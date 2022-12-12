@@ -1,0 +1,8 @@
+//onCreate
+setSupportActionBar(findViewById(R.id.my_toolbar))
+
+//nueva funcion (fuera del onCreate)
+override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
