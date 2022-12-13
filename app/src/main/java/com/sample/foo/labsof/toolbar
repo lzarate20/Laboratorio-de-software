@@ -1,5 +1,6 @@
 //onCreate
 setSupportActionBar(findViewById(R.id.my_toolbar))
+getSupportActionBar()?.setDisplayShowTitleEnabled(false)
 
 //nueva funcion (fuera del onCreate)
 override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {

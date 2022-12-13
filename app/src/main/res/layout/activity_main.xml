@@ -23,7 +23,10 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/toolbar"/>
+        android:src="@drawable/toolbar"
+
+        android:adjustViewBounds="true"
+        android:scaleType="centerInside"/>
         </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout

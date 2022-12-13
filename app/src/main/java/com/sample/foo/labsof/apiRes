@@ -1,0 +1,13 @@
+val api = Retrofit.Builder().baseUrl(Coneccion.url)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build().create(UserService::class.java)
+        lifecycleScope.launch {
+            val result = api.getUsers(1)
+            if(result.isSuccessful) {
+                println("Codigo ${result.code()}")
+                println(result.body())
+            } else{
+                println("Codigo ${result.code()}")
+                println(result.errorBody())
+            }
+        }

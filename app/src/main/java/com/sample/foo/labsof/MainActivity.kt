@@ -18,12 +18,11 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(findViewById(R.id.my_toolbar))
         val FT: FragmentTransaction = supportFragmentManager.beginTransaction()
-
+        getSupportActionBar()?.setDisplayShowTitleEnabled(false)
         val menu_inicio: Fragment = Menu()
         FT.add(R.id.inicio_menu,menu_inicio)
 
         FT.commit()
-        getSupportActionBar()?.setDisplayShowTitleEnabled(false)
         val api = Retrofit.Builder().baseUrl(Coneccion.url)
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(UserService::class.java)
