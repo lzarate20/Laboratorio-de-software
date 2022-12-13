@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         FT.add(R.id.inicio_menu,menu_inicio)
 
         FT.commit()
-
+        getSupportActionBar()?.setDisplayShowTitleEnabled(false)
         val api = Retrofit.Builder().baseUrl(Coneccion.url)
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(UserService::class.java)
