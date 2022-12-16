@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
 import com.sample.foo.labsof.Coneccion.Coneccion
+import com.sample.foo.labsof.DataClass.ListUsers
 import com.sample.foo.labsof.Service.UserService
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
@@ -15,12 +16,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        setSupportActionBar(findViewById(R.id.my_toolbar))
         val FT: FragmentTransaction = supportFragmentManager.beginTransaction()
-        getSupportActionBar()?.setDisplayShowTitleEnabled(false)
         val menu_inicio: Fragment = Menu()
+        val toolbar: Fragment = ToolbarFragment()
+        var bun = Bundle()
+        bun.putString("toolbar","1")
+        toolbar.setArguments(bun)
         FT.add(R.id.inicio_menu,menu_inicio)
+        FT.add(R.id.toolbar,toolbar)
 
         FT.commit()
         val api = Retrofit.Builder().baseUrl(Coneccion.url)
@@ -30,7 +33,8 @@ class MainActivity : AppCompatActivity() {
             val result = api.getUsers(1)
             if(result.isSuccessful) {
                 println("Codigo ${result.code()}")
-                println(result.body())
+                val tecnicos = result.body()?.let { ListUsers(it) }
+                println(tecnicos!!.getTecnicos())
             } else{
                 println("Codigo ${result.code()}")
                 println(result.errorBody())
@@ -39,9 +43,6 @@ class MainActivity : AppCompatActivity() {
 
 
     }
-    override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
+
 
 }

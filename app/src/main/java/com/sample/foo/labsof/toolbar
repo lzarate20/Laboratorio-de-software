@@ -1,9 +1,20 @@
-//onCreate
-setSupportActionBar(findViewById(R.id.my_toolbar))
-getSupportActionBar()?.setDisplayShowTitleEnabled(false)
+OnCreate
+  val FT: FragmentTransaction = supportFragmentManager.beginTransaction()
+        val toolbar: Fragment = ToolbarFragment()
+        var bun = Bundle()
+        bun.putString("toolbar","2")
+        toolbar.setArguments(bun)
+        FT.add(R.id.toolbar,toolbar)
 
-//nueva funcion (fuera del onCreate)
-override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
+        FT.commit()
+
+
+
+
+
+
+layout
+<FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/toolbar"/>
