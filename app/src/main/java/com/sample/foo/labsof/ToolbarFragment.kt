@@ -3,7 +3,6 @@ package com.sample.foo.labsof
 import android.os.Bundle
 import android.view.*
 import android.view.Menu
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -43,7 +42,6 @@ class ToolbarFragment : Fragment() {
         var toolbar: Fragment
         var bool: Boolean
 
-        Toast.makeText(context, param1, Toast.LENGTH_LONG).show()
         if (param1.equals("1")) {
             toolbar = ToolbarBasicoFragment()
             bool = false

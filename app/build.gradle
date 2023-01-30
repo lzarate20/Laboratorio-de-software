@@ -13,6 +13,7 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -44,6 +45,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:[ultima-version]'
 
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:(latest version)'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:(latest version)'
