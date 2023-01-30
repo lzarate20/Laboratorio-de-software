@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Visitas">
+    tools:context=".CrearVisita">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,20 +15,38 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Crear Visita"
+            android:textColor="@color/black"
+            android:textSize="30dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/crearVisita"
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/botones"
-                android:text="Crear visita"
-                android:textColor="@color/white" />
-
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="20dp"
+                android:hint="hola"
+                android:inputType="text" />
+            <EditText
+                android:id="@+id/fecha"
+                android:hint="fecha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="date"
+                android:focusable="false"
+                android:clickable="true"
+                android:maxLines="1" />
         </LinearLayout>
+
+
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,20 +26,7 @@ class MainActivity : AppCompatActivity() {
         FT.add(R.id.toolbar,toolbar)
 
         FT.commit()
-        val api = Retrofit.Builder().baseUrl(Coneccion.url)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build().create(UserService::class.java)
-        lifecycleScope.launch {
-            val result = api.getUsers(1)
-            if(result.isSuccessful) {
-                println("Codigo ${result.code()}")
-                val tecnicos = result.body()?.let { ListUsers(it) }
-                println(tecnicos!!.getTecnicos())
-            } else{
-                println("Codigo ${result.code()}")
-                println(result.errorBody())
-            }
-        }
+
 
 
     }

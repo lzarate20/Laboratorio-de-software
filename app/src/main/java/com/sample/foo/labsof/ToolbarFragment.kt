@@ -35,22 +35,23 @@ class ToolbarFragment : Fragment() {
         setHasOptionsMenu(true)
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_toolbar, container, false)
-        val f= getActivity() as AppCompatActivity
+        val f = getActivity() as AppCompatActivity
         val FT: FragmentTransaction = f.supportFragmentManager.beginTransaction()
         f.setSupportActionBar(view.findViewById(R.id.my_toolbar))
 
         /*f.getSupportActionBar()?.setDisplayShowTitleEnabled(false)*/
         var toolbar: Fragment
         var bool: Boolean
-        if(param1.equals("1")){
+
+        Toast.makeText(context, param1, Toast.LENGTH_LONG).show()
+        if (param1.equals("1")) {
             toolbar = ToolbarBasicoFragment()
-            bool=false
+            bool = false
 
-        }else{
+        } else {
             toolbar = ToolbarMejoradoFragment()
-            bool=true
+            bool = true
 
-            Toast.makeText(context,param1,Toast.LENGTH_LONG).show()
 
         }
 
