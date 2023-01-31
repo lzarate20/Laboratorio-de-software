@@ -24,7 +24,7 @@ class CrearVisita : AppCompatActivity() {
         val api = Retrofit.Builder().baseUrl(Coneccion.url)
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(UserService::class.java)
-        lifecycleScope.launch {
+        lifecycleScope.launch{
             try {
                 val result = api.getUsers(1)
                 if (result.isSuccessful) {
