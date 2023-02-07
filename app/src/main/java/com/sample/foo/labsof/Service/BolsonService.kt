@@ -5,6 +5,6 @@ import retrofit2.Response
 import retrofit2.http.*
 
 interface BolsonService {
-    @GET("/api/Bolson")
-    suspend fun getBolson(): Response<List<Bolson>>
+    @GET("/api/bolson")
+    suspend fun getBolson(@Query("id_ronda") id_ronda: Int?): Response<List<Bolson>>
 }

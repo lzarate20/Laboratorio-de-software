@@ -25,6 +25,15 @@
                 android:id="@+id/listaBolsones"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/botones"
+                android:text="Listado de bolsones"
+                android:textColor="@color/white" />
+            <Button
+                android:id="@+id/crearBolson"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:background="@drawable/botones"
                 android:text="Listado de bolsones"
                 android:textColor="@color/white" />

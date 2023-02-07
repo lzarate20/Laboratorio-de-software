@@ -4,9 +4,9 @@ import com.sample.foo.labsof.DataClass.Visita
 import retrofit2.Response
 import retrofit2.http.*
 
-interface VisitaServise {
+interface VisitaService {
     @GET("/api/Visitas")
-    suspend fun getVisitass(@Query("page") page: Long): Response<List<Visita>>
+    suspend fun getVisitas(): Response<List<Visita>>
 
     @GET("/api/Visitas/{id}")
     suspend fun getSingleVisita(@Path("id") id: Long): Response<Visita>

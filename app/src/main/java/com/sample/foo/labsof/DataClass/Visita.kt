@@ -1,5 +1,7 @@
 package com.sample.foo.labsof.DataClass
 
+import java.time.LocalDate
+
 class Visita(
     val fecha_visita: List<Int>?,
     val descripcion: String?, val id_tecnico: Int?,
@@ -24,5 +26,10 @@ class Visita(
     ){
         this.id_visita=id_visita
         this.parcelas=parcelas
+    }
+    internal object Compare {
+        fun maxDate(a: Visita, b: Visita): Visita {
+            return if (LocalDate.parse(a.fecha_visita.toString()) > LocalDate.parse(b.fecha_visita.toString())) a else b
+        }
     }
 }

@@ -5,11 +5,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.sample.foo.labsof.DataClass.Bolson
 import com.sample.foo.labsof.R
+import com.sample.foo.labsof.databinding.ItemBolsonBinding
 import org.w3c.dom.Text
 
 class BolsonViewHolder(view:View):ViewHolder(view) {
-    val familiaProductora = view.findViewById<TextView>(R.id.familiaProductora)
+    val binding = ItemBolsonBinding.bind(view)
     fun render(bolson: Bolson){
-        familiaProductora.text = bolson.id_fp.toString()
+        binding.familiaProductora.text = bolson.id_bolson.toString()
     }
 }
