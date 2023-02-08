@@ -7,4 +7,7 @@ import retrofit2.http.*
 interface BolsonService {
     @GET("/api/bolson")
     suspend fun getBolson(@Query("id_ronda") id_ronda: Int?): Response<List<Bolson>>
+
+    @POST("/api/bolson")
+    suspend fun putBolson(@Body bolson:Bolson): Response<Map<String,String>>
 }

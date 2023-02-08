@@ -13,10 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.sample.foo.labsof.Adapter.VerduraAdapter
 import com.sample.foo.labsof.Coneccion.Coneccion
+import com.sample.foo.labsof.DataClass.*
 
-import com.sample.foo.labsof.DataClass.Quinta
-import com.sample.foo.labsof.DataClass.Verdura
-import com.sample.foo.labsof.DataClass.Visita
 import com.sample.foo.labsof.Service.*
 import com.sample.foo.labsof.databinding.ActivityCrearBolsonBinding
 
@@ -45,36 +43,71 @@ class CrearBolson : AppCompatActivity() {
         val api_verdura = Retrofit.Builder().baseUrl(Coneccion.url)
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(VerduraService::class.java)
+        val api_ronda = Retrofit.Builder().baseUrl(Coneccion.url)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build().create(RondaService::class.java)
+        val api_bolson = Retrofit.Builder().baseUrl(Coneccion.url)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build().create(BolsonService::class.java)
         val spinner:Spinner = binding.familiaProductora
         lifecycleScope.launch{
             try {
+                val result_ronda = api_ronda.getRonda()
                 val result_verduras = api_verdura.getVerdura()
                 val result_quinta = api_quinta.getQuintas()
                 val result_visitas = api_visita.getVisitas()
-                initSpinner(spinner,result_quinta.body().orEmpty())
-                initView(result_verduras.body().orEmpty())
-                var item_spinner = -1
-                spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                        item_spinner = position
-                        val visita = getVisitaById(item_spinner,result_visitas.body().orEmpty())
-                        binding.submit.isEnabled = true
-                        binding.submit.isClickable = true
-                        binding.submit.setOnClickListener {
-                            val data = adapter.getData()
-                            var verdura: Verdura
-                            for (each in data.keys){
-                                verdura = result_verduras.body().orEmpty().get(each)
-                                var parcela = visita.parcelas.filter { it.verdura.id_verdura == verdura.id_verdura }
-                                if(!parcela.isEmpty()):
-                                    var parcela = visita.parcelas
-                                else:
+                if(result_ronda.isSuccessful) {
+                    val ronda_actual = getRondaActual(result_ronda.body()!!)
+
+                    initSpinner(spinner, result_quinta.body().orEmpty())
+                    initView(result_verduras.body().orEmpty())
+                    spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>,
+                            view: View,
+                            position: Int,
+                            id: Long
+                        ) {
+                            if(result_visitas.isSuccessful){
+                            var visita = getVisitaById(result_quinta.body()!!.get(position).id_quinta, result_visitas.body().orEmpty())
+                            binding.submit.isEnabled = true
+                            binding.submit.isClickable = true
+                            binding.submit.setOnClickListener {
+                                val data = adapter.getData()
+                                var verdura: Verdura
+                                var lista_verduras = ArrayList<Verdura>()
+                                var count_verduras_otro = 0
+                                for (each in data.keys) {
+                                    verdura = result_verduras.body().orEmpty().get(each)
+                                    var parcela =
+                                        visita.parcelas?.filter { it.id_verdura == verdura.id_verdura }
+                                    if (parcela?.isEmpty()!!) {
+                                        // Buscar parcela de otra quinta
+                                        count_verduras_otro += 1;
+                                        var visitasQuintas = getUltimaVisita(
+                                            result_visitas.body()!!,
+                                            result_quinta.body()!!
+                                        )
+                                        //parcela = visitasQuintas.map { it.parcelas?.filter { it.id_verdura == verdura.id_verdura } }
+                                    }
+                                    lista_verduras.add(verdura)
+                                }
+                                val bolson = Bolson(
+                                    54,
+                                    0,
+                                    idFp = result_quinta.body()!!.get(position).fpid,
+                                    idRonda = ronda_actual.id_ronda,
+                                    verduras = lista_verduras
+                                )
+                                lifecycleScope.launch { api_bolson.putBolson(bolson) }
+                            }
                             }
                         }
-                    }
-                    override fun onNothingSelected(parent: AdapterView<*>) {
-                        binding.submit.isEnabled = false
-                        binding.submit.isClickable = false
+
+                        override fun onNothingSelected(parent: AdapterView<*>) {
+                            binding.submit.isEnabled = false
+                            binding.submit.isClickable = false
+                        }
                     }
                 }
 
@@ -108,6 +141,16 @@ class CrearBolson : AppCompatActivity() {
 
     fun getVisitaById(id:Int,listaVisitas:List<Visita>): Visita {
        return listaVisitas.filter { it.id_quinta == id }.reduce(Visita.Compare::maxDate)
+    }
+
+    fun getUltimaVisita(visitas:List<Visita>,quintas: List<Quinta>): List<Visita> {
+        return quintas.map{
+            val each = it
+            visitas.filter { it.id_quinta == each.id_quinta }.reduce(Visita.Compare::maxDate)
+        }
+    }
+    fun getRondaActual(listaRondas:List<Ronda>):Ronda {
+        return listaRondas.reduce(Ronda.Compare::maxDate)
     }
 
 
