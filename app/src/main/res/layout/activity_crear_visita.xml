@@ -8,7 +8,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="150dp"
+        tools:layout_editor_absoluteY="-54dp">
 
         <FrameLayout
             android:id="@+id/toolbar"
@@ -23,25 +25,159 @@
             android:textSize="30dp" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_width="fill_parent"
+            android:layout_height="400dp"
+            android:layout_margin="20dp"
             android:orientation="vertical">
 
-            <EditText
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textQ"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Quinta" />
+
+                    <Spinner
+                        android:id="@+id/spinnerQ"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"></Spinner>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ff0000"
+                    android:text="Error"
+                    android:visibility="gone"
+                    android:id="@+id/errrorQ"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textF"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fecha" />
+
+                    <EditText
+                        android:id="@+id/fecha"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:importantForAutofill="no" />
+                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ff0000"
+                    android:text="Error"
+
+                    android:visibility="gone"
+                    android:id="@+id/errrorF"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Descripcion" />
+
+                    <EditText
+                        android:id="@+id/descripcion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ff0000"
+                    android:text="Error"
+                    android:visibility="gone"
+                    android:id="@+id/errrorD"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tecnico" />
+
+                    <Spinner
+                        android:id="@+id/spinnerT"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </Spinner>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ff0000"
+                    android:text="Error"
+
+                    android:visibility="gone"
+                    android:id="@+id/errrorT"/>
+            </LinearLayout>
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="20dp"
-                android:hint="hola"
-                android:inputType="text" />
-            <EditText
-                android:id="@+id/fecha"
-                android:layout_width="wrap_content"
+                android:textColor="#ff0000"
+                android:text="Error"
+                android:visibility="gone"
+                android:id="@+id/errrorG"/>
+            <Button
+                android:id="@+id/guardar"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:importantForAutofill="no"
-                android:focusable="false"
-                android:focusableInTouchMode="false" />
+                android:background="@drawable/botones"
+                android:text="Esperando"
+                android:textColor="@color/white" />
         </LinearLayout>
 
 

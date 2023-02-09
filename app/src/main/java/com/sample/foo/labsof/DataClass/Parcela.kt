@@ -1,9 +1,36 @@
 package com.sample.foo.labsof.DataClass
 
-class Parcela(
-    val id_parcela: Int?, val cantidad_surcos: Int?,
-    val cubierta: Boolean?, val cosecha: Boolean?,
-    val id_verdura: Int?, val id_visita: Int?,
-    val verdura: Verdura?
-) {
+class Parcela() {
+    var error: String?=null
+    var id_visita: Int?=null
+    var id_parcela: Int?= null
+    var id_verdura: Int? = null
+    var cosecha: Boolean? = null
+    var cubierta: Boolean? = null
+    var cantidad_surcos: Int? = null
+    constructor(id_visita: Int?):this(){
+        this.id_visita=id_visita
+    }
+    constructor(
+        id_visita: Int?, cantidad_surcos: Int?,
+        cubierta: Boolean?,
+        cosecha: Boolean?,
+        id_verdura: Int?
+    ) : this(id_visita) {
+        this.cantidad_surcos = cantidad_surcos
+        this.cubierta = cubierta
+        this.cosecha = cosecha
+        this.id_verdura = id_verdura
+    }
+    constructor(
+        id_visita: Int?, cantidad_surcos: Int?,
+        cubierta: Boolean?,
+        cosecha: Boolean?,
+        id_verdura: Int?,id_parcela:Int?
+    ) : this(id_visita,cantidad_surcos, cubierta, cosecha, id_verdura) {
+        this.id_parcela= id_parcela
+    }
+    constructor(error:String?):this(){
+        this.error=error
+    }
 }

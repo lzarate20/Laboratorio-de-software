@@ -1,28 +1,49 @@
 package com.sample.foo.labsof.DataClass
 
-class Visita(
-    val fecha_visita: List<Int>?,
-    val descripcion: String?, val id_tecnico: Int?,
-    val id_quinta: Int?
-) {
-    var parcelas: List<Parcela>?
-    var id_visita:Int?
-
-    init {
-        parcelas = null
-        id_visita=null
-    }
+class Visita(val error:String?=null) {
+    var parcelas: List<Parcela>? = null
+    var id_visita: Int? = null
+    var fecha_visita: String? = null
+    var descripcion: String? = null
+    var id_tecnico: Int? = null
+    var id_quinta: Int? = null
 
     constructor(
-        id_visita: Int?, fecha_visita: List<Int>?,
+        id_visita: Int?, fecha_visita: String?,
         descripcion: String?, id_tecnico: Int?,
         id_quinta: Int?, parcelas: List<Parcela>?
     ) : this(
         fecha_visita,
         descripcion, id_tecnico,
         id_quinta
-    ){
-        this.id_visita=id_visita
-        this.parcelas=parcelas
+    ) {
+        this.id_visita = id_visita
+        this.parcelas = parcelas
+    }
+
+    constructor(
+        fecha_visita: String?,
+        descripcion: String?,
+        id_tecnico: Int?,
+        id_quinta: Int?
+    ) : this() {
+        this.fecha_visita=fecha_visita
+        this.id_tecnico=id_tecnico
+        this.descripcion=descripcion
+        this.id_quinta=id_quinta
+    }
+    constructor(v: VisitaFechaList):this(){
+        val f=v.fecha_visita
+        this.fecha_visita="${(f?.get(0))}-${(f?.get(1))}-${(f?.get(2))}"
+        this.id_tecnico=v.id_tecnico
+        this.descripcion=v.descripcion
+        this.id_quinta=v.id_quinta
+        this.id_visita = v.id_visita
+        this.parcelas = v.parcelas
+    }
+
+
+    override fun toString():String{
+        return "${(id_quinta)} ${(fecha_visita)} ${(id_tecnico)} ${(descripcion)}"
     }
 }

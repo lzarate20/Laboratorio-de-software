@@ -26,7 +26,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/botones"
+
+                android:layout_margin="10dp"
                 android:text="Crear visita"
+                android:textColor="@color/white" />
+            <Button
+                android:id="@+id/proximasVisitas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/botones"
+                android:text="Proximas visitas"
+                android:textColor="@color/white" />
+            <Button
+                android:id="@+id/historialVisitas"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/botones"
+                android:text="Historial de visitas"
                 android:textColor="@color/white" />
 
         </LinearLayout>

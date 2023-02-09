@@ -27,6 +27,16 @@ class Visitas : AppCompatActivity() {
             val intent = Intent(this, CrearVisita::class.java)
             startActivity(intent)
         }
+        val hVisita: Button = findViewById(R.id.historialVisitas)
+        hVisita.setOnClickListener { view: View ->
+            val intent = Intent(this, HistorialVisitas::class.java)
+            startActivity(intent)
+        }
+        val pVisita: Button = findViewById(R.id.proximasVisitas)
+        pVisita.setOnClickListener { view: View ->
+            val intent = Intent(this, ProximasVisitas::class.java)
+            startActivity(intent)
+        }
     }
 
 

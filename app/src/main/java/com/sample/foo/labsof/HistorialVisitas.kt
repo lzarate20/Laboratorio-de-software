@@ -1,32 +1,28 @@
 package com.sample.foo.labsof
 
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
-import com.sample.foo.labsof.helpers.Inicializador
-import java.util.*
+import com.sample.foo.labsof.Coneccion.VisitaConeccion
+import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
+class HistorialVisitas : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_historial_visitas)
         val FT: FragmentTransaction = supportFragmentManager.beginTransaction()
-        val menu_inicio: Fragment = Menu()
         val toolbar: Fragment = ToolbarFragment()
-        var bun = Bundle()
-        bun.putString("toolbar","1")
+        val bun = Bundle()
+        bun.putString("toolbar", "2")
         toolbar.setArguments(bun)
-        FT.add(R.id.inicio_menu,menu_inicio)
-        FT.add(R.id.toolbar,toolbar)
-        FT.commit()
+        FT.add(R.id.toolbar, toolbar)
 
+        FT.commit()
+        lifecycleScope.launch{
+           val visitas= VisitaConeccion.get().getVisitasPasadas().ordenarFechaYTecnico().toString()
+        }
 
     }
-
-
 }

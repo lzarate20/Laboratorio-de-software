@@ -8,9 +8,11 @@ interface UserService {
     @GET("/api/users")
     suspend fun getUsers(@Query("page") page:Long):Response<List<User>>
     @GET("/api/users/{id}")
-    suspend fun getSingleUser(@Path("id")id: Long):Response<User>
+    suspend fun getSingleUser(@Path("id") id: Int?):Response<User>
     @POST("/api/login")
     suspend fun  login(@Body user: User):Response<Map<String, String>>
     @GET("/api/users")
     suspend fun getUserWihtAuth(@Header("autorization") token:String)
+    @POST("/api/users")
+    suspend fun postUser(@Body user:User):Response<User>
 }
