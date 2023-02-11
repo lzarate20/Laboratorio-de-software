@@ -1,6 +1,7 @@
 package com.sample.foo.labsof.Adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.sample.foo.labsof.Coneccion.Coneccion
@@ -13,7 +14,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
-class BolsonAdapter(val listaBolsones:List<Bolson>): RecyclerView.Adapter<BolsonViewHolder>() {
+class BolsonAdapter(val listaBolsones:List<Bolson>, private val onClickListener:(Bolson) -> Unit): RecyclerView.Adapter<BolsonViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BolsonViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return BolsonViewHolder(layoutInflater.inflate(R.layout.item_bolson,parent,false))
@@ -21,7 +22,8 @@ class BolsonAdapter(val listaBolsones:List<Bolson>): RecyclerView.Adapter<Bolson
 
     override fun onBindViewHolder(holder: BolsonViewHolder, position: Int) {
             val item = listaBolsones[position]
-            holder.render(item)
+            holder.render(item, onClickListener)
+
     }
 
     override fun getItemCount(): Int {

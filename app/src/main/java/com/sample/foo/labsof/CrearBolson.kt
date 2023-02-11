@@ -57,7 +57,7 @@ class CrearBolson : AppCompatActivity() {
                 val result_quinta = api_quinta.getQuintas()
                 val result_visitas = api_visita.getVisitas()
                 if(result_ronda.isSuccessful) {
-                    val ronda_actual = getRondaActual(result_ronda.body()!!)
+                    val ronda_actual = Ronda.getRondaActual(api_ronda.getRonda().body()!!)
 
                     initSpinner(spinner, result_quinta.body().orEmpty())
                     initView(result_verduras.body().orEmpty())
@@ -69,9 +69,10 @@ class CrearBolson : AppCompatActivity() {
                             id: Long
                         ) {
                             if(result_visitas.isSuccessful){
-                            var visita = getVisitaById(result_quinta.body()!!.get(position).id_quinta, result_visitas.body().orEmpty())
+                            var visita = Visita.getVisitaById(result_quinta.body()!!.get(position).id_quinta, result_visitas.body().orEmpty())
                             binding.submit.isEnabled = true
                             binding.submit.isClickable = true
+                            binding.submit.setBackgroundResource(R.color.green)
                             binding.submit.setOnClickListener {
                                 val data = adapter.getData()
                                 var verdura: Verdura
@@ -84,7 +85,7 @@ class CrearBolson : AppCompatActivity() {
                                     if (parcela?.isEmpty()!!) {
                                         // Buscar parcela de otra quinta
                                         count_verduras_otro += 1;
-                                        var visitasQuintas = getUltimaVisita(
+                                        var visitasQuintas = Visita.getUltimaVisita(
                                             result_visitas.body()!!,
                                             result_quinta.body()!!
                                         )
@@ -95,11 +96,12 @@ class CrearBolson : AppCompatActivity() {
                                 val bolson = Bolson(
                                     54,
                                     0,
-                                    idFp = result_quinta.body()!!.get(position).fpid,
+                                    idFp = result_quinta.body()!!.get(position).fpId,
                                     idRonda = ronda_actual.id_ronda,
                                     verduras = lista_verduras
                                 )
-                                lifecycleScope.launch { api_bolson.putBolson(bolson) }
+                                lifecycleScope.launch { api_bolson.postBolson(bolson) }
+                                finish()
                             }
                             }
                         }
@@ -139,19 +141,8 @@ class CrearBolson : AppCompatActivity() {
         binding.recyclerVerduras.adapter = adapter
     }
 
-    fun getVisitaById(id:Int,listaVisitas:List<Visita>): Visita {
-       return listaVisitas.filter { it.id_quinta == id }.reduce(Visita.Compare::maxDate)
-    }
 
-    fun getUltimaVisita(visitas:List<Visita>,quintas: List<Quinta>): List<Visita> {
-        return quintas.map{
-            val each = it
-            visitas.filter { it.id_quinta == each.id_quinta }.reduce(Visita.Compare::maxDate)
-        }
-    }
-    fun getRondaActual(listaRondas:List<Ronda>):Ronda {
-        return listaRondas.reduce(Ronda.Compare::maxDate)
-    }
+
 
 
 }

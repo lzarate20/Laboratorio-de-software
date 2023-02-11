@@ -1,0 +1,147 @@
+package com.sample.foo.labsof
+
+import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.sample.foo.labsof.Adapter.VerduraAdapter
+import com.sample.foo.labsof.Coneccion.Coneccion
+import com.sample.foo.labsof.DataClass.*
+import com.sample.foo.labsof.Service.*
+import com.sample.foo.labsof.databinding.ActivityEditarBolsonBinding
+import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
+
+class EditarBolson: AppCompatActivity() {
+
+    lateinit var binding: ActivityEditarBolsonBinding
+    lateinit var  adapter: VerduraAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityEditarBolsonBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        val bolson_id:Int = intent.getIntExtra("bolson",-1)
+        val api_bolson = Retrofit.Builder().baseUrl(Coneccion.url)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build().create(BolsonService::class.java)
+        val api_visita = Retrofit.Builder().baseUrl(Coneccion.url)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build().create(VisitaService::class.java)
+        val api_quinta = Retrofit.Builder().baseUrl(Coneccion.url)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build().create(QuintaService::class.java)
+        val api_verdura = Retrofit.Builder().baseUrl(Coneccion.url)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build().create(VerduraService::class.java)
+        val api_ronda = Retrofit.Builder().baseUrl(Coneccion.url)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build().create(RondaService::class.java)
+        val spinner: Spinner = binding.familiaProductora
+        lifecycleScope.launch{
+            try {
+                val bolson_item = api_bolson.getBolson(bolson_id).body()!!
+                val result_ronda = api_ronda.getRondaById(bolson_item.idRonda)
+                val result_verduras = api_verdura.getVerdura()
+                val result_quinta = api_quinta.getQuintas()
+                val result_visitas = api_visita.getVisitas()
+                if(result_ronda.isSuccessful) {
+                    val ronda_actual = result_ronda.body()
+                    val quinta_actual = Quinta.findQuintaByFp(
+                            result_quinta.body().orEmpty(),
+                            bolson_item.idFp?.toInt()
+                    )
+                    initSpinner(spinner, result_quinta.body().orEmpty(), quinta_actual)
+                    initView(result_verduras.body().orEmpty(),bolson_item.verduras.orEmpty())
+
+                    spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>,
+                            view: View,
+                            position: Int,
+                            id: Long
+                        ) {
+                            if(result_visitas.isSuccessful){
+                                var visita = Visita.getVisitaById(result_quinta.body()!!.get(position).id_quinta, result_visitas.body().orEmpty())
+                                binding.submit.isEnabled = true
+                                binding.submit.isClickable = true
+                                binding.submit.setBackgroundResource(R.color.green)
+                                binding.submit.setOnClickListener {
+                                    val data = adapter.getData()
+                                    var verdura: Verdura
+                                    var lista_verduras = ArrayList<Verdura>()
+                                    var count_verduras_otro = 0
+                                    for (each in data.keys) {
+                                        verdura = result_verduras.body().orEmpty().get(each)
+                                        var parcela =
+                                            visita.parcelas?.filter { it.id_verdura == verdura.id_verdura }
+                                        if (parcela?.isEmpty()!!) {
+                                            // Buscar parcela de otra quinta
+                                            count_verduras_otro += 1;
+                                            var visitasQuintas = Visita.getUltimaVisita(
+                                                result_visitas.body()!!,
+                                                result_quinta.body()!!
+                                            )
+                                            //parcela = visitasQuintas.map { it.parcelas?.filter { it.id_verdura == verdura.id_verdura } }
+                                        }
+                                        lista_verduras.add(verdura)
+                                    }
+                                    val bolson = Bolson(
+                                        bolson_item.id_bolson!!,
+                                        bolson_item.cantidad,
+                                        idFp = result_quinta.body()!!.get(position).fpId,
+                                        idRonda = bolson_item.idRonda,
+                                        verduras = lista_verduras
+                                    )
+                                    lifecycleScope.launch { api_bolson.putBolson(bolson) }
+                                    finish()
+                                }
+                            }
+                        }
+
+                        override fun onNothingSelected(parent: AdapterView<*>) {
+                            binding.submit.isEnabled = false
+                            binding.submit.isClickable = false
+                        }
+                    }
+                }
+
+            }
+            catch (e: IOException) {
+
+            }
+            catch (e: HttpException){
+
+            }
+
+        }
+    }
+    fun initSpinner(spinner: Spinner, listQuinta: List<Quinta>,quinta:Quinta?){
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            listQuinta.map{it.nombre}
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
+        }
+        val pos = adapter.getPosition(quinta?.nombre)
+        spinner.setSelection(pos)
+    }
+    fun initView(listaVerdura: List<Verdura>,listaSelected:List<Verdura>) {
+        adapter = VerduraAdapter(listaVerdura,listaSelected)
+        binding.recyclerVerduras.layoutManager = LinearLayoutManager(this)
+        binding.recyclerVerduras.adapter = adapter
+
+    }
+
+}

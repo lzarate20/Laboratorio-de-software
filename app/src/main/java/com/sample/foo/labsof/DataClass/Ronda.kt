@@ -9,4 +9,9 @@ data class Ronda(val id_ronda:Int?,val fecha_inicio: List<Int>,val fecha_fin:Lis
                 Date(b.fecha_fin[0],b.fecha_fin[1],b.fecha_fin[2])) a else b
         }
     }
+    companion object {
+        fun getRondaActual(listaRondas: List<Ronda>): Ronda {
+            return listaRondas.reduce(Ronda.Compare::maxDate)
+        }
+    }
 }

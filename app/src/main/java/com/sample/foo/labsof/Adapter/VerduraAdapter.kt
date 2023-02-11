@@ -9,22 +9,35 @@ import com.sample.foo.labsof.DataClass.Verdura
 import com.sample.foo.labsof.R
 import com.sample.foo.labsof.databinding.ItemVerduraBinding
 
-class VerduraAdapter(val listaVerdura:List<Verdura>): RecyclerView.Adapter<VerduraAdapter.VerduraViewHolder>() {
+class VerduraAdapter(val listaVerdura:List<Verdura>,val listaSelected: List<Verdura>? = null): RecyclerView.Adapter<VerduraAdapter.VerduraViewHolder>() {
 
 
-    private val verdurasCountMap = hashMapOf<Int,String>()
+    private val verdurasMap = hashMapOf<Int,String>()
 
     fun getData(): HashMap<Int, String> {
-        return verdurasCountMap
+        return verdurasMap
     }
+
     inner class VerduraViewHolder(private val binding: ItemVerduraBinding): RecyclerView.ViewHolder(binding.root)  {
-        val verdura_nombre = binding.nombreVegetal
 
-
-        fun render(vegetal: Verdura,position: Int){
-            verdura_nombre.text = vegetal.nombre.toString()
-            val input = binding.inputVegetal.doAfterTextChanged {
-                verdurasCountMap[position] = it.toString()
+        fun render(vegetal: Verdura,position: Int,isSelected:Boolean = false){
+            binding.inputVegetal.text = vegetal.nombre.toString()
+            binding.inputVegetal.isChecked = isSelected
+            binding.inputVegetal.setBackgroundResource(
+                if (binding.inputVegetal.isChecked)
+                    android.R.color.holo_green_dark
+                else
+                    android.R.color.white
+            )
+            binding.inputVegetal.setOnClickListener {
+                binding.inputVegetal.isChecked = !binding.inputVegetal.isChecked
+                binding.inputVegetal.setBackgroundResource(
+                    if (binding.inputVegetal.isChecked)
+                        android.R.color.holo_green_dark
+                    else
+                        android.R.color.white
+                )
+                verdurasMap.put(position,it.toString())
             }
         }
     }
@@ -36,7 +49,12 @@ class VerduraAdapter(val listaVerdura:List<Verdura>): RecyclerView.Adapter<Verdu
 
     override fun onBindViewHolder(holder: VerduraViewHolder, position: Int) {
         val item = listaVerdura[position]
-        holder.render(item,position)
+        var isSelected = false
+
+        if(listaSelected!=null) {
+            isSelected = listaSelected!!.any{it.id_verdura == item.id_verdura}
+        }
+        holder.render(item,position,isSelected)
     }
 
     override fun getItemCount(): Int {

@@ -33,4 +33,16 @@ class Visita(
             return if (Date(a.fecha_visita!![0],a.fecha_visita!![1],a.fecha_visita!![2]) > Date(b.fecha_visita!![0],b.fecha_visita!![1],b.fecha_visita!![2])) a else b
         }
     }
+
+    companion object{
+        fun getVisitaById(id:Int,listaVisitas:List<Visita>): Visita {
+            return listaVisitas.filter { it.id_quinta == id }.reduce(Visita.Compare::maxDate)
+        }
+        fun getUltimaVisita(visitas:List<Visita>,quintas: List<Quinta>): List<Visita> {
+            return quintas.map{
+                val each = it
+                visitas.filter { it.id_quinta == each.id_quinta }.reduce(Visita.Compare::maxDate)
+            }
+        }
+    }
 }

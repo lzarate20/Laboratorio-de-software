@@ -10,7 +10,10 @@ import org.w3c.dom.Text
 
 class BolsonViewHolder(view:View):ViewHolder(view) {
     val binding = ItemBolsonBinding.bind(view)
-    fun render(bolson: Bolson){
+
+    fun render(bolson: Bolson,onClickListener:(Bolson) -> Unit){
         binding.familiaProductora.text = bolson.id_bolson.toString()
+        binding.cantidad.text = bolson.cantidad.toString()
+        itemView.setOnClickListener{onClickListener(bolson)}
     }
 }
