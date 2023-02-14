@@ -2,6 +2,28 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Editar Bolson"
+        android:textColor="@color/black"
+        android:textSize="30dp" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
     <Spinner
         android:id="@+id/familia_productora"
         android:layout_width="match_parent"
@@ -36,4 +58,6 @@
         android:text="Actualizar bolson"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true" />
+    </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>

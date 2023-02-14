@@ -7,6 +7,8 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sample.foo.labsof.Adapter.VerduraAdapter
@@ -29,6 +31,13 @@ class EditarBolson: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityEditarBolsonBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val FT: FragmentTransaction = supportFragmentManager.beginTransaction()
+        val toolbar: Fragment = ToolbarFragment()
+        val bun = Bundle()
+        bun.putString("toolbar", "2")
+        toolbar.setArguments(bun)
+        FT.add(R.id.toolbar, toolbar)
+        FT.commit()
         val bolson_id:Int = intent.getIntExtra("bolson",-1)
         val api_bolson = Retrofit.Builder().baseUrl(Coneccion.url)
             .addConverterFactory(GsonConverterFactory.create())

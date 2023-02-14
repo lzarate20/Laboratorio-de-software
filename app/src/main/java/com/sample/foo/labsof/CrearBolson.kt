@@ -9,6 +9,8 @@ import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doBeforeTextChanged
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,6 +38,13 @@ class CrearBolson : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding  = ActivityCrearBolsonBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val FT: FragmentTransaction = supportFragmentManager.beginTransaction()
+        val toolbar: Fragment = ToolbarFragment()
+        val bun = Bundle()
+        bun.putString("toolbar", "2")
+        toolbar.setArguments(bun)
+        FT.add(R.id.toolbar, toolbar)
+        FT.commit()
         val api_visita = Retrofit.Builder().baseUrl(Coneccion.url)
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(VisitaService::class.java)
