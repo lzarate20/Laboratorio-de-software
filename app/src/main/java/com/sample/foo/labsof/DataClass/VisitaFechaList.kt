@@ -70,4 +70,21 @@ data class VisitaFechaList(val error: String? = null) {
     fun visitaPasada():Boolean{
         return fechaDate().before(Date())
     }
+    internal object Compare {
+        fun maxDate(a: VisitaFechaList, b: VisitaFechaList): VisitaFechaList {
+            return if (Date(a.fecha_visita!![0],a.fecha_visita!![1],a.fecha_visita!![2]) > Date(b.fecha_visita!![0],b.fecha_visita!![1],b.fecha_visita!![2])) a else b
+        }
+    }
+
+    companion object{
+        fun getVisitaById(id:Int,listaVisitas:List<VisitaFechaList>): VisitaFechaList {
+            return listaVisitas.filter { it.id_quinta == id }.reduce(VisitaFechaList.Compare::maxDate)
+        }
+        fun getUltimaVisita(visitas:List<VisitaFechaList>,quintas: List<Quinta>): List<VisitaFechaList> {
+            return quintas.map{
+                val each = it
+                visitas.filter { it.id_quinta == each.id_quinta }.reduce(VisitaFechaList.Compare::maxDate)
+            }
+        }
+    }
 }

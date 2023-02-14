@@ -6,7 +6,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.doBeforeTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -82,14 +81,14 @@ class EditarBolson: AppCompatActivity() {
                             id: Long
                         ) {
                             if(result_visitas.isSuccessful){
-                                var visita = Visita.getVisitaById(result_quinta.body()!!.get(position).id_quinta, result_visitas.body().orEmpty())
+                                var visita = VisitaFechaList.getVisitaById(result_quinta.body()!!.get(position).id_quinta!!, result_visitas.body().orEmpty())
                                 binding.submit.isEnabled = true
                                 binding.submit.isClickable = true
                                 binding.submit.setBackgroundResource(R.color.green)
                                 binding.submit.setOnClickListener {
                                     val data = adapter.getData()
-                                    var verdura: Verdura
-                                    var lista_verduras = ArrayList<Verdura>()
+                                    var verdura: VerduraFechaList
+                                    var lista_verduras = ArrayList<VerduraFechaList>()
                                     var count_verduras_otro = 0
                                     var count_verduras = 0
                                     var verdura_en_parcela = true
@@ -99,7 +98,7 @@ class EditarBolson: AppCompatActivity() {
                                        var parcela = result_parcelas.filter{each -> id_parcela.any { it == each.id_parcela  }}.any{it.id_verdura == verdura.id_verdura}
                                         if (!parcela) {
                                             // Buscar parcela de otra quinta
-                                            var visitasQuintas = Visita.getUltimaVisita(
+                                            var visitasQuintas = VisitaFechaList.getUltimaVisita(
                                                 result_visitas.body()!!,
                                                 result_quinta.body()!!
                                             )
@@ -179,7 +178,7 @@ class EditarBolson: AppCompatActivity() {
         val pos = adapter.getPosition(quinta?.nombre)
         spinner.setSelection(pos)
     }
-    fun initView(listaVerdura: List<Verdura>,listaSelected:List<Verdura>) {
+    fun initView(listaVerdura: List<VerduraFechaList>, listaSelected:List<VerduraFechaList>) {
         adapter = VerduraAdapter(listaVerdura,listaSelected)
         binding.recyclerVerduras.layoutManager = LinearLayoutManager(this)
         binding.recyclerVerduras.adapter = adapter

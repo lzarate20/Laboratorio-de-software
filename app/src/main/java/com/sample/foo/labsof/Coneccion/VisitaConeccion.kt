@@ -13,7 +13,7 @@ class VisitaConeccion {
         var api = Coneccion.api.create(VisitaService::class.java)
         suspend fun get(): ListVisita {
             try {
-                val result = api.getVisitas(1)
+                val result = api.getVisitas()
                 if (result.isSuccessful) {
                     return ListVisita(result.body())
                 } else {

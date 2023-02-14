@@ -5,7 +5,7 @@ import android.os.Parcelable
 import java.util.*
 
 
-data class Bolson(val id_bolson:Int?,val cantidad:Int,val idFp:Int?,val idRonda:Int?,val verduras:List<Verdura>?):java.io.Serializable{
+data class Bolson(val id_bolson:Int?,val cantidad:Int,val idFp:Int?,val idRonda:Int?,val verduras:List<VerduraFechaList>?):java.io.Serializable{
 
     internal object Compare {
         fun maxId(a: Bolson, b: Bolson): Bolson {

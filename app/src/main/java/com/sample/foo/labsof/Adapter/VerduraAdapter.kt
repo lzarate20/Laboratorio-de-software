@@ -6,10 +6,11 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.sample.foo.labsof.DataClass.Bolson
 import com.sample.foo.labsof.DataClass.Verdura
+import com.sample.foo.labsof.DataClass.VerduraFechaList
 import com.sample.foo.labsof.R
 import com.sample.foo.labsof.databinding.ItemVerduraBinding
 
-class VerduraAdapter(val listaVerdura:List<Verdura>,val listaSelected: List<Verdura>? = null): RecyclerView.Adapter<VerduraAdapter.VerduraViewHolder>() {
+class VerduraAdapter(val listaVerdura:List<VerduraFechaList>,val listaSelected: List<VerduraFechaList>? = null): RecyclerView.Adapter<VerduraAdapter.VerduraViewHolder>() {
 
 
     private val verdurasMap = hashMapOf<Int,String>()
