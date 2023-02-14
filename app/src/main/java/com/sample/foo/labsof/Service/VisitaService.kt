@@ -19,5 +19,6 @@ interface VisitaService {
     suspend fun postVisita(@Body visitas:Visita):Response<VisitaFechaList>
 
     @DELETE("/api/Visitas/{id}")
-    suspend fun deleteSingleVisita(@Path("id") id: Long): Response<Visita>
+    suspend fun deleteSingleVisita(@Path("id") id: Int): Response<Visita>
+
 }

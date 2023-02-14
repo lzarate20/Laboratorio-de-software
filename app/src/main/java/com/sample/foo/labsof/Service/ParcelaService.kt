@@ -18,4 +18,7 @@ interface ParcelaService {
     @POST("/api/Parcelas")
     suspend fun postParcelas(@Body parcela: Parcela): Response<ParcelaVerdura>
 
+    @DELETE("/api/Parcelas/{id}")
+    suspend fun deleteParcela(@Path("id") id: Int?): Response<ParcelaVerdura>
+
 }

@@ -12,8 +12,7 @@
         android:layout_height="70dp"
         android:layout_alignParentStart="true"
         android:background="@drawable/botones"
-        android:src="@drawable/toolbar"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="#aaa"
         android:layout_centerVertical="true"
         android:layout_marginLeft="5dp"/>
 

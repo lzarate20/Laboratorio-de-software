@@ -107,5 +107,19 @@ class VisitaConeccion {
                 return Visita("Error al intentar conectar a la Base de datos")
             }
         }
+        suspend fun delete(id:Int): Visita? {
+            try {
+                val result = api.deleteSingleVisita(id)
+                if (result.isSuccessful) {
+                    return result.body()!!
+                } else {
+                    println(result.code())
+                    return null
+                }
+            } catch (e: Exception) {
+                println(e.printStackTrace())
+                return null
+            }
+        }
     }
 }

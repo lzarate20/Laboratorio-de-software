@@ -38,6 +38,25 @@ class ParcelaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }else{
             ver.visibility=View.GONE
         }
+        eliminar.setOnClickListener{v->
+            val builder: android.app.AlertDialog.Builder =
+                android.app.AlertDialog.Builder(v.context)
+            builder.setTitle("¿Eliminar?")
+            builder.setMessage("¿Esta seguro que desea eliminar esta parcela?")
+            builder.setPositiveButton(
+                "Eliminar",
+                DialogInterface.OnClickListener { dialog, which ->
+                        view.lifecycleScope.launch {
+                            parcela.id_parcela?.let { ParcelaConeccion.delete(it) }
+                        }
+                })
+            builder.setNegativeButton(
+                "Cancelar",
+                DialogInterface.OnClickListener { dialog, which ->
+
+                })
+            builder.create().show()
+        }
         ver.setOnClickListener{v->
             val builder: android.app.AlertDialog.Builder =
                 android.app.AlertDialog.Builder(v.context)
