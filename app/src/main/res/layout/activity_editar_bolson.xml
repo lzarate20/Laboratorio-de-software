@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <Spinner
+        android:id="@+id/familia_productora"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"/>
+
+    <TextView
+        android:id="@+id/errores"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_below="@+id/familia_productora"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerVerduras"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="100dp"
+        />
+    <EditText
+        android:id="@+id/cantidad"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:hint="Cantidad"
+        android:inputType="number"
+        android:layout_margin="10dp"
+        android:layout_alignParentEnd="true"/>
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:text="Actualizar bolson"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true" />
+</RelativeLayout>

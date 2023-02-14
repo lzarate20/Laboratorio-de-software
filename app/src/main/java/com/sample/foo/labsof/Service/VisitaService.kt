@@ -1,24 +1,22 @@
 package com.sample.foo.labsof.Service
 
 import com.sample.foo.labsof.DataClass.Visita
-import com.sample.foo.labsof.DataClass.VisitaFechaList
 import retrofit2.Response
 import retrofit2.http.*
 
 interface VisitaService {
     @GET("/api/Visitas")
-    suspend fun getVisitas(@Query("page") page: Long): Response<List<VisitaFechaList>>
+    suspend fun getVisitas(): Response<List<Visita>>
 
     @GET("/api/Visitas/{id}")
-    suspend fun getSingleVisita(@Path("id") id: Int): Response<VisitaFechaList>
+    suspend fun getSingleVisita(@Path("id") id: Long): Response<Visita>
 
-    @PUT("/api/Visitas")
-    suspend fun putVisita(@Body visitas:Visita):Response<VisitaFechaList>
+    @PUT("/api/visitas")
+    suspend fun putVisita(@Body visitas:Visita):Response<Visita>
 
-    @POST("/api/Visitas")
-    suspend fun postVisita(@Body visitas:Visita):Response<VisitaFechaList>
+    @POST("/api/visitas")
+    suspend fun postVisita(@Body visitas:Visita):Response<Visita>
 
     @DELETE("/api/Visitas/{id}")
-    suspend fun deleteSingleVisita(@Path("id") id: Int): Response<Visita>
-
+    suspend fun deleteSingleVisita(@Path("id") id: Long): Response<Visita>
 }

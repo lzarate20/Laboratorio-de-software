@@ -30,4 +30,13 @@ class Quinta() {
     ) {
         this.id_quinta = id_quinta
     }
+    companion object{
+        fun findQuintaByFp(lista:List<Quinta>,id:Int?):Quinta?{
+            return lista.find { it.fpId?.equals(id) ?:false  }
+        }
+
+    }
+
+
 }
+
