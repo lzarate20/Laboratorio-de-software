@@ -102,12 +102,14 @@ class ListadoBolsones:AppCompatActivity() {
         builder.setMessage("Estas seguro que queres eliminar el bolson?")
         builder.setPositiveButton("Si"){dialogInterface, which ->
             lifecycleScope.launchWhenCreated{
-                api_bolson.deleteSingleBolson(bolson.id_bolson!!)
-                listaBolsones.dropWhile { it.id_bolson == bolson.id_bolson }
-                startActivity(intent)
-                finish()
+                var res = api_bolson.deleteSingleBolson(bolson.id_bolson!!)
+                if(res.isSuccessful) {
+                    listaBolsones.toMutableList().removeIf{ it.id_bolson == bolson.id_bolson }
+                    startActivity(intent)
+                    finish()
+                    Toast.makeText(applicationContext,"Se ha borrado correctamente",Toast.LENGTH_LONG).show()
+                }
             }
-            Toast.makeText(applicationContext,"Se ha borrado correctamente",Toast.LENGTH_LONG).show()
         }
         builder.setNegativeButton("No"){dialogInterface, which ->
         }

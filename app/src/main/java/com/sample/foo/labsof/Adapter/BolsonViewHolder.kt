@@ -16,7 +16,7 @@ class BolsonViewHolder(view:View):ViewHolder(view) {
     fun render(bolson: Bolson, quinta: Quinta, editOnClickListener:(Bolson) -> Unit, deleteOnClickListener:(Bolson) -> Unit){
         binding.familiaProductora.text = quinta.nombre.toString()
         binding.cantidad.text = bolson.cantidad.toString()
-        itemView.setOnClickListener{editOnClickListener(bolson)}
+        binding.editarBolson.setOnClickListener{editOnClickListener(bolson)}
         binding.delete.setOnClickListener{
             deleteOnClickListener(bolson)
         }
