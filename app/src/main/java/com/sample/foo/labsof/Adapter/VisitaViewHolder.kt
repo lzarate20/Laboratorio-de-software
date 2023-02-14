@@ -47,13 +47,13 @@ class VisitaViewHolder(itemView: View) :ViewHolder(itemView) {
             val builder: android.app.AlertDialog.Builder =
                 android.app.AlertDialog.Builder(v.context)
             builder.setTitle("¿Eliminar?")
-            builder.setMessage("¿Esta seguro que desea eliminar esta parcela?")
+            builder.setMessage("¿Esta seguro que desea eliminar esta visita?")
             builder.setPositiveButton(
                 "Eliminar",
                 DialogInterface.OnClickListener { dialog, which ->
                     GlobalScope.launch {
                        visitaModel.id?.let { VisitaConeccion.delete(it) }
-                        
+
                     }
                 })
             builder.setNegativeButton(
