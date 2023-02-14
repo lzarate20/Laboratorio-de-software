@@ -75,6 +75,7 @@ class VisitaConeccion {
                 if (result.isSuccessful) {
                     return Visita(result.body()!!)
                 } else {
+                    println(result.code())
                     return Visita("Nose se pudo guardar la visita")
                 }
             } catch (e: Exception) {

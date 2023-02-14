@@ -12,10 +12,10 @@ interface VisitaService {
     @GET("/api/Visitas/{id}")
     suspend fun getSingleVisita(@Path("id") id: Int): Response<VisitaFechaList>
 
-    @PUT("/api/visitas")
+    @PUT("/api/Visitas")
     suspend fun putVisita(@Body visitas:Visita):Response<VisitaFechaList>
 
-    @POST("/api/visitas")
+    @POST("/api/Visitas")
     suspend fun postVisita(@Body visitas:Visita):Response<VisitaFechaList>
 
     @DELETE("/api/Visitas/{id}")

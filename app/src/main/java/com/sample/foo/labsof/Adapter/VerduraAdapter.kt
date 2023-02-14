@@ -21,7 +21,7 @@ class VerduraAdapter(val listaVerdura:List<VerduraFechaList>,val listaSelected: 
 
     inner class VerduraViewHolder(private val binding: ItemVerduraBinding): RecyclerView.ViewHolder(binding.root)  {
 
-        fun render(vegetal: Verdura,position: Int,isSelected:Boolean = false){
+        fun render(vegetal: VerduraFechaList,position: Int,isSelected:Boolean = false){
             binding.inputVegetal.text = vegetal.nombre.toString()
             binding.inputVegetal.isChecked = isSelected
             if (binding.inputVegetal.isChecked) {
