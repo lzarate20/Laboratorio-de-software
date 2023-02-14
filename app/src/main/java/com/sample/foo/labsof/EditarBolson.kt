@@ -57,7 +57,7 @@ class EditarBolson: AppCompatActivity() {
                 val result_quinta = api_quinta.getQuintas()
                 val result_visitas = api_visita.getVisitas()
                 val result_bolson = api_bolson.getBolsonByRonda(bolson_item.idRonda).body()!!.toMutableList()
-                result_bolson.remove(bolson_item)
+                result_bolson.removeAll { it.id_bolson == bolson_item.id_bolson }
                 val result_parcelas = api_parcela.getParcela().body()!!
                 var cantidad_input:Int? = bolson_item.cantidad
                 if(result_ronda.isSuccessful) {
@@ -120,7 +120,7 @@ class EditarBolson: AppCompatActivity() {
                                             "Ya se encuentra un bolson de dicha familia"
                                         binding.errores.visibility = View.VISIBLE
                                     }
-                                    else if (count_verduras < 7 || count_verduras_otro>2) {
+                                    else if (count_verduras < 1 || count_verduras_otro>2) {
                                     binding.errores.text =
                                         "Se deben seleccionar 7 verduras, con al menos 5 de producción propia "
                                     binding.errores.visibility = View.VISIBLE

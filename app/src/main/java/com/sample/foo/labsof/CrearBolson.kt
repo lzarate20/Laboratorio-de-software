@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doBeforeTextChanged
+import androidx.core.widget.doOnTextChanged
 
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,7 +67,7 @@ class CrearBolson : AppCompatActivity() {
                 if(result_ronda.isSuccessful) {
                     val ronda_actual = Ronda.getRondaActual(api_ronda.getRonda().body()!!)
                     var cantidad_input:Int? = null
-                    binding.cantidad.doBeforeTextChanged { text, start, count, after ->
+                    binding.cantidad.doOnTextChanged{ text, start, count, after ->
                         cantidad_input = text.toString().toIntOrNull()
                     }
                     initSpinner(spinner, result_quinta.body().orEmpty())

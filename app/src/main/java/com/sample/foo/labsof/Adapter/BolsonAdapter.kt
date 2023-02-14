@@ -23,9 +23,8 @@ class BolsonAdapter(val listaBolsones:List<Bolson>, val listaQuintas:List<Quinta
 
     override fun onBindViewHolder(holder: BolsonViewHolder, position: Int) {
             val item = listaBolsones[position]
-            val itemQ = listaQuintas[position]
+            val itemQ = listaQuintas.find { it.fpId == item.idFp }!!
             holder.render(item,itemQ, editOnClickListener,deleteOnClickListener)
-
     }
 
     override fun getItemCount(): Int {
