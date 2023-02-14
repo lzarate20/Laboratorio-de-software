@@ -72,7 +72,10 @@ class CrearBolson : AppCompatActivity() {
                 val result_visitas = api_visita.getVisitas()
                 val result_bolson = api_bolson.getBolsonByRonda(null)
                 val result_parcelas = api_parcela.getParcela().body()!!
-                val id_ultimo = result_bolson.body()!!.reduce(Bolson.Compare::maxId).id_bolson
+                var id_ultimo = 0
+                if(!result_bolson.body()!!.isEmpty()){
+                     id_ultimo = result_bolson.body()!!.reduce(Bolson.Compare::maxId).id_bolson!!
+                }
                 if(result_ronda.isSuccessful) {
                     val ronda_actual = Ronda.getRondaActual(api_ronda.getRonda().body()!!)
                     var cantidad_input:Int? = null
