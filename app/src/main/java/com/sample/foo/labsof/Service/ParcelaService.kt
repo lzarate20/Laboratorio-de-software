@@ -11,4 +11,8 @@ interface ParcelaService {
     @GET("/api/Parcelas/{id}")
     suspend fun getParcela(@Path("id") id: Int?): Response<Parcela>
 
+    @GET("/api/Parcelas")
+    suspend fun getParcela(): Response<List<Parcela>>
+
+
 }

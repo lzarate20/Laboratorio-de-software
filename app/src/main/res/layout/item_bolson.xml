@@ -19,6 +19,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:ignore="InvalidId" />
+        <Button
+            android:id="@+id/delete"
+            android:layout_width="match_parent"
+            android:text="Eliminar bolson"
+            android:layout_height="50dp"
+            android:layout_gravity="right" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

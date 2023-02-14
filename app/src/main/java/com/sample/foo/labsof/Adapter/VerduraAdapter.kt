@@ -23,6 +23,12 @@ class VerduraAdapter(val listaVerdura:List<Verdura>,val listaSelected: List<Verd
         fun render(vegetal: Verdura,position: Int,isSelected:Boolean = false){
             binding.inputVegetal.text = vegetal.nombre.toString()
             binding.inputVegetal.isChecked = isSelected
+            if (binding.inputVegetal.isChecked) {
+                verdurasMap.put(position, vegetal.nombre.toString())
+            }
+            else{
+                verdurasMap.remove(position)
+            }
             binding.inputVegetal.setBackgroundResource(
                 if (binding.inputVegetal.isChecked)
                     android.R.color.holo_green_dark
@@ -37,7 +43,12 @@ class VerduraAdapter(val listaVerdura:List<Verdura>,val listaSelected: List<Verd
                     else
                         android.R.color.white
                 )
-                verdurasMap.put(position,it.toString())
+                if (binding.inputVegetal.isChecked) {
+                    verdurasMap.put(position, it.toString())
+                }
+                else{
+                    verdurasMap.remove(position)
+                }
             }
         }
     }

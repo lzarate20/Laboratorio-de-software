@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter
 
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doBeforeTextChanged
 
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -49,6 +50,9 @@ class CrearBolson : AppCompatActivity() {
         val api_bolson = Retrofit.Builder().baseUrl(Coneccion.url)
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(BolsonService::class.java)
+        val api_parcela = Retrofit.Builder().baseUrl(Coneccion.url)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build().create(ParcelaService::class.java)
         val spinner:Spinner = binding.familiaProductora
         lifecycleScope.launch{
             try {
@@ -56,9 +60,15 @@ class CrearBolson : AppCompatActivity() {
                 val result_verduras = api_verdura.getVerdura()
                 val result_quinta = api_quinta.getQuintas()
                 val result_visitas = api_visita.getVisitas()
+                val result_bolson = api_bolson.getBolsonByRonda(null)
+                val result_parcelas = api_parcela.getParcela().body()!!
+                val id_ultimo = result_bolson.body()!!.reduce(Bolson.Compare::maxId).id_bolson
                 if(result_ronda.isSuccessful) {
                     val ronda_actual = Ronda.getRondaActual(api_ronda.getRonda().body()!!)
-
+                    var cantidad_input:Int? = null
+                    binding.cantidad.doBeforeTextChanged { text, start, count, after ->
+                        cantidad_input = text.toString().toIntOrNull()
+                    }
                     initSpinner(spinner, result_quinta.body().orEmpty())
                     initView(result_verduras.body().orEmpty())
                     spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -78,30 +88,60 @@ class CrearBolson : AppCompatActivity() {
                                 var verdura: Verdura
                                 var lista_verduras = ArrayList<Verdura>()
                                 var count_verduras_otro = 0
+                                var count_verduras = 0
+                                var verdura_en_parcela = true
                                 for (each in data.keys) {
                                     verdura = result_verduras.body().orEmpty().get(each)
-                                    var parcela =
-                                        visita.parcelas?.filter { it.id_verdura == verdura.id_verdura }
-                                    if (parcela?.isEmpty()!!) {
+                                    var id_parcela = visita.parcelas!!.map { it.id_parcela }
+                                    var parcela = result_parcelas.filter{each -> id_parcela.any { it == each.id_parcela  }}.any{it.id_verdura == verdura.id_verdura}
+                                    if (!parcela) {
                                         // Buscar parcela de otra quinta
-                                        count_verduras_otro += 1;
                                         var visitasQuintas = Visita.getUltimaVisita(
                                             result_visitas.body()!!,
                                             result_quinta.body()!!
                                         )
-                                        //parcela = visitasQuintas.map { it.parcelas?.filter { it.id_verdura == verdura.id_verdura } }
+                                        id_parcela = visitasQuintas.flatMap { it.parcelas!!.map { it.id_parcela } }
+                                        parcela = result_parcelas.filter{each -> id_parcela.any { it == each.id_parcela  }}.any{it.id_verdura == verdura.id_verdura}
+                                        if(parcela){
+                                            count_verduras_otro += 1
+                                        }
+                                        else{
+                                            verdura_en_parcela = false
+                                        }
                                     }
+                                    count_verduras +=1
                                     lista_verduras.add(verdura)
                                 }
-                                val bolson = Bolson(
-                                    54,
-                                    0,
-                                    idFp = result_quinta.body()!!.get(position).fpId,
-                                    idRonda = ronda_actual.id_ronda,
-                                    verduras = lista_verduras
-                                )
-                                lifecycleScope.launch { api_bolson.postBolson(bolson) }
-                                finish()
+                                var id_fp = result_quinta.body()!!.get(position).fpId
+                                if (result_bolson.body()!!.any { it.idFp == id_fp }){
+                                    binding.errores.text =
+                                        "Ya existe un bolson para dicha familia"
+                                    binding.errores.visibility = View.VISIBLE
+                                }
+                                else if (count_verduras < 1 || count_verduras_otro>2 ) {
+                                    binding.errores.text =
+                                        "Se deben seleccionar 7 verduras, con al menos 5 de producción propia"
+                                    binding.errores.visibility = View.VISIBLE
+                                } else if (cantidad_input == null || cantidad_input!! <=0) {
+                                    binding.errores.text =
+                                        "La cantidad de bolsones debe ser mayor a 0"
+                                    binding.errores.visibility = View.VISIBLE
+                                }
+                                else if(verdura_en_parcela.not()){
+                                    binding.errores.text = "Se debe seleccionar una verdura de produccion propia o que haya producido otra familia"
+                                    binding.errores.visibility = View.VISIBLE
+                                }
+                                else {
+                                    val bolson = Bolson(
+                                        id_ultimo!! + 1,
+                                        cantidad_input!!,
+                                        idFp = result_quinta.body()!!.get(position).fpId,
+                                        idRonda = ronda_actual.id_ronda,
+                                        verduras = lista_verduras
+                                    )
+                                    lifecycleScope.launch { api_bolson.postBolson(bolson) }
+                                    finish()
+                                }
                             }
                             }
                         }

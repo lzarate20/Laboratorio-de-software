@@ -6,6 +6,8 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doBeforeTextChanged
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sample.foo.labsof.Adapter.VerduraAdapter
@@ -44,6 +46,9 @@ class EditarBolson: AppCompatActivity() {
         val api_ronda = Retrofit.Builder().baseUrl(Coneccion.url)
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(RondaService::class.java)
+        val api_parcela = Retrofit.Builder().baseUrl(Coneccion.url)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build().create(ParcelaService::class.java)
         val spinner: Spinner = binding.familiaProductora
         lifecycleScope.launch{
             try {
@@ -52,8 +57,16 @@ class EditarBolson: AppCompatActivity() {
                 val result_verduras = api_verdura.getVerdura()
                 val result_quinta = api_quinta.getQuintas()
                 val result_visitas = api_visita.getVisitas()
+                val result_bolson = api_bolson.getBolsonByRonda(bolson_item.idRonda).body()!!.toMutableList()
+                result_bolson.remove(bolson_item)
+                val result_parcelas = api_parcela.getParcela().body()!!
+                var cantidad_input:Int? = bolson_item.cantidad
                 if(result_ronda.isSuccessful) {
-                    val ronda_actual = result_ronda.body()
+                    binding.cantidad.setText(bolson_item.cantidad.toString())
+                    binding.cantidad.doOnTextChanged{ text, start, count, after ->
+                        cantidad_input = text.toString().toIntOrNull()
+                    }
+                    // Setear el spinner
                     val quinta_actual = Quinta.findQuintaByFp(
                             result_quinta.body().orEmpty(),
                             bolson_item.idFp?.toInt()
@@ -78,30 +91,59 @@ class EditarBolson: AppCompatActivity() {
                                     var verdura: Verdura
                                     var lista_verduras = ArrayList<Verdura>()
                                     var count_verduras_otro = 0
+                                    var count_verduras = 0
+                                    var verdura_en_parcela = true
                                     for (each in data.keys) {
                                         verdura = result_verduras.body().orEmpty().get(each)
-                                        var parcela =
-                                            visita.parcelas?.filter { it.id_verdura == verdura.id_verdura }
-                                        if (parcela?.isEmpty()!!) {
+                                        var id_parcela = visita.parcelas!!.map { it.id_parcela }
+                                       var parcela = result_parcelas.filter{each -> id_parcela.any { it == each.id_parcela  }}.any{it.id_verdura == verdura.id_verdura}
+                                        if (!parcela) {
                                             // Buscar parcela de otra quinta
-                                            count_verduras_otro += 1;
                                             var visitasQuintas = Visita.getUltimaVisita(
                                                 result_visitas.body()!!,
                                                 result_quinta.body()!!
                                             )
-                                            //parcela = visitasQuintas.map { it.parcelas?.filter { it.id_verdura == verdura.id_verdura } }
+                                            id_parcela = visitasQuintas.flatMap { it.parcelas!!.map { it.id_parcela } }
+                                            parcela = result_parcelas.filter{each -> id_parcela.any { it == each.id_parcela  }}.any{it.id_verdura == verdura.id_verdura}
+                                            if(parcela){
+                                                count_verduras_otro += 1
+                                            }
+                                            else{
+                                                verdura_en_parcela = false
+                                            }
                                         }
+                                        count_verduras +=1
                                         lista_verduras.add(verdura)
                                     }
-                                    val bolson = Bolson(
-                                        bolson_item.id_bolson!!,
-                                        bolson_item.cantidad,
-                                        idFp = result_quinta.body()!!.get(position).fpId,
-                                        idRonda = bolson_item.idRonda,
-                                        verduras = lista_verduras
-                                    )
+                                    var id_fp = result_quinta.body()!!.get(position).fpId
+                                    if (result_bolson.any { it.idFp == id_fp }) {
+                                        binding.errores.text =
+                                            "Ya se encuentra un bolson de dicha familia"
+                                        binding.errores.visibility = View.VISIBLE
+                                    }
+                                    else if (count_verduras < 7 || count_verduras_otro>2) {
+                                    binding.errores.text =
+                                        "Se deben seleccionar 7 verduras, con al menos 5 de producción propia "
+                                    binding.errores.visibility = View.VISIBLE
+                                } else if (cantidad_input == null || cantidad_input!! <= 0) {
+                                    binding.errores.text =
+                                        "La cantidad de bolsones debe ser mayor a 0"
+                                    binding.errores.visibility = View.VISIBLE
+                                } else if(verdura_en_parcela.not()){
+                                        binding.errores.text = "Se debe seleccionar una verdura de produccion propia o que haya producido otra familia"
+                                        binding.errores.visibility = View.VISIBLE
+                                    }
+                                    else {
+                                        val bolson = Bolson(
+                                            bolson_item.id_bolson!!,
+                                            cantidad_input!!,
+                                            idFp = id_fp,
+                                            idRonda = bolson_item.idRonda,
+                                            verduras = lista_verduras
+                                        )
                                     lifecycleScope.launch { api_bolson.putBolson(bolson) }
                                     finish()
+                                }
                                 }
                             }
                         }
