@@ -7,7 +7,7 @@ import retrofit2.http.*
 
 interface ParcelaService {
     @GET("/api/Parcelas")
-    suspend fun getParcelas(@Query("page") page: Int?): Response<List<Parcela>>
+    suspend fun getParcelas(): Response<List<Parcela>>
 
     @GET("/api/Parcelas/{id}")
     suspend fun getSingleParcelas(@Path("id") id: Int?): Response<Parcela>
@@ -23,4 +23,5 @@ interface ParcelaService {
 
     @GET("/api/Parcelas")
     suspend fun getParcela(): Response<List<Parcela>>
+
 }

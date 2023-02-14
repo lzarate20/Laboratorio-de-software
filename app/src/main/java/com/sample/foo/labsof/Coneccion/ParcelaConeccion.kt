@@ -10,7 +10,7 @@ class ParcelaConeccion {
         var api = Coneccion.api.create(ParcelaService::class.java)
         suspend fun get(): List<Parcela>? {
             try {
-                val result = api.getParcelas(1)
+                val result = api.getParcelas()
                 if (result.isSuccessful) {
                     return result.body()
                 } else {
