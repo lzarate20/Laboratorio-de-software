@@ -1,12 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/visita"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="10dp"
+    android:background="@drawable/item_recycler_view">
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:ignore="InvalidId,MissingConstraints" />
+        android:orientation="vertical"
+        android:id="@+id/l"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/ver"
+        android:gravity="center"
+        android:layout_margin="5dp">
+    <TextView
+        android:id="@+id/fecha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="InvalidId,MissingConstraints"
+        android:gravity="center"/>
+    <TextView
+        android:id="@+id/tecnico"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="InvalidId,MissingConstraints"
+        android:gravity="center"
+        tools:text="Juan"/>
+    <TextView
+        android:id="@+id/quinta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="InvalidId,MissingConstraints"
+        android:gravity="center"
+        tools:text="Juan"/>
+    </LinearLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ver"
+        android:id="@+id/ver"
+        android:background="@drawable/botones"
+        android:textColor="@color/white"
+        tools:ignore="InvalidId,MissingConstraints"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="4dp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>

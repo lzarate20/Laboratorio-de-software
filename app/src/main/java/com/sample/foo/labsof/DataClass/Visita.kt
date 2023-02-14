@@ -1,7 +1,9 @@
 package com.sample.foo.labsof.DataClass
 
+import com.sample.foo.labsof.helpers.ConversorDate
+
 class Visita(val error:String?=null) {
-    var parcelas: List<Parcela>? = null
+    var parcelas: List<ParcelaVerdura>? = null
     var id_visita: Int? = null
     var fecha_visita: String? = null
     var descripcion: String? = null
@@ -11,7 +13,7 @@ class Visita(val error:String?=null) {
     constructor(
         id_visita: Int?, fecha_visita: String?,
         descripcion: String?, id_tecnico: Int?,
-        id_quinta: Int?, parcelas: List<Parcela>?
+        id_quinta: Int?, parcelas: List<ParcelaVerdura>?
     ) : this(
         fecha_visita,
         descripcion, id_tecnico,
@@ -34,7 +36,7 @@ class Visita(val error:String?=null) {
     }
     constructor(v: VisitaFechaList):this(){
         val f=v.fecha_visita
-        this.fecha_visita="${(f?.get(0))}-${(f?.get(1))}-${(f?.get(2))}"
+        this.fecha_visita=ConversorDate.convertToBD(v.fecha_visita!!)
         this.id_tecnico=v.id_tecnico
         this.descripcion=v.descripcion
         this.id_quinta=v.id_quinta

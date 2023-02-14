@@ -70,8 +70,19 @@ class ConversorDate {
             val f = fecha.split("/")
             return "${(f[2])}-${(f[1])}-${(f[0])}"
         }
+        fun convertToBD(fecha: List<Int>):String{
+            var dia: String="${(fecha[2])}"
+            if(fecha[2]/10 < 1) dia= "0${(fecha[2])}"
+            var mes: String="${(fecha[1])}"
+            if(fecha[1]/10 < 1) mes= "0${(fecha[1])}"
+            return "${(fecha[0])}-${(mes)}-${(dia)}"
+        }
         fun convertToInput(fecha: List<Int>):String{
-            return "${(fecha[2])}/${(fecha[1])}/${(fecha[0])}"
+            var dia: String="${(fecha[2])}"
+            if(fecha[2]/10 < 1) dia= "0${(fecha[2])}"
+            var mes: String="${(fecha[1])}"
+            if(fecha[1]/10 < 1) mes= "0${(fecha[1])}"
+            return "${(dia)}/${(mes)}/${(fecha[0])}"
         }
         fun convertToArray(fecha:String):List<Int>{
             val f = fecha.split("/") as List<Int>

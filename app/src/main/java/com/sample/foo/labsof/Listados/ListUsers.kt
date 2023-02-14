@@ -21,7 +21,7 @@ class ListUsers() {
                 error="No hay tecnicos guardados"
             }
             return ListUsers(users!!.filter {
-                it.roles != 1
+                it.roles == 1
             }, error)
         }
         return ListUsers(error)
@@ -30,7 +30,7 @@ class ListUsers() {
         if (users != null) {
 
             var admin =ListUsers(users!!.filter {
-                it.roles == 1
+                it.roles ==0
             },error)
             if (admin!!.users!!.isEmpty() == true){
                 admin.error="No hay Administradores guardados"
@@ -39,6 +39,12 @@ class ListUsers() {
         }
 
         return ListUsers(error)
+    }
+    fun getById(id:Int):User?{
+        return users?.find { u-> u.id_user==id }
+    }
+    fun getPos(id: Int):Int{
+        return users!!.indexOfFirst { u->u.id_user==id }
     }
 
 }

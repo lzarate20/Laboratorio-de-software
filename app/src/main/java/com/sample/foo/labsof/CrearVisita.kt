@@ -61,7 +61,7 @@ class CrearVisita : AppCompatActivity() {
                 val error= findViewById<TextView>(R.id.errrorQ)
                 mostrarError(error, listQ.error!!)
             }
-
+  
 
             if (listQ.error == null && listTec.error == null) {
                 val guardar = findViewById<Button>(R.id.guardar)

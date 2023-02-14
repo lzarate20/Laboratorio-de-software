@@ -1,6 +1,7 @@
 package com.sample.foo.labsof.Listados
 
 import com.sample.foo.labsof.DataClass.Quinta
+import com.sample.foo.labsof.DataClass.User
 
 class ListQuintas() {
     var quintas: List<Quinta>?=null
@@ -18,5 +19,11 @@ class ListQuintas() {
     }
     constructor(lista: List<Quinta>, error: String?):this(lista){
         this.error=error
+    }
+    fun getById(id:Int): Quinta?{
+        return quintas?.find { u-> u.id_quinta==id }
+    }
+    fun getPos(id: Int):Int{
+        return quintas!!.indexOfFirst { u->u.id_quinta==id }
     }
 }

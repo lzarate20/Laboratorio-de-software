@@ -16,7 +16,6 @@ class UserConeccion {
                     return ListUsers("Error al obtener los usuarios")
                 }
             } catch (e: Exception) {
-
                 return ListUsers("Error al intentar conectar a la Base de datos")
             }
         }

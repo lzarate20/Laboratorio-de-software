@@ -33,4 +33,14 @@ class Parcela() {
     constructor(error:String?):this(){
         this.error=error
     }
+    constructor(p:ParcelaVerdura):this(){
+        this.cantidad_surcos = p.cantidad_surcos
+        this.cubierta = p.cubierta
+        this.cosecha = p.cosecha
+        this.id_verdura = p.verdura?.id_verdura
+        this.id_parcela= p.id_parcela
+        this.id_visita= p.id_visita
+    }
+
+
 }
