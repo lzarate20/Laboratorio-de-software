@@ -77,8 +77,9 @@ class FechaDialog() : DialogFragment() {
 
         val dialog =
             DatePickerDialog(requireContext(), R.style.DialogTheme, observer, year, month, day)
+
         dialog.datePicker.minDate = minDate!!
-        dialog.datePicker.minDate = maxDate!!
+        dialog.datePicker.maxDate = maxDate!!
 
         return dialog
     }
@@ -86,4 +87,5 @@ class FechaDialog() : DialogFragment() {
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
     }
+
 }

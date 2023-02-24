@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.core.app.ActivityCompat.startActivityForResult
 
 import android.content.Intent
 
@@ -37,6 +36,11 @@ class Menu : Fragment() {
         val visitas : Button =view.findViewById<Button>(R.id.visitas)
         visitas.setOnClickListener{ view: View ->
             val intent = Intent (activity , Visitas::class.java)
+            activity?.startActivity(intent)
+        }
+        val familia : Button =view.findViewById<Button>(R.id.familias)
+        familia.setOnClickListener{ view: View ->
+            val intent = Intent (activity , CrearQuintaActivity::class.java)
             activity?.startActivity(intent)
         }
         return view

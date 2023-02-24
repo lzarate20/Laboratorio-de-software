@@ -20,6 +20,7 @@ class Quinta() {
         this.direccion = direccion
         this.geoImg = geoImg
         this.fpId = fpId
+        this.id_quinta = fpId
     }
 
     constructor(

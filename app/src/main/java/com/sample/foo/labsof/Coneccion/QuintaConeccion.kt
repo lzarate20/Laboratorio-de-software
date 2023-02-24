@@ -33,5 +33,18 @@ class QuintaConeccion {
                 return Quinta("Error al intentar conectar a la Base de datos")
             }
         }
+        suspend fun post(quinta:Quinta): Quinta?{
+            try {
+                val result = QuintaConeccion.api.postQuintas(quinta)
+                if (result.isSuccessful) {
+                    return result.body()!!
+                } else {
+                    return null
+                }
+            } catch (e: Exception) {
+
+                return null
+            }
+        }
     }
 }

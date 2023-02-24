@@ -26,6 +26,14 @@
         android:background="@drawable/botones"
         android:onClick="bolsones"
         android:id="@+id/bolsones"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="familia"
+        android:layout_margin="10dp"
+        android:textColor="@color/white"
+        android:background="@drawable/botones"
+        android:id="@+id/familias"/>
 
 </LinearLayout>
 
