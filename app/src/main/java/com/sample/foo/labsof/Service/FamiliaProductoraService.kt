@@ -6,7 +6,7 @@ import retrofit2.http.*
 
 interface FamiliaProductoraService {
     @GET("/api/FamiliasProductoras")
-    suspend fun getFamiliasProductoras(@Query("page") page: Long): Response<List<FamiliaProductora>>
+    suspend fun getFamiliasProductoras(): Response<List<FamiliaProductora>>
 
     @GET("/api/FamiliasProductoras/{id}")
     suspend fun getSingleFamiliaProductora(@Path("id") id: Long): Response<FamiliaProductora>

@@ -7,6 +7,22 @@ class FamiliaProductoraConeccion {
     companion object {
         var api = Coneccion.api.create(FamiliaProductoraService::class.java)
 
+
+        suspend fun get():List<FamiliaProductora>?{
+            try {
+                val result = FamiliaProductoraConeccion.api.getFamiliasProductoras()
+                if (result.isSuccessful) {
+                    return result.body()
+                } else {
+                    println(result.code())
+                    return null
+                }
+            } catch (e: Exception) {
+                println(e.printStackTrace())
+                return null
+            }
+        }
+
         suspend fun post(familiaProductora: FamiliaProductora):FamiliaProductora?{
             try {
                 val result = api.postFamiliasProductoras(familiaProductora)

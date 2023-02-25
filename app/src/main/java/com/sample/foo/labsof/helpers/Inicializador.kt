@@ -38,7 +38,7 @@ class Inicializador {
             var api2 = Coneccion.api.create(FamiliaProductoraService::class.java)
             fp = createFp()
             lifecycleScope.launch {
-                val isEmpty = api2.getFamiliasProductoras(1)
+                val isEmpty = api2.getFamiliasProductoras()
                 if (isEmpty.isSuccessful && isEmpty.body()?.isEmpty() == true) {
                     val result = api2.postFamiliasProductoras(fp)
                     if (result.isSuccessful) {

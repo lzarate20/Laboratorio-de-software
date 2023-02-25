@@ -40,7 +40,7 @@ class Menu : Fragment() {
         }
         val familia : Button =view.findViewById<Button>(R.id.familias)
         familia.setOnClickListener{ view: View ->
-            val intent = Intent (activity , CrearQuintaActivity::class.java)
+            val intent = Intent (activity , QuintasActivity::class.java)
             activity?.startActivity(intent)
         }
         return view
