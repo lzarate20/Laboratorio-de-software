@@ -66,5 +66,20 @@ class FamiliaProductoraConeccion {
             }
         }
 
+        suspend fun delete(id:Int):FamiliaProductora?{
+            try {
+                val result = FamiliaProductoraConeccion.api.deleteSingleFamiliasProductoras(id)
+                if (result.isSuccessful) {
+                    return result.body()!!
+                } else {
+                    println(result.code())
+                    return null
+                }
+            } catch (e: Exception) {
+                println(e.printStackTrace())
+                return null
+            }
+        }
+
     }
 }

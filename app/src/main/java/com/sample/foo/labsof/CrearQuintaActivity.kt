@@ -54,6 +54,8 @@ class CrearQuintaActivity:AppCompatActivity() {
         toolbar.setArguments(bun)
         FT.add(R.id.toolbar, toolbar)
         FT.commit()
+        binding.nombreVista.text = "Crear Quinta"
+        binding.submit.text = "Crear Quinta"
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
             PERMISSION_GRANTED) {
             val permiso = arrayOf<String>(android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.WRITE_EXTERNAL_STORAGE,android.Manifest.permission.READ_EXTERNAL_STORAGE)

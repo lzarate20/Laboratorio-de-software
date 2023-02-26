@@ -47,6 +47,8 @@ class EditarQuintaActivity : AppCompatActivity() {
         toolbar.setArguments(bun)
         FT.add(R.id.toolbar, toolbar)
         FT.commit()
+        binding.nombreVista.text = "Editar Quinta"
+        binding.submit.text = "Editar Quinta"
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
             PackageManager.PERMISSION_GRANTED
         ) {
@@ -136,6 +138,8 @@ class EditarQuintaActivity : AppCompatActivity() {
                                 builder.setPositiveButton("Listo",
                                     DialogInterface.OnClickListener { dialog, which ->
                                         finish()
+                                        finish()
+                                        startActivity(intent)
                                     })
                                 builder.create()?.show()
                             }
