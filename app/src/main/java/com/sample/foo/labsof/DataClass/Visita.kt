@@ -36,7 +36,7 @@ class Visita(val error:String?=null) {
     }
     constructor(v: VisitaFechaList):this(){
         val f=v.fecha_visita
-        this.fecha_visita=ConversorDate.convertToBD(v.fecha_visita!!)
+        this.fecha_visita= ConversorDate.convertToBD(v.fecha_visita!!)
         this.id_tecnico=v.id_tecnico
         this.descripcion=v.descripcion
         this.id_quinta=v.id_quinta

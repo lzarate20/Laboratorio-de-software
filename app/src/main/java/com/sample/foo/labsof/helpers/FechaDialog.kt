@@ -16,8 +16,8 @@ class FechaDialog() : DialogFragment() {
     private var month: Int
     private var year: Int
     private var observer: DatePickerDialog.OnDateSetListener? = null
-    private var minDate: Long? = null
-    private var maxDate: Long? = null
+    private var minDate: Long = Long.MIN_VALUE
+    private var maxDate: Long = Long.MAX_VALUE
 
     init {
         LocalDate.now().let { now ->

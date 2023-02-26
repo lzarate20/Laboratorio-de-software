@@ -7,11 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.core.app.ActivityCompat.startActivityForResult
 
 import android.content.Intent
-
-
+import com.sample.foo.labsof.helpers.Session
 
 
 class Menu : Fragment() {
@@ -37,6 +35,14 @@ class Menu : Fragment() {
         val visitas : Button =view.findViewById<Button>(R.id.visitas)
         visitas.setOnClickListener{ view: View ->
             val intent = Intent (activity , Visitas::class.java)
+            activity?.startActivity(intent)
+        }
+        val user : Button =view.findViewById(R.id.users)
+        if(activity?.let { Session(it).getSession().isTecnico() } == true){
+            user.visibility= View.GONE
+        }
+        user.setOnClickListener{ view: View ->
+            val intent = Intent (activity , UserActivity::class.java)
             activity?.startActivity(intent)
         }
         return view

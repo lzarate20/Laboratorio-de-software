@@ -30,7 +30,7 @@ class Verdura() {
         this.id_verdura=v.id_verdura
         this.descripcion= v.descripcion
         this.nombre= v.nombre
-        this.tiempo_cosecha=ConversorDate.convertToInput(v.tiempo_cosecha!!)
+        this.tiempo_cosecha= ConversorDate.convertToInput(v.tiempo_cosecha!!)
         this.mes_siembra= ConversorDate.convertToInput(v.mes_siembra!!)
         this.archImg= v.archImg
         this.parcelas= v.parcelas

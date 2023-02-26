@@ -1,9 +1,11 @@
 package com.sample.foo.labsof
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +18,7 @@ import com.sample.foo.labsof.Coneccion.VisitaConeccion
 import kotlinx.coroutines.launch
 
 class ProximasVisitas : AppCompatActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_proximas_visitas)
@@ -30,6 +33,7 @@ class ProximasVisitas : AppCompatActivity() {
         initRecyclerView()
 
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun initRecyclerView(){
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerVisita)
         recyclerView.layoutManager=LinearLayoutManager(this)

@@ -27,7 +27,7 @@ class ParcelaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val ver= itemView.findViewById<Button>(R.id.ver)
     val eliminar= itemView.findViewById<Button>(R.id.eliminar)
 
-    fun render(parcela:ParcelaVerdura, actualizar:Boolean, verduras: List<VerduraFechaList>?, view:VerVisita){
+    fun render( parcela:ParcelaVerdura, actualizar:Boolean, verduras: List<VerduraFechaList>?, view:VerVisita){
 
         cosecha.isChecked= parcela.cosecha == true
         cubierta.isChecked= parcela.cubierta == true

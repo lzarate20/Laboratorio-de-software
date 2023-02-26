@@ -5,6 +5,9 @@ import com.sample.foo.labsof.DataClass.User
 class ListUsers() {
     var users: List<User>?=null
     var error:String?=null
+    init {
+        users?.forEach { u-> u.password=null }
+    }
     constructor(users: List<User>?):this(){
         this.users=users
     }
@@ -21,7 +24,7 @@ class ListUsers() {
                 error="No hay tecnicos guardados"
             }
             return ListUsers(users!!.filter {
-                it.roles == 1
+                it.isTecnico()
             }, error)
         }
         return ListUsers(error)
@@ -30,7 +33,7 @@ class ListUsers() {
         if (users != null) {
 
             var admin =ListUsers(users!!.filter {
-                it.roles ==0
+                !it.isTecnico()
             },error)
             if (admin!!.users!!.isEmpty() == true){
                 admin.error="No hay Administradores guardados"
@@ -45,6 +48,9 @@ class ListUsers() {
     }
     fun getPos(id: Int):Int{
         return users!!.indexOfFirst { u->u.id_user==id }
+    }
+    fun size():Int{
+        return users!!.size
     }
 
 }
