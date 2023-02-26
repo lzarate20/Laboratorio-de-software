@@ -46,5 +46,18 @@ class QuintaConeccion {
                 return null
             }
         }
+        suspend fun put(quinta:Quinta): Quinta?{
+            try {
+                val result = QuintaConeccion.api.putQuintas(quinta)
+                if (result.isSuccessful) {
+                    return result.body()!!
+                } else {
+                    return null
+                }
+            } catch (e: Exception) {
+
+                return null
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
+import android.view.View
 import android.widget.EditText
 import android.widget.ScrollView
 import android.widget.Toast
@@ -89,20 +90,27 @@ class CrearQuintaActivity:AppCompatActivity() {
 
         binding.submit.setOnClickListener {
             if(binding.nombreQuinta.text == null){
+                binding.error.visibility = View.VISIBLE
                 binding.error.text ="Se debe ingresar el nombre de la quinta"
             }
             else if(binding.direccion.text == null){
+                binding.error.visibility = View.VISIBLE
                 binding.error.text = "Se debe ingresar una direccion"
             }
             else if (binding.nombreFamilia.text == null){
+                binding.error.visibility = View.VISIBLE
                 binding.error.text ="Se debe ingresar el nombre de la familia"
             }
             else {
                 val date = LocalDate.parse(binding.fecha.text.toString(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                 if(!date.isBefore(LocalDate.now())){
+                    binding.error.visibility = View.VISIBLE
                     binding.error.text = "Se debe ingresar una fecha anterior al dia de hoy"
                 }
                 else{
+                    year = date.year
+                    month = date.monthValue
+                    day = date.dayOfMonth
                     var list = listOf(year,month,day)
                     var fp = FamiliaProductora(binding.nombreFamilia.text.toString(),list)
                     lifecycleScope.launch{

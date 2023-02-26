@@ -9,7 +9,7 @@ interface FamiliaProductoraService {
     suspend fun getFamiliasProductoras(): Response<List<FamiliaProductora>>
 
     @GET("/api/FamiliasProductoras/{id}")
-    suspend fun getSingleFamiliaProductora(@Path("id") id: Long): Response<FamiliaProductora>
+    suspend fun getSingleFamiliaProductora(@Path("id") id: Int): Response<FamiliaProductora>
 
     @PUT("/api/FamiliasProductoras")
     suspend fun putFamiliasProductoras(@Body familiaProductora: FamiliaProductora): Response<FamiliaProductora>
@@ -18,5 +18,5 @@ interface FamiliaProductoraService {
     suspend fun postFamiliasProductoras(@Body familiaProductora: FamiliaProductora): Response<FamiliaProductora>
 
     @DELETE("/api/FamiliasProductoras/{id}")
-    suspend fun deleteSingleFamiliasProductoras(@Path("id") id: Long): Response<FamiliaProductora>
+    suspend fun deleteSingleFamiliasProductoras(@Path("id") id: Int): Response<FamiliaProductora>
 }

@@ -1,5 +1,6 @@
 package com.sample.foo.labsof
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sample.foo.labsof.Adapter.QuintaAdapter
 import com.sample.foo.labsof.Coneccion.FamiliaProductoraConeccion
 import com.sample.foo.labsof.Coneccion.QuintaConeccion
+import com.sample.foo.labsof.DataClass.Bolson
 import com.sample.foo.labsof.DataClass.FamiliaProductora
+import com.sample.foo.labsof.DataClass.Quinta
 import com.sample.foo.labsof.Listados.ListQuintas
 import com.sample.foo.labsof.databinding.ActivityListaQuintasBinding
 import retrofit2.HttpException
@@ -53,6 +56,12 @@ class ListadoQuintasActivity: AppCompatActivity() {
 
     }
 
+    fun onItemSelected(quinta: Quinta){
+        val intent = Intent(this, EditarQuintaActivity::class.java)
+        intent.putExtra("quinta",quinta.id_quinta)
+        startActivity(intent)
+    }
+
     fun initView(listaQ: ListQuintas,listaF: List<FamiliaProductora>) {
         val recyclerView = binding.recyclerQuintas
         val textView = binding.sinQuintas
@@ -60,7 +69,7 @@ class ListadoQuintasActivity: AppCompatActivity() {
             textView.setVisibility(View.VISIBLE)
         } else {
             recyclerView.layoutManager = LinearLayoutManager(this)
-            adapter = QuintaAdapter(listaQ.quintas!!,listaF,{},{})
+            adapter = QuintaAdapter(listaQ.quintas!!,listaF,{onItemSelected(it)},{})
             recyclerView.adapter = adapter
             textView.setVisibility(View.GONE)
         }
