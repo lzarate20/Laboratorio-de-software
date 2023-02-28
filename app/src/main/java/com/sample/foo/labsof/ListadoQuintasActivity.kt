@@ -68,6 +68,12 @@ class ListadoQuintasActivity: AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun onItemRoute(quinta: Quinta){
+        val intent = Intent(this, RutaActivity::class.java)
+        intent.putExtra("quinta",quinta.id_quinta)
+        startActivity(intent)
+    }
+
     fun initView(listaQ: ListQuintas,listaF: List<FamiliaProductora>) {
         val recyclerView = binding.recyclerQuintas
         val textView = binding.sinQuintas
@@ -75,7 +81,7 @@ class ListadoQuintasActivity: AppCompatActivity() {
             textView.setVisibility(View.VISIBLE)
         } else {
             recyclerView.layoutManager = LinearLayoutManager(this)
-            adapter = QuintaAdapter(listaQ.quintas!!,listaF,{onItemSelected(it)},{deleteItem(it)})
+            adapter = QuintaAdapter(listaQ.quintas!!,listaF,{onItemSelected(it)},{onItemRoute(it)},{deleteItem(it)})
             recyclerView.adapter = adapter
             textView.setVisibility(View.GONE)
         }

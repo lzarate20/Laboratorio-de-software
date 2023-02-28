@@ -75,6 +75,20 @@
             android:layout_alignParentRight="true"
             android:gravity="center"
             android:layout_margin="5dp">
+            <Button
+                android:id="@+id/editarQuinta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/botones"
+                android:text="Editar quinta"
+                android:textColor="@color/white" />
+            <Button
+                android:id="@+id/rutaQuinta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/botones"
+                android:text="Ver Ruta"
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/delete"
@@ -85,13 +99,6 @@
                 android:textColor="@color/white"
                 android:layout_marginBottom="5dp"/>
 
-            <Button
-                android:id="@+id/editarQuinta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/botones"
-                android:text="Editar quinta"
-                android:textColor="@color/white" />
         </LinearLayout>
 
 
