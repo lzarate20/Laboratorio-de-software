@@ -1,5 +1,6 @@
 package com.sample.foo.labsof
 
+import android.content.Context
 import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -37,7 +38,7 @@ class ListarAdminActivity : AppCompatActivity() {
         initRecyclerView()
     }
     private fun initRecyclerView(){
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerVisita)
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerUser)
         recyclerView.layoutManager= LinearLayoutManager(this)
         var builder: android.app.AlertDialog.Builder =
             android.app.AlertDialog.Builder(this)
@@ -47,8 +48,9 @@ class ListarAdminActivity : AppCompatActivity() {
         var bCreate = builder.create()
         bCreate.show()
         lifecycleScope.launch{
-            bCreate.dismiss()
+
             val user= UserConeccion.get().getAdmin()
+            bCreate.dismiss()
             if(user.error== null) {
                 recyclerView.adapter = UserAdapter(user)
             }else{
@@ -58,7 +60,7 @@ class ListarAdminActivity : AppCompatActivity() {
                     DialogInterface.OnClickListener { dialog, which ->
                         dialog.dismiss()
                     })
-
+                builder.create().show()
             }
         }
 

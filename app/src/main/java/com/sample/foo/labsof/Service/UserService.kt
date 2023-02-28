@@ -15,7 +15,8 @@ interface UserService {
     suspend fun  login(@Body user: User):Response<Auth>
     @POST("/api/users")
     suspend fun postUser(@Body user:User):Response<User>
-
+    @PUT("/api/users")
+    suspend fun putUser(@Body user:User):Response<User>
     @DELETE("/api/users/{id}")
     suspend fun delete(@Path("id") id: Int): Response<User>
 

@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/config"
-        android:title="Configurar perfil" />
+        android:title="Editar perfil" />
     <item
         android:id="@+id/pass"
         android:title="Cambiar contraseña" />

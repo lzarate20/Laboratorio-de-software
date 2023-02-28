@@ -38,5 +38,9 @@ class Session(private val activity: Activity) {
         fun haveSesion():Boolean{
             return this.getSession().nombre != ""
         }
+    fun closeSession(){
+        editor.clear()
+        editor.commit()
+    }
 
 }

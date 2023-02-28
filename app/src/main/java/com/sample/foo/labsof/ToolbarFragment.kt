@@ -2,6 +2,7 @@ package com.sample.foo.labsof
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.view.Menu
@@ -89,14 +90,17 @@ class ToolbarFragment : Fragment() {
     fun showPopup(view: View) {
         val popup = PopupMenu(view.context, view)
         popup.inflate(R.menu.menu_tooltip)
-
         popup.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item: MenuItem? ->
 
             when (item!!.itemId) {
                 R.id.cSesion -> {
-
+                    Session(activity as Activity).closeSession()
+                    val intent = Intent(activity, MainActivity::class.java)
+                    startActivity(intent)
                 }
                 R.id.config -> {
+                    val intent = Intent(activity, EditarPerfilActivity::class.java)
+                    startActivity(intent)
                 }
                 R.id.pass -> {
                 }

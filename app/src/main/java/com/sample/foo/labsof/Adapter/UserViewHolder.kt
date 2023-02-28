@@ -32,7 +32,6 @@ class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         nombre.text = "${(userModel.nombre)} ${(userModel.apellido)}"
         email.text = "Email: ${(userModel.email)}"
         rol.text = "Rol: ${(userModel.rol())}"
-        ver.text = "Actualizar"
         eliminar.visibility = View.VISIBLE
         ver.setOnClickListener { v ->
             val intent = Intent(v.context, VerUserActivity::class.java)

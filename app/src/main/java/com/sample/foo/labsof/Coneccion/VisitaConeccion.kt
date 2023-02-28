@@ -53,7 +53,6 @@ class VisitaConeccion {
                 val visitas = this.get()
 
                 if (visitas.error == null) {
-                    println("1")
                     val visitas_pasadas = visitas.getVisitasPasadas()
                     var parcelas: List<ParcelaVerdura>? = null
                     if (visitas_pasadas.size() != 0) {

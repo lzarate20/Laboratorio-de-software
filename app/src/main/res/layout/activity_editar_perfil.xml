@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CrearUserActivity">
+    tools:context=".EditarPerfilActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -78,31 +79,7 @@
                 </LinearLayout>
 
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Contraseña: " />
-
-                    <EditText
-                        android:id="@+id/pass"
-                        android:layout_width="match_parent"
-                        android:inputType="textPassword"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-            </LinearLayout>
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -191,7 +168,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Rol: " />
-                    <Spinner
+                    <TextView
                         android:id="@+id/rol"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />

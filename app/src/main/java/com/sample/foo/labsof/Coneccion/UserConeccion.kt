@@ -1,12 +1,14 @@
 package com.sample.foo.labsof.Coneccion
 
+import com.sample.foo.labsof.DataClass.Parcela
+import com.sample.foo.labsof.DataClass.ParcelaVerdura
 import com.sample.foo.labsof.DataClass.User
 import com.sample.foo.labsof.Service.UserService
 import com.sample.foo.labsof.Listados.ListUsers
 
 class UserConeccion {
     companion object {
-        var api = Coneccion.api.create(UserService::class.java)
+        val api = Coneccion.api.create(UserService::class.java)
         suspend fun get(): ListUsers {
             try {
                 val result = api.getUsers(1)
@@ -23,11 +25,11 @@ class UserConeccion {
             try {
                 val result = api.getSingleUser(id)
                 if (result.isSuccessful) {
-                    var user = result.body()!!
+                    val user = result.body()!!
                     user.password= null
                     return user
                 } else {
-                    return User("el usuario seleccionado no existe en la base de datos")
+                    return User("El usuario seleccionado no existe en la base de datos")
                 }
             } catch (e: Exception) {
 
@@ -55,15 +57,40 @@ class UserConeccion {
         suspend fun delete(id: Int):Boolean? {
             try {
                 val result = api.delete(id)
-                if (result.isSuccessful) {
-                    return true
+                return result.isSuccessful
+            } catch (e: Exception) {
+                return null
+            }
+        }
+
+        suspend fun put(user: User):User{
+            try {
+                val u = this.getSingle(user.id_user)
+                if (u.error != null) {
+                    return User(u.error)
+                }
+                user.password= u.password
+                val result = api.putUser(user)
+                return if (result.isSuccessful) {
+                    result.body()!!
                 } else {
-                    println(result.code())
-                    return false
+                    User("Nose se pudo guardar los cambios")
                 }
             } catch (e: Exception) {
-                println(e.printStackTrace())
-                return null
+                return User("Error al intentar conectar a la Base de datos")
+            }
+        }
+        suspend fun post(user:User): User {
+            return try {
+                val result = api.postUser(user)
+                if (result.isSuccessful) {
+                    result.body()!!
+                } else {
+                    User("No se pudo crear el usuario")
+                }
+            } catch (e: Exception) {
+
+                User("Error al intentar conectar a la Base de datos")
             }
         }
 

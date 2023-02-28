@@ -20,21 +20,20 @@ class MainActivity : AppCompatActivity() {
         var bun = Bundle()
         bun.putString("toolbar", "1")
         toolbar.setArguments(bun)
-        println(Session(this@MainActivity).getSession().nombre +" asda")
-        if (Session(this@MainActivity).haveSesion()) {
-            println("con sesion")
-            val menu_inicio: Fragment = Menu()
+         if (Session(this@MainActivity).haveSesion()) {
+             val menu_inicio: Fragment = Menu()
             FT.add(R.id.inicio_menu, menu_inicio)
         } else {
-            println("sin sesion")
-            val menu_inicio: Fragment = InicioSesionFragment()
+           val menu_inicio: Fragment = InicioSesionFragment()
             FT.add(R.id.inicio_menu, menu_inicio)
         }
-        println("despues")
         FT.add(R.id.toolbar, toolbar)
         FT.commit()
 
     }
 
+    override fun onBackPressed() {
+
+    }
 
 }

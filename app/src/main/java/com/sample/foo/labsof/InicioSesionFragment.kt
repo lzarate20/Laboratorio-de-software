@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import com.sample.foo.labsof.Coneccion.UserConeccion
 import com.sample.foo.labsof.DataClass.User
 import com.sample.foo.labsof.helpers.Session
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -57,7 +58,7 @@ class InicioSesionFragment : Fragment() {
             builder.setCancelable(false)
             var bCreate = builder.create()
             bCreate.show()
-            lifecycleScope.launchWhenCreated{
+            lifecycleScope.launch{
                 var user = UserConeccion.auth(User(username.text.toString(), pass.text.toString()))
 
                 bCreate.dismiss()
@@ -77,6 +78,7 @@ class InicioSesionFragment : Fragment() {
                         DialogInterface.OnClickListener { dialog, which ->
                             dialog.dismiss()
                         })
+                    builder.create().show()
 
                 }
             }

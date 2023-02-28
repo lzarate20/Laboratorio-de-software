@@ -5,7 +5,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
@@ -13,13 +15,15 @@ import com.sample.foo.labsof.Coneccion.UserConeccion
 import com.sample.foo.labsof.DataClass.User
 import com.sample.foo.labsof.helpers.Session
 import com.sample.foo.labsof.helpers.Verificacion
+import com.sample.foo.labsof.helpers.Verificacion.Companion.notVacio
 import kotlinx.coroutines.launch
 
-class CrearUserActivity : AppCompatActivity() {
+class EditarPerfilActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_crear_user)
+        setContentView(R.layout.activity_editar_perfil)
         val session = Session(this)
+        val userSession = session.getSession()
         if (!session.haveSesion()) {
             finish()
         }
@@ -35,16 +39,19 @@ class CrearUserActivity : AppCompatActivity() {
         val email = findViewById<EditText>(R.id.email)
         val direc = findViewById<EditText>(R.id.direc)
         val user_name = findViewById<EditText>(R.id.user_name)
-        val pass = findViewById<EditText>(R.id.pass)
-        val rol = findViewById<Spinner>(R.id.rol)
-        val roles = arrayOf<String>("Administrador", "Técnico")
-        creacionSpinner(rol, roles)
+        val rol = findViewById<TextView>(R.id.rol)
+        nombre.setText(userSession.nombre)
+        apellido.setText(userSession.apellido)
+        email.setText(userSession.email)
+        direc.setText(userSession.direccion)
+        user_name.setText(userSession.username)
+        rol.text = userSession.rol()
 
         val guardar = findViewById<Button>(R.id.guardar)
         guardar.setOnClickListener { view: View ->
             if (Verificacion.notVacio(nombre) && Verificacion.notVacio(apellido)
                 && Verificacion.notVacio(email) && Verificacion.notVacio(direc)
-                && Verificacion.notVacio(user_name) && Verificacion.notVacio(pass)
+                && Verificacion.notVacio(user_name)
             ) {
                 if (Verificacion.email(email)) {
                     val builder: android.app.AlertDialog.Builder =
@@ -60,11 +67,12 @@ class CrearUserActivity : AppCompatActivity() {
                             apellido.text.toString(),
                             direc.text.toString(),
                             user_name.text.toString(),
-                            pass.text.toString(),
+                            null,
                             email.text.toString(),
-                            rol.selectedItemPosition
+                            userSession.roles,
+                            userSession.id_user
                         )
-                        val new_user = UserConeccion.post(user)
+                        val new_user = UserConeccion.put(user)
                         bCreate.dismiss()
                         if (new_user.error != null) {
                             var builder = android.app.AlertDialog.Builder(view.context)
@@ -79,15 +87,20 @@ class CrearUserActivity : AppCompatActivity() {
                             session.saveSession(new_user)
                             var builder = android.app.AlertDialog.Builder(view.context)
                             builder.setTitle("Guardado Exitoso")
-                            builder.setMessage("Se guardo exitosamente el usuario")
+                            builder.setMessage("Se guardaron exitosamente los cambios")
                             builder.setPositiveButton("Ok",
                                 DialogInterface.OnClickListener { dialog, which ->
-                                   finish()
+                                    dialog.dismiss()
+                                    val intent= Intent(view.context,MainActivity::class.java)
+                                    finish()
+                                    overridePendingTransition(0, 0)
+                                    startActivity(intent)
+                                    overridePendingTransition(0, 0);
                                 })
                             builder.create().show()
                         }
                     }
-                } else {
+                }else {
                     var builder = android.app.AlertDialog.Builder(view.context)
                     builder.setTitle("Error")
                     builder.setMessage("Debe introducir un email valido")
@@ -109,16 +122,6 @@ class CrearUserActivity : AppCompatActivity() {
             }
         }
 
-    }
-
-    private fun creacionSpinner(spinner: Spinner, list: Array<String>) {
-        val mSortAdapter: ArrayAdapter<CharSequence> = ArrayAdapter(
-            baseContext,
-            android.R.layout.simple_spinner_item,
-            list
-        )
-        mSortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = mSortAdapter
     }
 
 
