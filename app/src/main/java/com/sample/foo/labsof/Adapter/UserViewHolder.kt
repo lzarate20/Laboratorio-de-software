@@ -27,12 +27,16 @@ class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val rol = itemView.findViewById<TextView>(R.id.rol)
     val ver = itemView.findViewById<Button>(R.id.ver)
     val eliminar = itemView.findViewById<Button>(R.id.eliminar)
+
     @SuppressLint("RestrictedApi")
     fun render(userModel: User) {
         nombre.text = "${(userModel.nombre)} ${(userModel.apellido)}"
         email.text = "Email: ${(userModel.email)}"
         rol.text = "Rol: ${(userModel.rol())}"
         eliminar.visibility = View.VISIBLE
+        if(userModel.id_user == getActivity(itemView.context)?.let { Session(it).getSession().id_user }){
+            ver.text= "Ver"
+        }
         ver.setOnClickListener { v ->
             val intent = Intent(v.context, VerUserActivity::class.java)
             val bun = Bundle()
@@ -41,8 +45,8 @@ class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
 
         var activity = getActivity(itemView.context)!!
-        var Im= Session(activity).getSession()
-        if(Im.id_user!= userModel.id_user) {
+        var Im = Session(activity).getSession()
+        if (Im.id_user != userModel.id_user) {
             eliminar.setOnClickListener { v ->
                 val builder: android.app.AlertDialog.Builder =
                     android.app.AlertDialog.Builder(v.context)
@@ -52,12 +56,20 @@ class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     "Eliminar",
                     DialogInterface.OnClickListener { dialog, which ->
                         GlobalScope.launch {
-                           val delete= userModel.id_user.let { UserConeccion.delete(it!!) }
-                            if(delete== true){
-                                val intent=
-                                    if(userModel.isTecnico()){
+                            val builder: android.app.AlertDialog.Builder =
+                                android.app.AlertDialog.Builder(itemView.context)
+                            builder.setTitle("Enviando Información")
+                            builder.setMessage("Su solicitud esta siendo procesada")
+                            builder.setCancelable(false)
+                            val bCreate = builder.create()
+                            bCreate.show()
+                            val delete = userModel.id_user.let { UserConeccion.delete(it!!) }
+                            bCreate.dismiss()
+                            if (delete == true) {
+                                val intent =
+                                    if (userModel.isTecnico()) {
                                         Intent(activity, ListarTecActivity::class.java)
-                                    }else{
+                                    } else {
                                         Intent(activity, ListarAdminActivity::class.java)
                                     }
                                 activity.finish()
@@ -74,8 +86,8 @@ class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     })
                 builder.create().show()
             }
-        }else{
-            eliminar.visibility= View.GONE
+        } else {
+            eliminar.visibility = View.GONE
         }
 
     }

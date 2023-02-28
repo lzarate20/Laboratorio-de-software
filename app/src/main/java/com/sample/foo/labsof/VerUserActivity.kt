@@ -46,11 +46,20 @@ class VerUserActivity : AppCompatActivity() {
         val email = findViewById<TextView>(R.id.email)
         val direc = findViewById<TextView>(R.id.direc)
         val user_name = findViewById<TextView>(R.id.user_name)
+        val rolT = findViewById<TextView>(R.id.rolT)
         val rol = findViewById<Spinner>(R.id.rol)
+
+        val guardar = findViewById<Button>(R.id.guardar)
         creacionSpinner(rol,roles)
 
         var id: Int = this.intent.getIntExtra("id", 0)
         var user: User = User()
+        if(userSession.id_user== id){
+            rolT.visibility= View.VISIBLE
+            rol.visibility = View.GONE
+            rolT.text= userSession.rol()
+            guardar.visibility= View.GONE
+        }
         lifecycleScope.launch{
             user = UserConeccion.getSingle(id)
             bCreate.dismiss()
@@ -72,7 +81,6 @@ class VerUserActivity : AppCompatActivity() {
                 rol.setSelection(user.roles!!)
             }
         }
-        val guardar = findViewById<Button>(R.id.guardar)
         guardar.setOnClickListener { view: View ->
             lifecycleScope.launch{
                 user.roles= rol.selectedItemPosition
