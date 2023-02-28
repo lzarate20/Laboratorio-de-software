@@ -10,11 +10,15 @@ import com.sample.foo.labsof.DataClass.VerduraFechaList
 import com.sample.foo.labsof.R
 import com.sample.foo.labsof.databinding.ItemVerduraBinding
 
-class VerduraAdapter(val listaVerdura:List<VerduraFechaList>,val listaSelected: List<VerduraFechaList>? = null): RecyclerView.Adapter<VerduraAdapter.VerduraViewHolder>() {
+class VerduraAdapter(var listaVerdura:List<VerduraFechaList>,var listaSelected: List<VerduraFechaList>? = null): RecyclerView.Adapter<VerduraAdapter.VerduraViewHolder>() {
 
 
     private val verdurasMap = hashMapOf<Int,String>()
 
+    fun set(listaV: List<VerduraFechaList>) {
+        this.listaVerdura = listaV
+        this.notifyDataSetChanged()
+    }
     fun getData(): HashMap<Int, String> {
         return verdurasMap
     }
@@ -74,5 +78,6 @@ class VerduraAdapter(val listaVerdura:List<VerduraFechaList>,val listaSelected: 
     }
     override fun getItemViewType(position: Int) = position
     override fun getItemId(position: Int) = position.toLong()
+
 
 }

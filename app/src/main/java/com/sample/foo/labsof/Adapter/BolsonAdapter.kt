@@ -32,4 +32,5 @@ class BolsonAdapter(val listaBolsones:List<Bolson>, val listaQuintas:List<Quinta
     }
 
 
+
 }

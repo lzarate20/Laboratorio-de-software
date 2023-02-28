@@ -7,7 +7,6 @@ import android.widget.ArrayAdapter
 
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.doBeforeTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -18,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sample.foo.labsof.Adapter.VerduraAdapter
 import com.sample.foo.labsof.Coneccion.BolsonConeccion
 import com.sample.foo.labsof.Coneccion.Coneccion
+import com.sample.foo.labsof.Coneccion.QuintaConeccion
 import com.sample.foo.labsof.Coneccion.VisitaConeccion
 import com.sample.foo.labsof.DataClass.*
 
@@ -33,7 +33,8 @@ import java.io.IOException
 class CrearBolson : AppCompatActivity() {
 
     lateinit var binding: ActivityCrearBolsonBinding
-    lateinit var  adapter:VerduraAdapter
+    lateinit var  adapterPropia:VerduraAdapter
+    lateinit var  adapterAjena:VerduraAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,12 +48,6 @@ class CrearBolson : AppCompatActivity() {
         toolbar.setArguments(bun)
         FT.add(R.id.toolbar, toolbar)
         FT.commit()
-        val api_visita = Retrofit.Builder().baseUrl(Coneccion.url)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build().create(VisitaService::class.java)
-        val api_quinta = Retrofit.Builder().baseUrl(Coneccion.url)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build().create(QuintaService::class.java)
         val api_verdura = Retrofit.Builder().baseUrl(Coneccion.url)
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(VerduraService::class.java)
@@ -62,19 +57,16 @@ class CrearBolson : AppCompatActivity() {
         val api_bolson = Retrofit.Builder().baseUrl(Coneccion.url)
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(BolsonService::class.java)
-        val api_parcela = Retrofit.Builder().baseUrl(Coneccion.url)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build().create(ParcelaService::class.java)
 
         val spinner:Spinner = binding.familiaProductora
         lifecycleScope.launch{
             try {
                 val result_ronda = api_ronda.getRonda()
                 val result_verduras = api_verdura.getVerdura()
-                val result_quinta = api_quinta.getQuintas()
+                val result_quinta = QuintaConeccion.get()
                 val result_visitas = VisitaConeccion.get()
                 val result_bolson = BolsonConeccion.api.getBolsonByRonda(null)
-                val result_parcelas = api_parcela.getParcela().body()!!
+
 
                 if(result_ronda.isSuccessful) {
                     val ronda_actual = Ronda.getRondaActual(api_ronda.getRonda().body()!!)
@@ -82,8 +74,20 @@ class CrearBolson : AppCompatActivity() {
                     binding.cantidad.doOnTextChanged{ text, start, count, after ->
                         cantidad_input = text.toString().toIntOrNull()
                     }
-                    initSpinner(spinner, result_quinta.body().orEmpty())
-                    initView(result_verduras.body().orEmpty())
+                    initSpinner(spinner, result_quinta.quintas!!)
+                    var visita = VisitaFechaList.getVisitaById(result_quinta.quintas!!.get(0).id_quinta!!, result_visitas.visitas!!)
+                    var listaVerduraPropia =  visita.parcelas!!.map { it.verdura!! }.distinctBy { it.id_verdura }
+                    var listaVerduraAjena = ArrayList<VerduraFechaList>()
+                    var quintas = result_quinta.quintas!!
+                    var visitaAjena:VisitaFechaList
+                    for(each in quintas.subList(1,quintas.size-1)){
+                        visitaAjena = VisitaFechaList.getVisitaById(each.id_quinta!!,result_visitas.visitas!!)
+                        var verduras = visitaAjena.parcelas!!.map{it.verdura}.distinctBy { it!!.id_verdura }
+                        verduras.dropWhile{ listaVerduraPropia.any{each -> each.id_verdura == it!!.id_verdura} || listaVerduraAjena.any{each -> each.id_verdura == it!!.id_verdura}}
+                        listaVerduraAjena.addAll(verduras.asIterable() as Collection<VerduraFechaList>)
+                    }
+                    initView(listaVerduraPropia,listaVerduraAjena)
+
                     spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(
                             parent: AdapterView<*>,
@@ -92,12 +96,23 @@ class CrearBolson : AppCompatActivity() {
                             id: Long
                         ) {
                             if(result_visitas.error !=null){
-                            var visita = VisitaFechaList.getVisitaById(result_quinta.body()!!.get(position).id_quinta!!, result_visitas.visitas!!)
-                            binding.submit.isEnabled = true
-                            binding.submit.isClickable = true
-                            binding.submit.setBackgroundResource(R.color.green)
-                            binding.submit.setOnClickListener {
-                                val data = adapter.getData()
+                                visita = VisitaFechaList.getVisitaById(result_quinta.quintas!!.get(position).id_quinta!!, result_visitas.visitas!!)
+                                listaVerduraPropia =  visita.parcelas!!.map { it.verdura!! }
+                                listaVerduraAjena = ArrayList<VerduraFechaList>()
+                                quintas = result_quinta.quintas!!
+                                quintas.toMutableList().removeAt(position)
+                                for(each in quintas){
+                                    visitaAjena = VisitaFechaList.getVisitaById(each.id_quinta!!,result_visitas.visitas!!)
+                                    var verduras = visitaAjena.parcelas!!.map{it.verdura}
+                                    verduras.dropWhile{ listaVerduraPropia.any{each -> each.id_verdura == it!!.id_verdura} || listaVerduraAjena.any{each -> each.id_verdura == it!!.id_verdura}}
+                                    listaVerduraAjena.addAll(verduras.asIterable() as Collection<VerduraFechaList>)
+                                }
+                                adapterPropia.set(listaVerduraPropia)
+                                adapterAjena.set(listaVerduraAjena)
+
+                                binding.submit.setBackgroundResource(R.color.green)
+                                binding.submit.setOnClickListener {
+                                val data = adapterPropia.getData()
                                 var verdura: VerduraFechaList
                                 var lista_verduras = ArrayList<VerduraFechaList>()
                                 var count_verduras_otro = 0
@@ -105,27 +120,16 @@ class CrearBolson : AppCompatActivity() {
                                 var verdura_en_parcela = true
                                 for (each in data.keys) {
                                     verdura = result_verduras.body().orEmpty().get(each)
-                                    var id_parcela = visita.parcelas!!.map { it.id_parcela }
-                                    var parcela = result_parcelas.filter{each -> id_parcela.any { it == each.id_parcela  }}.any{it.id_verdura == verdura.id_verdura}
-                                    if (!parcela) {
-                                        // Buscar parcela de otra quinta
-                                        var visitasQuintas = VisitaFechaList.getUltimaVisita(
+                                     var visitasQuintas = VisitaFechaList.getUltimaVisita(
                                             result_visitas.visitas!!,
-                                            result_quinta.body()!!
+                                            result_quinta.quintas!!
                                         )
-                                        id_parcela = visitasQuintas.flatMap { it.parcelas!!.map { it.id_parcela } }
-                                        parcela = result_parcelas.filter{each -> id_parcela.any { it == each.id_parcela  }}.any{it.id_verdura == verdura.id_verdura}
-                                        if(parcela){
-                                            count_verduras_otro += 1
-                                        }
-                                        else{
-                                            verdura_en_parcela = false
-                                        }
-                                    }
+
+
                                     count_verduras +=1
                                     lista_verduras.add(verdura)
                                 }
-                                var id_fp = result_quinta.body()!!.get(position).fpId
+                                var id_fp = result_quinta.quintas!!.get(position).fpId
                                 if (result_bolson.body()!!.any { it.idFp == id_fp }){
                                     binding.errores.text =
                                         "Ya existe un bolson para dicha familia"
@@ -148,7 +152,7 @@ class CrearBolson : AppCompatActivity() {
                                     val bolson = Bolson(
                                         null,
                                         cantidad_input!!,
-                                        idFp = result_quinta.body()!!.get(position).fpId,
+                                        idFp = result_quinta.quintas!!.get(position).fpId,
                                         idRonda = ronda_actual.id_ronda,
                                         verduras = lista_verduras
                                     )
@@ -188,10 +192,13 @@ class CrearBolson : AppCompatActivity() {
             spinner.adapter = adapter
         }
     }
-    fun initView(listaVerdura: List<VerduraFechaList>) {
-        adapter = VerduraAdapter(listaVerdura)
-        binding.recyclerVerduras.layoutManager = LinearLayoutManager(this)
-        binding.recyclerVerduras.adapter = adapter
+    fun initView(listaVerduraPropia: List<VerduraFechaList>,listaVerduraAjena:List<VerduraFechaList>) {
+        binding.recyclerVerdurasPropia.layoutManager = LinearLayoutManager(this)
+        binding.recyclerVerdurasAjena.layoutManager = LinearLayoutManager(this)
+        this.adapterPropia = VerduraAdapter(listaVerduraPropia)
+        this.adapterAjena = VerduraAdapter(listaVerduraAjena)
+        binding.recyclerVerdurasPropia.adapter = adapterPropia
+        binding.recyclerVerdurasAjena.adapter = adapterAjena
     }
 
 

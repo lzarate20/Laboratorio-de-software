@@ -48,13 +48,26 @@
             android:visibility="invisible"
             android:layout_below="@+id/familia_productora"
             />
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerVerduras"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
-        />
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+             <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerVerdurasPropia"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="100dp"
+                 android:layout_weight="0.5"
+            />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerVerdurasAjena"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="100dp"
+                android:layout_weight="0.5"
+                />
+            </LinearLayout>
 
 
     </LinearLayout>
