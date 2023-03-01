@@ -12,14 +12,6 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="usuarios"
-        android:layout_margin="10dp"
-        android:textColor="@color/white"
-        android:background="@drawable/botones"
-        android:id="@+id/users"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:text="Visitas"
         android:layout_margin="10dp"
         android:textColor="@color/white"
@@ -34,6 +26,22 @@
         android:background="@drawable/botones"
         android:onClick="bolsones"
         android:id="@+id/bolsones"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Quintas"
+        android:layout_margin="10dp"
+        android:textColor="@color/white"
+        android:background="@drawable/botones"
+        android:id="@+id/familias"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rondas"
+        android:layout_margin="10dp"
+        android:textColor="@color/white"
+        android:background="@drawable/botones"
+        android:id="@+id/rondas"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

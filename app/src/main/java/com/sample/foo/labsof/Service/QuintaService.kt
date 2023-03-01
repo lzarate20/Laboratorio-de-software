@@ -18,7 +18,7 @@ interface QuintaService{
     suspend fun postQuintas(@Body quinta: Quinta): Response<Quinta>
 
     @DELETE("/api/Quintas/{id}")
-    suspend fun deleteSingleQuintas(@Path("id") id: Long): Response<Quinta>
+    suspend fun deleteSingleQuintas(@Path("id") id: Int): Response<Quinta>
 
     @GET("/api/Quintas")
     suspend fun getQuinta(@Query("id") id: Int?): Response<Quinta>

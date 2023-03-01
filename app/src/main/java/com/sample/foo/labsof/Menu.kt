@@ -52,6 +52,16 @@ class Menu : Fragment() {
             val intent = Intent(activity, VerduraActivity::class.java)
             activity?.startActivity(intent)
         }
+        val quintas : Button =view.findViewById<Button>(R.id.familias)
+        quintas.setOnClickListener{ view: View ->
+            val intent = Intent (activity , QuintasActivity::class.java)
+            activity?.startActivity(intent)
+        }
+        val rondas : Button =view.findViewById<Button>(R.id.rondas)
+        rondas.setOnClickListener{ view: View ->
+            val intent = Intent (activity , RondaActivity::class.java)
+            activity?.startActivity(intent)
+        }
         return view
     }
 

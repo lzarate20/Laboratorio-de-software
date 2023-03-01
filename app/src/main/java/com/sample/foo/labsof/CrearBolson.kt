@@ -16,7 +16,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.sample.foo.labsof.Adapter.VerduraAdapter
+import com.sample.foo.labsof.Coneccion.BolsonConeccion
 import com.sample.foo.labsof.Coneccion.Coneccion
+import com.sample.foo.labsof.Coneccion.VisitaConeccion
 import com.sample.foo.labsof.DataClass.*
 
 import com.sample.foo.labsof.Service.*
@@ -63,19 +65,17 @@ class CrearBolson : AppCompatActivity() {
         val api_parcela = Retrofit.Builder().baseUrl(Coneccion.url)
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(ParcelaService::class.java)
+
         val spinner:Spinner = binding.familiaProductora
         lifecycleScope.launch{
             try {
                 val result_ronda = api_ronda.getRonda()
                 val result_verduras = api_verdura.getVerdura()
                 val result_quinta = api_quinta.getQuintas()
-                val result_visitas = api_visita.getVisitas()
-                val result_bolson = api_bolson.getBolsonByRonda(null)
+                val result_visitas = VisitaConeccion.get()
+                val result_bolson = BolsonConeccion.api.getBolsonByRonda(null)
                 val result_parcelas = api_parcela.getParcela().body()!!
-                var id_ultimo = 0
-                if(!result_bolson.body()!!.isEmpty()){
-                     id_ultimo = result_bolson.body()!!.reduce(Bolson.Compare::maxId).id_bolson!!
-                }
+
                 if(result_ronda.isSuccessful) {
                     val ronda_actual = Ronda.getRondaActual(api_ronda.getRonda().body()!!)
                     var cantidad_input:Int? = null
@@ -91,8 +91,8 @@ class CrearBolson : AppCompatActivity() {
                             position: Int,
                             id: Long
                         ) {
-                            if(result_visitas.isSuccessful){
-                            var visita = VisitaFechaList.getVisitaById(result_quinta.body()!!.get(position).id_quinta!!, result_visitas.body().orEmpty())
+                            if(result_visitas.error !=null){
+                            var visita = VisitaFechaList.getVisitaById(result_quinta.body()!!.get(position).id_quinta!!, result_visitas.visitas!!)
                             binding.submit.isEnabled = true
                             binding.submit.isClickable = true
                             binding.submit.setBackgroundResource(R.color.green)
@@ -110,7 +110,7 @@ class CrearBolson : AppCompatActivity() {
                                     if (!parcela) {
                                         // Buscar parcela de otra quinta
                                         var visitasQuintas = VisitaFechaList.getUltimaVisita(
-                                            result_visitas.body()!!,
+                                            result_visitas.visitas!!,
                                             result_quinta.body()!!
                                         )
                                         id_parcela = visitasQuintas.flatMap { it.parcelas!!.map { it.id_parcela } }
@@ -146,7 +146,7 @@ class CrearBolson : AppCompatActivity() {
                                 }
                                 else {
                                     val bolson = Bolson(
-                                        id_ultimo!! + 1,
+                                        null,
                                         cantidad_input!!,
                                         idFp = result_quinta.body()!!.get(position).fpId,
                                         idRonda = ronda_actual.id_ronda,

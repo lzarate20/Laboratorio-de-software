@@ -3,6 +3,7 @@ package com.sample.foo.labsof.helpers
 import android.os.Build
 import androidx.annotation.RequiresApi
 import java.time.*
+import java.time.chrono.ChronoLocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -53,7 +54,7 @@ class ConversorDate {
            return Date(f[0]-1900,f[1]-1,f[2],23,59,59)
         }
         @RequiresApi(Build.VERSION_CODES.O)
-        fun formatDateListInt(time: LocalDateTime): kotlin.collections.List<Int> {
+        fun formatDateListInt(time: LocalDate): kotlin.collections.List<Int> {
             var year: Int
             var month: Int
             var day: Int

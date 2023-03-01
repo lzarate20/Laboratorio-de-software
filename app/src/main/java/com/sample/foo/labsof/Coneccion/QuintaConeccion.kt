@@ -33,5 +33,46 @@ class QuintaConeccion {
                 return Quinta("Error al intentar conectar a la Base de datos")
             }
         }
+        suspend fun post(quinta:Quinta): Quinta?{
+            try {
+                val result = QuintaConeccion.api.postQuintas(quinta)
+                if (result.isSuccessful) {
+                    return result.body()!!
+                } else {
+                    return null
+                }
+            } catch (e: Exception) {
+
+                return null
+            }
+        }
+        suspend fun put(quinta:Quinta): Quinta?{
+            try {
+                val result = QuintaConeccion.api.putQuintas(quinta)
+                if (result.isSuccessful) {
+                    return result.body()!!
+                } else {
+                    return null
+                }
+            } catch (e: Exception) {
+
+                return null
+            }
+        }
+        suspend fun delete(id:Int):Quinta?{
+            try {
+                val result = QuintaConeccion.api.deleteSingleQuintas(id)
+                if (result.isSuccessful) {
+                    return result.body()!!
+                } else {
+                    println(result.code())
+                    return null
+                }
+            } catch (e: Exception) {
+                println(e.printStackTrace())
+                return null
+            }
+        }
+
     }
 }

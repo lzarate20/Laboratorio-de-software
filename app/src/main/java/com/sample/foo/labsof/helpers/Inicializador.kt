@@ -9,6 +9,7 @@ import com.sample.foo.labsof.Service.FamiliaProductoraService
 import com.sample.foo.labsof.Service.QuintaService
 import com.sample.foo.labsof.Service.UserService
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 
@@ -38,7 +39,7 @@ class Inicializador {
             var api2 = Coneccion.api.create(FamiliaProductoraService::class.java)
             fp = createFp()
             lifecycleScope.launch {
-                val isEmpty = api2.getFamiliasProductoras(1)
+                val isEmpty = api2.getFamiliasProductoras()
                 if (isEmpty.isSuccessful && isEmpty.body()?.isEmpty() == true) {
                     val result = api2.postFamiliasProductoras(fp)
                     if (result.isSuccessful) {
@@ -72,7 +73,7 @@ class Inicializador {
         fun createFp(): FamiliaProductora {
             var aux = RandomString(10)
             return FamiliaProductora(
-                aux, ConversorDate.formatDateListInt(LocalDateTime.now())
+                aux, ConversorDate.formatDateListInt(LocalDate.now())
             )
         }
 
