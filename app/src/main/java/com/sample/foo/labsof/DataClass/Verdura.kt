@@ -39,4 +39,16 @@ class Verdura() {
     constructor(e:String):this(){
         this.error= e
     }
+    constructor(tiempo_cosecha: String?,
+        mes_siembra: String?,  archImg: String?,
+        nombre: String?,  descripcion: String?,
+        parcelas: List<String>?
+    ) : this(){
+        this.descripcion= descripcion
+        this.nombre= nombre
+        this.tiempo_cosecha=tiempo_cosecha
+        this.mes_siembra= mes_siembra
+        this.archImg= archImg
+        this.parcelas= parcelas
+    }
 }
