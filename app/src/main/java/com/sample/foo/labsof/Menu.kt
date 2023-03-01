@@ -1,5 +1,6 @@
 package com.sample.foo.labsof
 
+import android.app.Activity
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -25,24 +26,30 @@ class Menu : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_menu, container, false)
-        val bolsones = view.findViewById<View>(R.id.bolsones) as Button
-
+        val bolsones = view.findViewById<Button>(R.id.bolsones)
+        val visitas: Button = view.findViewById<Button>(R.id.visitas)
+        val verduras: Button = view.findViewById(R.id.verduras)
+        val user: Button = view.findViewById(R.id.users)
+        if (activity?.let { Session(it).getSession().isTecnico() } == true) {
+            user.visibility = View.GONE
+        }
         //Asigna listener para poder abrir Activity.
-        bolsones.setOnClickListener{ view: View ->
-            val intent = Intent (activity , Bolsones::class.java)
+        bolsones.setOnClickListener { view: View ->
+            val intent = Intent(activity, Bolsones::class.java)
             activity?.startActivity(intent)
         }
-        val visitas : Button =view.findViewById<Button>(R.id.visitas)
-        visitas.setOnClickListener{ view: View ->
-            val intent = Intent (activity , Visitas::class.java)
+
+        visitas.setOnClickListener { view: View ->
+            val intent = Intent(activity, Visitas::class.java)
             activity?.startActivity(intent)
         }
-        val user : Button =view.findViewById(R.id.users)
-        if(activity?.let { Session(it).getSession().isTecnico() } == true){
-            user.visibility= View.GONE
+
+        user.setOnClickListener { view: View ->
+            val intent = Intent(activity, UserActivity::class.java)
+            activity?.startActivity(intent)
         }
-        user.setOnClickListener{ view: View ->
-            val intent = Intent (activity , UserActivity::class.java)
+        verduras.setOnClickListener { view: View ->
+            val intent = Intent(activity, VerduraActivity::class.java)
             activity?.startActivity(intent)
         }
         return view

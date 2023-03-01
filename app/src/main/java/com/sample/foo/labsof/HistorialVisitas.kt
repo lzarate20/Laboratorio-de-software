@@ -1,9 +1,11 @@
 package com.sample.foo.labsof
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
@@ -30,6 +32,7 @@ class HistorialVisitas : AppCompatActivity() {
         initRecyclerView()
 
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun initRecyclerView(){
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerVisita)
         recyclerView.layoutManager= LinearLayoutManager(this)

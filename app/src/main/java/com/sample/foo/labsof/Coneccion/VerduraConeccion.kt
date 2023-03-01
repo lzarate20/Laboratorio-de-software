@@ -13,11 +13,9 @@ class VerduraConeccion {
                 if (result.isSuccessful) {
                     return result.body()
                 } else {
-                    println(result.code())
                     return null
                 }
             } catch (e: Exception) {
-                println(e.printStackTrace())
                 return null
             }
         }
@@ -34,7 +32,14 @@ class VerduraConeccion {
                 return null
             }
         }
-
+        suspend fun delete(id: Int):Boolean? {
+            return try {
+                val result = api.delete(id)
+                result.isSuccessful
+            } catch (e: Exception) {
+                null
+            }
+        }
 
     }
 }

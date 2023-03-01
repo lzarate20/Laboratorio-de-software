@@ -11,4 +11,7 @@ interface VerduraService {
     suspend fun getVerdura(): Response<List<VerduraFechaList>>
     @GET("/api/verdura/{id}")
     suspend fun getSingleVerdura(@Path("id") id: Int?): Response<Verdura>
+    @DELETE("/api/verdura/{id}")
+    suspend fun delete(@Path("id") id: Int): Response<Verdura>
+
 }

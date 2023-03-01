@@ -11,6 +11,7 @@ class Verdura() {
     var nombre: String?= null
     var descripcion: String?= null
     var parcelas: List<String>?= null
+    var error:String?= null
 
     constructor(
         id_verdura: Int?, tiempo_cosecha: String?,
@@ -34,5 +35,8 @@ class Verdura() {
         this.mes_siembra= ConversorDate.convertToInput(v.mes_siembra!!)
         this.archImg= v.archImg
         this.parcelas= v.parcelas
+    }
+    constructor(e:String):this(){
+        this.error= e
     }
 }

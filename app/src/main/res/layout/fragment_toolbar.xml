@@ -10,7 +10,7 @@
         android:layout_height="wrap_content">
         <ImageButton
             android:id="@+id/menu"
-            android:layout_width="wrap_content"
+            android:layout_width="?attr/actionBarSize"
             android:layout_height="?attr/actionBarSize"
             android:layout_alignBottom="@+id/my_toolbar"
             android:layout_alignParentRight="true"
@@ -19,7 +19,7 @@
             android:background="@drawable/botones"
             android:backgroundTint="#e2e2e2"
             android:visibility="gone"
-
+            tools:visibility="visible"
             android:contentDescription="Imagen de usuario"/>
 
         <androidx.appcompat.widget.Toolbar

@@ -9,13 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.sample.foo.labsof.helpers.Session
 
-class UserActivity : AppCompatActivity() {
+class VerduraActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user)
-        val session = Session(this@UserActivity)
-        val userSession= session.getSession()
-        if (!session.haveSesion()|| userSession.isTecnico()) {
+        setContentView(R.layout.activity_verdura)
+        val session = Session(this@VerduraActivity)
+        val userSession = session.getSession()
+        if (!session.haveSesion()) {
             finish()
         }
         val FT: FragmentTransaction = supportFragmentManager.beginTransaction()
@@ -28,20 +28,14 @@ class UserActivity : AppCompatActivity() {
         FT.commit()
 
 
-
-        val crear= findViewById<Button>(R.id.crear)
-        val lTec= findViewById<Button>(R.id.listadoTecnicos)
-        val lAdmin= findViewById<Button>(R.id.listadoAdmin)
+        val crear = findViewById<Button>(R.id.crear)
+        val list = findViewById<Button>(R.id.listado)
         crear.setOnClickListener { view: View ->
-            val intent = Intent(this, CrearUserActivity::class.java)
+            val intent = Intent(this, CrearVerduraActivity::class.java)
             startActivity(intent)
         }
-        lTec.setOnClickListener { view: View ->
-            val intent = Intent(this, ListarTecActivity::class.java)
-            startActivity(intent)
-        }
-        lAdmin.setOnClickListener { view: View ->
-            val intent = Intent(this, ListarAdminActivity::class.java)
+        list.setOnClickListener { view: View ->
+            val intent = Intent(this, ListadoVerdurasActivity::class.java)
             startActivity(intent)
         }
     }
