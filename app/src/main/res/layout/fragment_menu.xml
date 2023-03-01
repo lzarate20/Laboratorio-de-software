@@ -12,6 +12,14 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Verduras"
+        android:layout_margin="10dp"
+        android:textColor="@color/white"
+        android:background="@drawable/botones"
+        android:id="@+id/users"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Visitas"
         android:layout_margin="10dp"
         android:textColor="@color/white"
