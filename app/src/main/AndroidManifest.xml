@@ -108,6 +108,13 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".ProximasRondasActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ListadoQuintasActivity"
             android:exported="false">
             <meta-data

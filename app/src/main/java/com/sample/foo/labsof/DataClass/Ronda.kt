@@ -1,5 +1,6 @@
 package com.sample.foo.labsof.DataClass
 
+import java.time.LocalDate
 import java.util.Date
 
 data class Ronda(val id_ronda:Int?,val fecha_inicio: List<Int>,val fecha_fin:List<Int>){
@@ -25,6 +26,12 @@ data class Ronda(val id_ronda:Int?,val fecha_inicio: List<Int>,val fecha_fin:Lis
                 return false
             }
         }
+        fun isAfterToday(r:Ronda):Boolean{
+            var today = LocalDate.now()
+            var day = LocalDate.of(r.fecha_inicio[0],r.fecha_inicio[1],r.fecha_inicio[2])
+            return day.isAfter(today)
+        }
+
     }
     companion object {
         fun getRondaActual(listaRondas: List<Ronda>): Ronda {

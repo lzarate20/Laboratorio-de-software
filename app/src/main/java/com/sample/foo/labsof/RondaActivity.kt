@@ -25,5 +25,9 @@ class RondaActivity: AppCompatActivity() {
             val intent = Intent(this, CrearRondaActivity::class.java)
             startActivity(intent)
         }
+        binding.proximasRondas.setOnClickListener { view: View ->
+            val intent = Intent(this, ProximasRondasActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

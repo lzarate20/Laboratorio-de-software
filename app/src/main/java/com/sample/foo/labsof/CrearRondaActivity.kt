@@ -61,8 +61,6 @@ class CrearRondaActivity: AppCompatActivity() {
         binding.fechaInicio.setOnClickListener {
 
            var date = ConversorDate.getCurrentDate(binding.fechaInicio.text.toString())
-
-            datePickerFin.setMinDate(date.toEpochDay())
             showDatePicker(datePickerInicio,binding.fechaInicio,binding.fechaFin,date)
         }
         binding.fechaFin.setOnClickListener {
@@ -90,7 +88,12 @@ class CrearRondaActivity: AppCompatActivity() {
                     binding.error.text =
                         "Ya existe una ronda que se superpone con las fechas ingresadas"
                     binding.error.visibility = View.VISIBLE
-                } else {
+                } else if (fecha_fin.isBefore(fecha_ini)) {
+                    binding.error.text =
+                        "La fecha de inicio debe ser anterior a la fecha de fin."
+                    binding.error.visibility = View.VISIBLE
+                }
+                else{
                     lifecycleScope.launch {
                         var res = RondaConeccion.postRonda(ronda)
                         if (res != null) {
