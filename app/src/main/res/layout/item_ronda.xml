@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingVertical="5dp">
 <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -56,10 +57,41 @@
                 </LinearLayout>
 
     </LinearLayout>
-    <Button
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="5dp"
+        android:layout_centerVertical="true">
+    <Button
+        android:id="@+id/edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/botones"
+        android:textColor="@color/white"
+        android:layout_marginBottom="5dp"
+        android:text="Editar"
         />
+    <Button
+        android:id="@+id/ver"
+        android:background="@drawable/botones"
+        android:textColor="@color/white"
+        android:layout_marginBottom="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ver detalle"
+        />
+    <Button
+        android:id="@+id/delete"
+        android:background="@drawable/botones"
+        android:textColor="@color/white"
+        android:layout_marginBottom="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Eliminar"
+        />
+        </LinearLayout>
 </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

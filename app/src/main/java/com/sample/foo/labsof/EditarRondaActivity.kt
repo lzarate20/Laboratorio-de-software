@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.doBeforeTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
@@ -17,12 +16,11 @@ import com.sample.foo.labsof.helpers.DatePickerHelper
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
-class CrearRondaActivity: AppCompatActivity() {
+class EditarRondaActivity : AppCompatActivity() {
 
-    lateinit var binding:ActivityCrearRondaBinding
+    lateinit var binding: ActivityCrearRondaBinding
     lateinit var datePickerInicio: DatePickerHelper
     lateinit var datePickerFin: DatePickerHelper
 
@@ -37,31 +35,26 @@ class CrearRondaActivity: AppCompatActivity() {
         toolbar.setArguments(bun)
         FT.add(R.id.toolbar, toolbar)
         FT.commit()
-        binding.title.text = "Crear Ronda"
-        binding.submit.text = "Crear Ronda"
+        binding.title.text = "Editar Ronda"
+        binding.submit.text = "Editar Ronda"
+
+        val ronda_id =  intent.getIntExtra("ronda",-1)
         datePickerInicio = DatePickerHelper(this)
         datePickerFin = DatePickerHelper(this)
-        var year: Int
-        var month: Int
-        var day: Int
-        LocalDate.now().let { now ->
 
-            year = now.year
-            month = now.monthValue
-            day = now.dayOfMonth
-        }
-        var result_rondas: List<Ronda>? = null
+        var ronda: Ronda?
         lifecycleScope.launch {
-            result_rondas = RondaConeccion.getRondas()
-        }
-        binding.fechaInicio.setText(ConversorDate.formatDate(year, month-1, day))
-        binding.fechaFin.setText(ConversorDate.formatDate(year, month-1, day))
+            ronda = RondaConeccion.getRonda(ronda_id)
+            var result_rondas = RondaConeccion.getRondas()!!.toMutableList()
+            result_rondas.removeAll { it.id_ronda == ronda_id }
+        binding.fechaInicio.setText(ConversorDate.convertToInput(ronda!!.fecha_inicio))
+        binding.fechaFin.setText(ConversorDate.convertToInput(ronda!!.fecha_fin))
         var fechaMin = LocalDateTime.now()
         datePickerInicio.setMinDate(ConversorDate.toLong(fechaMin))
         datePickerFin.setMinDate(ConversorDate.toLong(fechaMin))
         binding.fechaInicio.setOnClickListener {
 
-           var date = ConversorDate.getCurrentDate(binding.fechaInicio.text.toString())
+            var date = ConversorDate.getCurrentDate(binding.fechaInicio.text.toString())
             showDatePicker(datePickerInicio,binding.fechaInicio,date)
         }
         binding.fechaFin.setOnClickListener {
@@ -80,7 +73,7 @@ class CrearRondaActivity: AppCompatActivity() {
             )
 
             val ronda = Ronda(
-                null,
+                ronda_id,
                 ConversorDate.formatDateListInt(fecha_ini),
                 ConversorDate.formatDateListInt(fecha_fin)
             )
@@ -96,7 +89,7 @@ class CrearRondaActivity: AppCompatActivity() {
                 }
                 else{
                     lifecycleScope.launch {
-                        var res = RondaConeccion.postRonda(ronda)
+                        var res = RondaConeccion.putRonda(ronda)
                         if (res != null) {
                             val builder: android.app.AlertDialog.Builder =
                                 android.app.AlertDialog.Builder(it.context)
@@ -113,8 +106,9 @@ class CrearRondaActivity: AppCompatActivity() {
             }
         }
         }
+    }
 
-    private fun showDatePicker(datePicker:DatePickerHelper,fecha: EditText,fechaDialogo:LocalDate) {
+    private fun showDatePicker(datePicker: DatePickerHelper, fecha: EditText, fechaDialogo: LocalDate) {
         datePicker.showDialog(fechaDialogo.dayOfMonth, fechaDialogo.monthValue-1,fechaDialogo.year, object : DatePickerHelper.Callback {
             override fun onDateSelected(dayofMonth: Int, month: Int, year: Int) {
                 val dayStr = if (dayofMonth < 10) "0${dayofMonth}" else "${dayofMonth}"
@@ -125,6 +119,4 @@ class CrearRondaActivity: AppCompatActivity() {
         })
 
     }
-
-
 }
