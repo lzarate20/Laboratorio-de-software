@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doBeforeTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
@@ -22,7 +23,8 @@ import java.time.format.DateTimeFormatter
 class CrearRondaActivity: AppCompatActivity() {
 
     lateinit var binding:ActivityCrearRondaBinding
-    lateinit var datePicker: DatePickerHelper
+    lateinit var datePickerInicio: DatePickerHelper
+    lateinit var datePickerFin: DatePickerHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +38,8 @@ class CrearRondaActivity: AppCompatActivity() {
         FT.add(R.id.toolbar, toolbar)
         FT.commit()
 
-        datePicker = DatePickerHelper(this)
+        datePickerInicio = DatePickerHelper(this)
+        datePickerFin = DatePickerHelper(this)
         var year: Int
         var month: Int
         var day: Int
@@ -52,23 +55,19 @@ class CrearRondaActivity: AppCompatActivity() {
         }
         binding.fechaInicio.setText(ConversorDate.formatDate(year, month-1, day))
         binding.fechaFin.setText(ConversorDate.formatDate(year, month-1, day))
+        var fechaMin = LocalDateTime.now()
+        datePickerInicio.setMinDate(ConversorDate.toLong(fechaMin))
+        datePickerFin.setMinDate(ConversorDate.toLong(fechaMin))
         binding.fechaInicio.setOnClickListener {
-            var date = ConversorDate.getCurrentDate(binding.fechaInicio.text.toString())
-            showDatePicker(binding.fechaInicio,date)
-            var fechaMin = LocalDateTime.of(
-                ConversorDate.getCurrentDate(binding.fechaInicio.text.toString()),
-                LocalTime.MIN
-            )
-            datePicker.setMinDate(ConversorDate.toLong(fechaMin))
+
+           var date = ConversorDate.getCurrentDate(binding.fechaInicio.text.toString())
+
+            datePickerFin.setMinDate(date.toEpochDay())
+            showDatePicker(datePickerInicio,binding.fechaInicio,binding.fechaFin,date)
         }
         binding.fechaFin.setOnClickListener {
             var date = ConversorDate.getCurrentDate(binding.fechaInicio.text.toString())
-            var fechaMin = LocalDateTime.of(
-                ConversorDate.getCurrentDate(binding.fechaInicio.text.toString()),
-                LocalTime.MIN
-            )
-            datePicker.setMinDate(ConversorDate.toLong(fechaMin))
-            showDatePicker(binding.fechaFin,date)
+            showDatePicker(datePickerFin,binding.fechaFin,date)
         }
         binding.submit.setOnClickListener {
 
@@ -111,13 +110,25 @@ class CrearRondaActivity: AppCompatActivity() {
         }
         }
 
-    private fun showDatePicker(fecha: EditText,fechaDialogo:LocalDate) {
+    private fun showDatePicker(datePicker:DatePickerHelper,fecha: EditText,fechaDialogo:LocalDate) {
         datePicker.showDialog(fechaDialogo.dayOfMonth, fechaDialogo.monthValue-1,fechaDialogo.year, object : DatePickerHelper.Callback {
             override fun onDateSelected(dayofMonth: Int, month: Int, year: Int) {
                 val dayStr = if (dayofMonth < 10) "0${dayofMonth}" else "${dayofMonth}"
                 val mon = month +1
                 val monthStr = if (mon < 10) "0${mon}" else "${mon}"
                 fecha.setText("${dayStr}/${monthStr}/${year}")
+            }
+        })
+
+    }
+    private fun showDatePicker(datePicker:DatePickerHelper,fecha: EditText,fechaEnd: EditText,fechaDialogo:LocalDate) {
+        datePicker.showDialog(fechaDialogo.dayOfMonth, fechaDialogo.monthValue-1,fechaDialogo.year, object : DatePickerHelper.Callback {
+            override fun onDateSelected(dayofMonth: Int, month: Int, year: Int) {
+                val dayStr = if (dayofMonth < 10) "0${dayofMonth}" else "${dayofMonth}"
+                val mon = month +1
+                val monthStr = if (mon < 10) "0${mon}" else "${mon}"
+                fecha.setText("${dayStr}/${monthStr}/${year}")
+                fechaEnd.setText("${dayStr}/${monthStr}/${year}")
             }
         })
 

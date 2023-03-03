@@ -140,7 +140,7 @@ class CrearQuintaActivity:AppCompatActivity() {
 
     }
     private fun showDatePicker(fecha: EditText,fechaDialogo:LocalDate ,fechaMin: LocalDateTime=LocalDateTime.now()) {
-        datePicker.setMinDate(ConversorDate.toLong(fechaMin))
+        datePicker.setMaxDate(ConversorDate.toLong(fechaMin))
         datePicker.showDialog(fechaDialogo.dayOfMonth, fechaDialogo.monthValue-1,fechaDialogo.year, object : DatePickerHelper.Callback {
             override fun onDateSelected(dayofMonth: Int, month: Int, year: Int) {
                 val dayStr = if (dayofMonth < 10) "0${dayofMonth}" else "${dayofMonth}"
