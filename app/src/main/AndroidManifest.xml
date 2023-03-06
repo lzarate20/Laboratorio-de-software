@@ -64,6 +64,13 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".VerBolsonActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ListadoBolsones"
             android:exported="false">
             <meta-data
@@ -115,6 +122,20 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".HistorialRondasActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".VerRondaActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".EditarRondaActivity"
             android:exported="false">
             <meta-data
@@ -129,6 +150,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <activity
             android:name=".EditarQuintaActivity"
             android:exported="false">

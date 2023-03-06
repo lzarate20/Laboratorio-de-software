@@ -32,6 +32,12 @@ data class Ronda(val id_ronda:Int?,val fecha_inicio: List<Int>,val fecha_fin:Lis
             return day.isAfter(today)
         }
 
+        fun isBeforeOrEqualToday(r:Ronda):Boolean{
+            var today = LocalDate.now()
+            var day = LocalDate.of(r.fecha_inicio[0],r.fecha_inicio[1],r.fecha_inicio[2])
+            return day.isBefore(today) || day.isEqual(today)
+        }
+
     }
     companion object {
         fun getRondaActual(listaRondas: List<Ronda>): Ronda {

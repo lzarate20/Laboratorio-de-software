@@ -36,6 +36,16 @@
                 android:text="Crear ronda"
                 android:textColor="@color/white" />
 
+            <Button
+                android:id="@+id/historialRondas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/botones"
+                android:text="Historial de rondas"
+                android:textColor="@color/white" />
+
+
         </LinearLayout>
     </LinearLayout>
 

@@ -6,7 +6,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import com.sample.foo.labsof.databinding.ActivityBolsonesBinding
 import com.sample.foo.labsof.databinding.ActivityRondaBinding
 
 class RondaActivity: AppCompatActivity() {
@@ -27,6 +26,10 @@ class RondaActivity: AppCompatActivity() {
         }
         binding.proximasRondas.setOnClickListener { view: View ->
             val intent = Intent(this, ProximasRondasActivity::class.java)
+            startActivity(intent)
+        }
+        binding.historialRondas.setOnClickListener { view: View ->
+            val intent = Intent(this, HistorialRondasActivity::class.java)
             startActivity(intent)
         }
     }
