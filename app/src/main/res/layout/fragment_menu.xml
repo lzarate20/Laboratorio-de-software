@@ -29,11 +29,19 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="familia"
+        android:text="Quintas"
         android:layout_margin="10dp"
         android:textColor="@color/white"
         android:background="@drawable/botones"
         android:id="@+id/familias"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rondas"
+        android:layout_margin="10dp"
+        android:textColor="@color/white"
+        android:background="@drawable/botones"
+        android:id="@+id/rondas"/>
 
 </LinearLayout>
 

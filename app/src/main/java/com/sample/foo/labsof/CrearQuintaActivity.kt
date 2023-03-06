@@ -87,7 +87,8 @@ class CrearQuintaActivity:AppCompatActivity() {
         }
         binding.fecha.setText(ConversorDate.formatDate(year, month - 1, day))
         binding.fecha.setOnClickListener {
-            showDatePicker(binding.fecha)
+            var date = ConversorDate.getCurrentDate(binding.fecha.text.toString())
+            showDatePicker(binding.fecha,date)
         }
 
         binding.submit.setOnClickListener {
@@ -138,19 +139,19 @@ class CrearQuintaActivity:AppCompatActivity() {
         }
 
     }
-    private fun showDatePicker(fecha: EditText) {
-        val hoy = LocalDateTime.now()
-        datePicker.setMaxDate(ConversorDate.toLong(hoy))
-        datePicker.showDialog(hoy.dayOfMonth, hoy.monthValue,hoy.year, object : DatePickerHelper.Callback {
+    private fun showDatePicker(fecha: EditText,fechaDialogo:LocalDate ,fechaMin: LocalDateTime=LocalDateTime.now()) {
+        datePicker.setMaxDate(ConversorDate.toLong(fechaMin))
+        datePicker.showDialog(fechaDialogo.dayOfMonth, fechaDialogo.monthValue-1,fechaDialogo.year, object : DatePickerHelper.Callback {
             override fun onDateSelected(dayofMonth: Int, month: Int, year: Int) {
                 val dayStr = if (dayofMonth < 10) "0${dayofMonth}" else "${dayofMonth}"
-                val mon = month + 1
+                val mon = month +1
                 val monthStr = if (mon < 10) "0${mon}" else "${mon}"
                 fecha.setText("${dayStr}/${monthStr}/${year}")
             }
         })
 
     }
+
     private fun initMap(mapView: MapView){
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID)
         mapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)

@@ -9,6 +9,7 @@ import com.sample.foo.labsof.Service.FamiliaProductoraService
 import com.sample.foo.labsof.Service.QuintaService
 import com.sample.foo.labsof.Service.UserService
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 
@@ -72,7 +73,7 @@ class Inicializador {
         fun createFp(): FamiliaProductora {
             var aux = RandomString(10)
             return FamiliaProductora(
-                aux, ConversorDate.formatDateListInt(LocalDateTime.now())
+                aux, ConversorDate.formatDateListInt(LocalDate.now())
             )
         }
 

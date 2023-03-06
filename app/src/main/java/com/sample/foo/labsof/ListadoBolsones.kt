@@ -64,7 +64,7 @@ class ListadoBolsones:AppCompatActivity() {
                 val quintas = result.body()!!.flatMap { each -> result_quinta.filter{ it.id_quinta==each.idFp } }
                 listaBolsones = result.body().orEmpty()
                 if (result.isSuccessful) {
-                    initView(listaBolsones,quintas)
+                    initView(listaBolsones,quintas,rondaActual)
                 }
             }
             catch (e: IOException) {
@@ -75,14 +75,14 @@ class ListadoBolsones:AppCompatActivity() {
             }
         }
     }
-    fun initView(listaB: List<Bolson>,listaQ: List<Quinta>) {
+    fun initView(listaB: List<Bolson>,listaQ: List<Quinta>,ronda:Ronda) {
         val recyclerView = binding.recyclerBolsones
         val textView = binding.sinBolsones
         if (listaB.isEmpty()) {
             textView.setVisibility(View.VISIBLE)
         } else {
             recyclerView.layoutManager = LinearLayoutManager(this)
-            adapter = BolsonAdapter(listaB,listaQ,{onItemSelected(it)},{deleteItem(it)})
+            adapter = BolsonAdapter(listaB,listaQ,ronda,{onItemSelected(it)},{deleteItem(it)})
             recyclerView.adapter = adapter
             textView.setVisibility(View.GONE)
         }
