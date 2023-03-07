@@ -39,8 +39,9 @@ data class VisitaFechaList(val error: String? = null) {
         this.id_quinta = id_quinta
     }
 
-    fun fechaDate(): Date {
-        return ConversorDate.getDate(fecha_visita!!)
+    fun fechaDate(): LocalDate {
+        return ConversorDate.getCurrentDate(ConversorDate.convertToInput(fecha_visita!!))
+
     }
 
     fun fechaString(): String {
@@ -68,7 +69,7 @@ data class VisitaFechaList(val error: String? = null) {
         return fecha_visita?.get(0)  == year && fecha_visita?.get(1)  == month && fecha_visita?.get(2)  == day
     }
     fun visitaPasada():Boolean{
-        return fechaDate().before(Date())
+        return fechaDate().isBefore(LocalDate.now())
     }
     internal object Compare {
         fun maxDate(a: VisitaFechaList, b: VisitaFechaList): VisitaFechaList {
@@ -81,8 +82,7 @@ data class VisitaFechaList(val error: String? = null) {
             return listaVisitas.filter { it.id_quinta == id }.reduce(VisitaFechaList.Compare::maxDate)
         }
         fun getUltimaVisita(visitas:List<VisitaFechaList>,quintas: List<Quinta>): List<VisitaFechaList> {
-            return quintas.map{
-                val each = it
+            return quintas.map{each ->
                 visitas.filter { it.id_quinta == each.id_quinta }.reduce(VisitaFechaList.Compare::maxDate)
             }
         }

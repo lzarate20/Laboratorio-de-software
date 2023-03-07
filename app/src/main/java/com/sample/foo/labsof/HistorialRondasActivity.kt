@@ -34,7 +34,7 @@ class HistorialRondasActivity: AppCompatActivity() {
         lifecycleScope.launch {
             var result = RondaConeccion.getRondas()
             if(result != null){
-                result = result.filter { Ronda.Compare.isBeforeOrEqualToday(it) }.sortedWith(
+                result = result.filter { Ronda.Compare.endBeforeOrEqualToday(it) }.sortedWith(
                     Comparator<Ronda>( { t, t2 ->
                         var day1 = LocalDate.of(t.fecha_inicio[0],t.fecha_inicio[1],t.fecha_inicio[2])
                         var day2 = LocalDate.of(t2.fecha_inicio[0],t2.fecha_inicio[1],t2.fecha_inicio[2])

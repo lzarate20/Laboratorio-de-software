@@ -2,10 +2,7 @@ package com.sample.foo.labsof
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
-import android.util.Log
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -13,24 +10,21 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.sample.foo.labsof.Adapter.BolsonAdapter
+import com.sample.foo.labsof.Coneccion.BolsonConeccion
 import com.sample.foo.labsof.Coneccion.Coneccion
+import com.sample.foo.labsof.Coneccion.QuintaConeccion
+import com.sample.foo.labsof.Coneccion.RondaConeccion
 import com.sample.foo.labsof.DataClass.Bolson
 import com.sample.foo.labsof.DataClass.Quinta
 import com.sample.foo.labsof.DataClass.Ronda
 import com.sample.foo.labsof.Service.BolsonService
-import com.sample.foo.labsof.Service.QuintaService
-import com.sample.foo.labsof.Service.RondaService
-import com.sample.foo.labsof.databinding.ActivityCrearBolsonBinding
 import com.sample.foo.labsof.databinding.ActivityListaBolsonesBinding
-import kotlinx.coroutines.launch
-import retrofit2.HttpException
+import okhttp3.internal.notifyAll
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
 
-class ListadoBolsones:AppCompatActivity() {
+class ListadoBolsonesActivity:AppCompatActivity() {
 
     lateinit var binding: ActivityListaBolsonesBinding
     private lateinit var adapter: BolsonAdapter
@@ -47,31 +41,15 @@ class ListadoBolsones:AppCompatActivity() {
         toolbar.setArguments(bun)
         FT.add(R.id.toolbar, toolbar)
         FT.commit()
-        val api_bolson = Retrofit.Builder().baseUrl(Coneccion.url)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build().create(BolsonService::class.java)
-        val api_ronda = Retrofit.Builder().baseUrl(Coneccion.url)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build().create(RondaService::class.java)
-        val api_quinta = Retrofit.Builder().baseUrl(Coneccion.url)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build().create(QuintaService::class.java)
-        lifecycleScope.launchWhenCreated{
-            try {
-                val rondaActual = Ronda.getRondaActual(api_ronda.getRonda().body()!!)
-                val result = api_bolson.getBolsonByRonda(rondaActual.id_ronda)
-                val result_quinta = api_quinta.getQuintas().body()!!
-                val quintas = result.body()!!.flatMap { each -> result_quinta.filter{ it.id_quinta==each.idFp } }
-                listaBolsones = result.body().orEmpty()
-                if (result.isSuccessful) {
-                    initView(listaBolsones,quintas,rondaActual)
-                }
-            }
-            catch (e: IOException) {
-
-            }
-            catch (e: HttpException){
-
+        lifecycleScope.launchWhenCreated {
+            val rondas = RondaConeccion.getRondas()
+            if (rondas != null) {
+                val rondaActual = Ronda.getRondaActual(rondas)
+                val result = BolsonConeccion.getBolsonByRonda(rondaActual.id_ronda)
+                listaBolsones = result!!
+                val result_quinta = QuintaConeccion.get()
+                val quintas = result!!.flatMap { each -> result_quinta.quintas!!.filter { it.id_quinta == each.idFp } }
+                initView(listaBolsones, quintas, rondaActual)
             }
         }
     }
@@ -116,4 +94,5 @@ class ListadoBolsones:AppCompatActivity() {
         val alertDialog: AlertDialog = builder.create()
         alertDialog.show()
     }
+
 }

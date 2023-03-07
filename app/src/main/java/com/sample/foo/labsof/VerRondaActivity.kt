@@ -62,6 +62,11 @@ class VerRondaActivity: AppCompatActivity() {
 
     }
 
+    override fun onStart(){
+        super.onStart()
+        adapter.notifyDataSetChanged()
+    }
+
     fun initView(listaB: List<Bolson>,listaQ: List<Quinta>,ronda:Ronda) {
         val recyclerView = binding.bolsones
         val textView = binding.cargando
@@ -69,7 +74,7 @@ class VerRondaActivity: AppCompatActivity() {
             textView.setVisibility(View.VISIBLE)
         } else {
             recyclerView.layoutManager = LinearLayoutManager(this)
-            adapter = BolsonAdapter(listaB,listaQ,ronda,{onItemSelected(it)},{})
+            adapter = BolsonAdapter(listaB, listaQ, ronda, { onItemSelected(it) }, {})
             recyclerView.adapter = adapter
             textView.setVisibility(View.GONE)
         }
@@ -80,4 +85,6 @@ class VerRondaActivity: AppCompatActivity() {
         intent.putExtra("bolson",bolson.id_bolson)
         startActivity(intent)
     }
+
+
 }

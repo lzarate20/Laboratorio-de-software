@@ -13,10 +13,10 @@ interface BolsonService {
     suspend fun getBolsonByRonda(@Query("id_ronda") id_ronda: Int?): Response<List<Bolson>>
 
     @POST("/api/bolson")
-    suspend fun postBolson(@Body bolson:Bolson): Response<Map<String,String>>
+    suspend fun postBolson(@Body bolson:Bolson): Response<Bolson>
 
     @PUT("/api/bolson")
-    suspend fun putBolson(@Body bolson:Bolson): Response<Map<String,String>>
+    suspend fun putBolson(@Body bolson:Bolson): Response<Bolson>
 
     @DELETE("/api/bolson/{id}")
     suspend fun deleteSingleBolson(@Path("id") id: Int): Response<Bolson>

@@ -13,7 +13,7 @@ class BolsonViewHolder(view:View):ViewHolder(view) {
 
 
     fun render(bolson: Bolson, quinta: Quinta, ronda: Ronda, editOnClickListener:(Bolson) -> Unit, deleteOnClickListener:(Bolson) -> Unit){
-        if(Ronda.Compare.isAfterToday(ronda)){
+        if(Ronda.Compare.endAfterOrEqualToday(ronda)){
             binding.editarBolson.text = "Editar"
             binding.editarBolson.setOnClickListener{editOnClickListener(bolson)}
             binding.delete.setOnClickListener{

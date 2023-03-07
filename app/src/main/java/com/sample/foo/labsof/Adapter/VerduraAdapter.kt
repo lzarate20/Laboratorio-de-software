@@ -1,60 +1,51 @@
 package com.sample.foo.labsof.Adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.sample.foo.labsof.DataClass.Bolson
+import com.sample.foo.labsof.DataClass.ParcelaVerdura
 import com.sample.foo.labsof.DataClass.Verdura
 import com.sample.foo.labsof.DataClass.VerduraFechaList
 import com.sample.foo.labsof.R
 import com.sample.foo.labsof.databinding.ItemVerduraBinding
 
-class VerduraAdapter(var listaVerdura:List<VerduraFechaList>,var listaSelected: List<VerduraFechaList>? = null): RecyclerView.Adapter<VerduraAdapter.VerduraViewHolder>() {
+
+class VerduraAdapter(var listaVerdura:MutableList<ParcelaVerdura>,var listaSelected: MutableList<VerduraFechaList>? = null): RecyclerView.Adapter<VerduraAdapter.VerduraViewHolder>() {
 
 
     private val verdurasMap = hashMapOf<Int,String>()
 
-    fun set(listaV: List<VerduraFechaList>) {
-        this.listaVerdura = listaV
-        this.notifyDataSetChanged()
-    }
     fun getData(): HashMap<Int, String> {
         return verdurasMap
     }
 
     inner class VerduraViewHolder(private val binding: ItemVerduraBinding): RecyclerView.ViewHolder(binding.root)  {
 
-        fun render(vegetal: VerduraFechaList,position: Int,isSelected:Boolean = false){
-            binding.inputVegetal.text = vegetal.nombre.toString()
+        fun render(parcela: ParcelaVerdura,position: Int,isSelected:Boolean = false){
+            binding.inputVegetal.text = parcela.verdura!!.nombre.toString()
             binding.inputVegetal.isChecked = isSelected
-            if (binding.inputVegetal.isChecked) {
-                verdurasMap.put(position, vegetal.nombre.toString())
-            }
-            else{
-                verdurasMap.remove(position)
-            }
-            binding.inputVegetal.setBackgroundResource(
-                if (binding.inputVegetal.isChecked)
-                    android.R.color.holo_green_dark
-                else
-                    android.R.color.white
-            )
-            binding.inputVegetal.setOnClickListener {
-                binding.inputVegetal.isChecked = !binding.inputVegetal.isChecked
-                binding.inputVegetal.setBackgroundResource(
-                    if (binding.inputVegetal.isChecked)
-                        android.R.color.holo_green_dark
-                    else
-                        android.R.color.white
-                )
-                if (binding.inputVegetal.isChecked) {
-                    verdurasMap.put(position, it.toString())
+            binding.inputVegetal.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked && !parcela.cosecha!!){
+                Toast.makeText(buttonView.context,"${parcela.verdura!!.nombre.toString()} no se encontraba cosechada en la ultima visita",Toast.LENGTH_SHORT).show()
+                }
+                if (isChecked) {
+                    verdurasMap.put(parcela.verdura!!.id_verdura!!, buttonView.text.toString())
                 }
                 else{
-                    verdurasMap.remove(position)
+                    verdurasMap.remove(parcela.verdura!!.id_verdura!!)
                 }
             }
+            if (binding.inputVegetal.isChecked) {
+                verdurasMap.put(parcela.verdura!!.id_verdura!!, parcela.verdura!!.nombre.toString())
+            }
+            else{
+                verdurasMap.remove(parcela.verdura!!.id_verdura!!)
+            }
+
         }
     }
 
@@ -68,7 +59,7 @@ class VerduraAdapter(var listaVerdura:List<VerduraFechaList>,var listaSelected: 
         var isSelected = false
 
         if(listaSelected!=null) {
-            isSelected = listaSelected!!.any{it.id_verdura == item.id_verdura}
+            isSelected = listaSelected!!.any{ it.id_verdura == item.verdura!!.id_verdura}
         }
         holder.render(item,position,isSelected)
     }

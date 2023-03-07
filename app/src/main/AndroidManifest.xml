@@ -71,7 +71,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".ListadoBolsones"
+            android:name=".ListadoBolsonesActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
