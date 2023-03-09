@@ -10,8 +10,12 @@ interface VerduraService {
     @GET("/api/verdura")
     suspend fun getVerdura(): Response<List<VerduraFechaList>>
     @GET("/api/verdura/{id}")
-    suspend fun getSingleVerdura(@Path("id") id: Int?): Response<Verdura>
+    suspend fun getSingleVerdura(@Path("id") id: Int?): Response<VerduraFechaList>
     @DELETE("/api/verdura/{id}")
-    suspend fun delete(@Path("id") id: Int): Response<Verdura>
+    suspend fun delete(@Path("id") id: Int): Response<VerduraFechaList>
+    @POST("/api/verdura")
+    suspend fun postVerdura(@Body verdura:Verdura):Response<VerduraFechaList>
+    @PUT("/api/verdura")
+    suspend fun putverdura(@Body v:Verdura):Response<VerduraFechaList>
 
 }

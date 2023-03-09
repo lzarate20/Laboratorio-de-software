@@ -1,6 +1,5 @@
 package com.sample.foo.labsof
 
-import android.app.Activity
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment

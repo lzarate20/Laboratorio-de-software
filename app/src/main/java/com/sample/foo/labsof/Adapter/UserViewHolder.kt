@@ -7,13 +7,17 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.internal.ContextUtils.getActivity
 import com.sample.foo.labsof.*
 import com.sample.foo.labsof.Coneccion.UserConeccion
 import com.sample.foo.labsof.Coneccion.VisitaConeccion
 import com.sample.foo.labsof.DataClass.User
+import com.sample.foo.labsof.helpers.DialogHelper
 import com.sample.foo.labsof.helpers.Session
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -29,39 +33,40 @@ class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val eliminar = itemView.findViewById<Button>(R.id.eliminar)
 
     @SuppressLint("RestrictedApi")
-    fun render(userModel: User) {
+    fun render(userModel: User, registerForActivityResult: ActivityResultLauncher<Intent>, ac: AppCompatActivity) {
         nombre.text = "${(userModel.nombre)} ${(userModel.apellido)}"
         email.text = "Email: ${(userModel.email)}"
         rol.text = "Rol: ${(userModel.rol())}"
         eliminar.visibility = View.VISIBLE
-        if(userModel.id_user == getActivity(itemView.context)?.let { Session(it).getSession().id_user }){
-            ver.text= "Ver"
+        if (userModel.id_user == getActivity(itemView.context)?.let { Session(it).getSession().id_user }) {
+            ver.text = "Ver"
+            ver.setOnClickListener { v ->
+                val intent = Intent(v.context, VerUserActivity::class.java)
+                val bun = Bundle()
+                ContextCompat.startActivity(v.context, intent, bun)
+            }
+        } else {
+            ver.setOnClickListener { v ->
+
+                val intent = Intent(v.context, EditarUserActivity::class.java)
+                intent.putExtra("id", userModel.id_user)
+                registerForActivityResult.launch(intent)
+            }
         }
-        ver.setOnClickListener { v ->
-            val intent = Intent(v.context, VerUserActivity::class.java)
-            val bun = Bundle()
-            intent.putExtra("id", userModel.id_user)
-            ContextCompat.startActivity(v.context, intent, bun)
-        }
+
 
         var activity = getActivity(itemView.context)!!
         var Im = Session(activity).getSession()
         if (Im.id_user != userModel.id_user) {
             eliminar.setOnClickListener { v ->
-                val builder: android.app.AlertDialog.Builder =
-                    android.app.AlertDialog.Builder(v.context)
-                builder.setTitle("¿Eliminar?")
-                builder.setMessage("¿Esta seguro que desea eliminar este usuario?")
-                builder.setPositiveButton(
-                    "Eliminar",
-                    DialogInterface.OnClickListener { dialog, which ->
-                        GlobalScope.launch {
-                            val builder: android.app.AlertDialog.Builder =
-                                android.app.AlertDialog.Builder(itemView.context)
-                            builder.setTitle("Enviando Información")
-                            builder.setMessage("Su solicitud esta siendo procesada")
-                            builder.setCancelable(false)
-                            val bCreate = builder.create()
+                DialogHelper.dialogo(v.context,
+                    "¿Eliminar?",
+                    "¿Esta seguro que desea eliminar este usuario?",
+                    true,
+                    true,
+                    {
+                        ac.lifecycleScope.launch {
+                            val bCreate = DialogHelper.espera(v.context)
                             bCreate.show()
                             val delete = userModel.id_user.let { UserConeccion.delete(it!!) }
                             bCreate.dismiss()
@@ -76,24 +81,20 @@ class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                                 activity.overridePendingTransition(0, 0)
                                 activity.startActivity(intent)
                                 activity.overridePendingTransition(0, 0);
-                            }else{
-                                var builder= android.app.AlertDialog.Builder(itemView.context)
-                                builder.setTitle("Error")
-                                builder.setMessage("No se pudo eliminar el usuario")
-                                builder.setPositiveButton("Ok",
-                                    DialogInterface.OnClickListener { dialog, which ->
-                                        dialog.dismiss()
-                                    })
-                                builder.create().show()
+                            } else {
+                                DialogHelper.dialogo(
+                                    v.context,
+                                    "Error",
+                                    "No se pudo eliminar el usuario",
+                                    true,
+                                    false,
+                                    {},
+                                    {})
                             }
                         }
-                    })
-                builder.setNegativeButton(
-                    "Cancelar",
-                    DialogInterface.OnClickListener { dialog, which ->
+                    },
+                    {})
 
-                    })
-                builder.create().show()
             }
         } else {
             eliminar.visibility = View.GONE

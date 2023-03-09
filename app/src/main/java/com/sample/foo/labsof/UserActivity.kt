@@ -20,7 +20,7 @@ class UserActivity : AppCompatActivity() {
         }
         val FT: FragmentTransaction = supportFragmentManager.beginTransaction()
         val toolbar: Fragment = ToolbarFragment()
-        var bun = Bundle()
+        val bun = Bundle()
         bun.putString("toolbar", "2")
         toolbar.setArguments(bun)
         FT.add(R.id.toolbar, toolbar)

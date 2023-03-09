@@ -1,7 +1,5 @@
 package com.sample.foo.labsof
 
-import android.content.DialogInterface
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -13,9 +11,9 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
 import com.sample.foo.labsof.Coneccion.UserConeccion
 import com.sample.foo.labsof.DataClass.User
+import com.sample.foo.labsof.helpers.DialogHelper
 import com.sample.foo.labsof.helpers.Session
 import com.sample.foo.labsof.helpers.Verificacion
-import com.sample.foo.labsof.helpers.Verificacion.Companion.notVacio
 import kotlinx.coroutines.launch
 
 class EditarPerfilActivity : AppCompatActivity() {
@@ -54,12 +52,7 @@ class EditarPerfilActivity : AppCompatActivity() {
                 && Verificacion.notVacio(user_name)
             ) {
                 if (Verificacion.email(email)) {
-                    val builder: android.app.AlertDialog.Builder =
-                        android.app.AlertDialog.Builder(view.context)
-                    builder.setTitle("Enviando Información")
-                    builder.setMessage("Su solicitud esta siendo procesada")
-                    builder.setCancelable(false)
-                    val bCreate = builder.create()
+                    val bCreate = DialogHelper.espera(this@EditarPerfilActivity)
                     bCreate.show()
                     lifecycleScope.launch {
                         val user = User(
@@ -72,53 +65,36 @@ class EditarPerfilActivity : AppCompatActivity() {
                             userSession.roles,
                             userSession.id_user
                         )
+                        val u = UserConeccion.getSingle(userSession.id_user)
+                        user.password= u.password
                         val new_user = UserConeccion.put(user)
                         bCreate.dismiss()
                         if (new_user.error != null) {
-                            var builder = android.app.AlertDialog.Builder(view.context)
-                            builder.setTitle("Error")
-                            builder.setMessage(new_user.error)
-                            builder.setPositiveButton("Ok",
-                                DialogInterface.OnClickListener { dialog, which ->
-                                    dialog.dismiss()
-                                })
-                            builder.create().show()
+                            DialogHelper.dialogo(this@EditarPerfilActivity,
+                            "Error", new_user.error!!,true,false,{},{})
                         } else {
                             session.saveSession(new_user)
-                            var builder = android.app.AlertDialog.Builder(view.context)
-                            builder.setTitle("Guardado Exitoso")
-                            builder.setMessage("Se guardaron exitosamente los cambios")
-                            builder.setPositiveButton("Ok",
-                                DialogInterface.OnClickListener { dialog, which ->
-                                    dialog.dismiss()
-                                    val intent= Intent(view.context,MainActivity::class.java)
-                                    finish()
-                                    overridePendingTransition(0, 0)
-                                    startActivity(intent)
-                                    overridePendingTransition(0, 0);
-                                })
-                            builder.create().show()
+                            DialogHelper.dialogo(this@EditarPerfilActivity,
+                            "Guardado exitoso",
+                            "Se guardaron exitosamente los cambios",
+                            true,false,{},{})
                         }
                     }
                 }else {
-                    var builder = android.app.AlertDialog.Builder(view.context)
-                    builder.setTitle("Error")
-                    builder.setMessage("Debe introducir un email valido")
-                    builder.setPositiveButton("Ok",
-                        DialogInterface.OnClickListener { dialog, which ->
-                            dialog.dismiss()
-                        })
-                    builder.create().show()
+                    DialogHelper.dialogo(
+                        this@EditarPerfilActivity,
+                        "Error",
+                        "Debe introducir un email valido.\n Por ejemplo: usuario@gmail.com",
+                        true,false,{},{}
+                    )
                 }
             } else {
-                var builder = android.app.AlertDialog.Builder(view.context)
-                builder.setTitle("Error")
-                builder.setMessage("No puede haber campos vacios")
-                builder.setPositiveButton("Ok",
-                    DialogInterface.OnClickListener { dialog, which ->
-                        dialog.dismiss()
-                    })
-                builder.create().show()
+                DialogHelper.dialogo(
+                    this@EditarPerfilActivity,
+                    "Error",
+                    "No puede haber campos vacios",
+                    true,false,{},{}
+                )
             }
         }
 

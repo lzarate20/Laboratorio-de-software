@@ -13,8 +13,8 @@ class ListVerduras() {
             error="No hay verduras guardadas"
         }
     }
-    constructor(quintas: List<VerduraFechaList>?):this(){
-        this.verduras=quintas
+    constructor(verduras: List<VerduraFechaList>?):this(){
+        this.verduras=verduras
     }
     constructor(error: String?):this(){
         this.error=error

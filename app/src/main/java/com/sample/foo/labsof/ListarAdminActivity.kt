@@ -1,21 +1,18 @@
 package com.sample.foo.labsof
 
-import android.content.Context
-import android.content.DialogInterface
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sample.foo.labsof.Adapter.UserAdapter
-import com.sample.foo.labsof.Adapter.VisitaAdapter
-import com.sample.foo.labsof.Coneccion.QuintaConeccion
 import com.sample.foo.labsof.Coneccion.UserConeccion
-import com.sample.foo.labsof.Coneccion.VisitaConeccion
+import com.sample.foo.labsof.helpers.DialogHelper
 import com.sample.foo.labsof.helpers.Session
 import kotlinx.coroutines.launch
 
@@ -40,29 +37,37 @@ class ListarAdminActivity : AppCompatActivity() {
     private fun initRecyclerView(){
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerUser)
         recyclerView.layoutManager= LinearLayoutManager(this)
-        var builder: android.app.AlertDialog.Builder =
-            android.app.AlertDialog.Builder(this)
-        builder.setTitle("Esperando información")
-        builder.setMessage("Su solicitud esta siendo procesada")
-        builder.setCancelable(false)
-        var bCreate = builder.create()
+        val bCreate = DialogHelper.espera(this@ListarAdminActivity)
         bCreate.show()
         lifecycleScope.launch{
-
             val user= UserConeccion.get().getAdmin()
             bCreate.dismiss()
             if(user.error== null) {
-                recyclerView.adapter = UserAdapter(user)
+                recyclerView.adapter = UserAdapter(user, register,this@ListarAdminActivity)
             }else{
-                builder.setTitle("Error")
-                builder.setMessage(user.error)
-                builder.setPositiveButton("Ok",
-                    DialogInterface.OnClickListener { dialog, which ->
-                        dialog.dismiss()
-                    })
-                builder.create().show()
+                DialogHelper.dialogo(
+                    this@ListarAdminActivity,
+                    "Error",
+                    user.error!!,
+                    true,
+                    false,
+                    {},
+                    {}
+                )
             }
         }
 
     }
+    private val register =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent =
+                    Intent(this@ListarAdminActivity, ListarAdminActivity::class.java)
+                finish()
+                overridePendingTransition(0, 0)
+                startActivity(intent)
+                overridePendingTransition(0, 0)
+
+            }
+        }
 }

@@ -1,9 +1,14 @@
 package com.sample.foo.labsof
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
@@ -14,12 +19,13 @@ import com.sample.foo.labsof.helpers.Session
 import com.sample.foo.labsof.helpers.Verificacion
 import kotlinx.coroutines.launch
 
-class CrearUserActivity : AppCompatActivity() {
+class EditarUserActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_crear_user)
+        setContentView(R.layout.activity_editar_user)
         val session = Session(this)
-        if (!session.haveSesion()) {
+        val userSession = session.getSession()
+        if (!session.haveSesion() && userSession.isTecnico()) {
             finish()
         }
         val FT: FragmentTransaction = supportFragmentManager.beginTransaction()
@@ -29,24 +35,55 @@ class CrearUserActivity : AppCompatActivity() {
         toolbar.setArguments(bun)
         FT.add(R.id.toolbar, toolbar)
         FT.commit()
+
+        val bCreate = DialogHelper.espera(this@EditarUserActivity)
+        bCreate.show()
+        val roles = arrayOf<String>("Administrador", "Técnico")
         val nombre = findViewById<EditText>(R.id.nombre)
         val apellido = findViewById<EditText>(R.id.apellido)
         val email = findViewById<EditText>(R.id.email)
         val direc = findViewById<EditText>(R.id.direc)
-        val user_name = findViewById<EditText>(R.id.user_name)
         val pass = findViewById<EditText>(R.id.pass)
+        val user_name = findViewById<EditText>(R.id.user_name)
         val rol = findViewById<Spinner>(R.id.rol)
-        val roles = arrayOf<String>("Administrador", "Técnico")
-        creacionSpinner(rol, roles)
 
         val guardar = findViewById<Button>(R.id.guardar)
+        creacionSpinner(rol, roles)
+
+        val id: Int = this.intent.getIntExtra("id", 0)
+        var user = User()
+
+        lifecycleScope.launch {
+            user = UserConeccion.getSingle(id)
+            bCreate.dismiss()
+            if (user.error != null) {
+                DialogHelper.dialogo(
+                    this@EditarUserActivity,
+                    "Error",
+                    user.error!!,
+                    true,
+                    false,
+                    {},
+                    {})
+
+            } else {
+                nombre.setText(user.nombre)
+                apellido.setText(user.apellido)
+                email.setText(user.email)
+                direc.setText(user.direccion)
+                user_name.setText(user.username)
+                pass.setText(user.password)
+                rol.setSelection(user.roles!!)
+            }
+        }
         guardar.setOnClickListener { view: View ->
             if (Verificacion.notVacio(nombre) && Verificacion.notVacio(apellido)
                 && Verificacion.notVacio(email) && Verificacion.notVacio(direc)
                 && Verificacion.notVacio(user_name) && Verificacion.notVacio(pass)
             ) {
                 if (Verificacion.email(email)) {
-                    val bCreate = DialogHelper.espera(this@CrearUserActivity)
+
+                    val bCreate = DialogHelper.espera(this@EditarUserActivity)
                     bCreate.show()
                     lifecycleScope.launch {
                         val user = User(
@@ -56,43 +93,57 @@ class CrearUserActivity : AppCompatActivity() {
                             user_name.text.toString(),
                             pass.text.toString(),
                             email.text.toString(),
-                            rol.selectedItemPosition
+                            rol.selectedItemPosition,
+                            user.id_user
                         )
-                        val new_user = UserConeccion.post(user)
+                        val new_user = UserConeccion.put(user)
                         bCreate.dismiss()
                         if (new_user.error != null) {
                             DialogHelper.dialogo(
-                                this@CrearUserActivity,
-                                "Error",new_user.error!!,
-                                true,false,{},{}
-                            )
+                                this@EditarUserActivity,
+                                "Error",
+                                user.error!!,
+                                true,
+                                false,
+                                {},
+                                {})
                         } else {
                             DialogHelper.dialogo(
-                                this@CrearUserActivity,
-                                "Guardado exitoso",
-                                "Se guardo exitosamente el usuario",
-                                true,false,{},{}
-                            )
+                                this@EditarUserActivity,
+                                "Guardado Exitoso",
+                                "Se guardaron exitosamente los cambios",
+                                true,
+                                false,
+                                {
+                                    val intent = Intent()
+                                    setResult(Activity.RESULT_OK, intent)
+                                    finish()
+                                },
+                                {})
                         }
                     }
                 } else {
                     DialogHelper.dialogo(
-                        this@CrearUserActivity,
+                        this@EditarUserActivity,
                         "Error",
-                        "Debe introducir un email valido.\n Por ejemplo: usuario@gmail.com",
-                        true,false,{},{}
-                    )
+                        "Debe introducir un email valido",
+                        true,
+                        false,
+                        {},
+                        {})
+
                 }
             } else {
                 DialogHelper.dialogo(
-                    this@CrearUserActivity,
+                    this@EditarUserActivity,
                     "Error",
                     "No puede haber campos vacios",
-                    true,false,{},{}
-                )
+                    true,
+                    false,
+                    {},
+                    {})
             }
         }
-
     }
 
     private fun creacionSpinner(spinner: Spinner, list: Array<String>) {
@@ -104,6 +155,4 @@ class CrearUserActivity : AppCompatActivity() {
         mSortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = mSortAdapter
     }
-
-
 }

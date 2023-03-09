@@ -12,5 +12,9 @@ class Verificacion {
             return editText.text.toString().contains("@", true) &&
                     editText.text.toString().contains(".com", true)
         }
+        fun url(editText: EditText): Boolean {
+            return editText.text.toString().contains("https://", true) &&
+                    editText.text.toString().contains("htttp://", true)
+        }
     }
 }

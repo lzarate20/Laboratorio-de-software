@@ -1,12 +1,10 @@
 package com.sample.foo.labsof
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.view.Menu
-import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
@@ -47,7 +45,7 @@ class ToolbarFragment : Fragment() {
         f.setSupportActionBar(view.findViewById(R.id.my_toolbar))
 
         /*f.getSupportActionBar()?.setDisplayShowTitleEnabled(false)*/
-        var toolbar: Fragment
+        val toolbar: Fragment
         var bool: Boolean
 
         if (param1.equals("1")) {
@@ -61,14 +59,14 @@ class ToolbarFragment : Fragment() {
 
         }
 
-        f.getSupportActionBar()?.setDisplayHomeAsUpEnabled(bool);
-        f.getSupportActionBar()?.setDisplayShowHomeEnabled(bool);
+        f.supportActionBar?.setDisplayHomeAsUpEnabled(bool)
+        f.supportActionBar?.setDisplayShowHomeEnabled(bool)
         FT.add(R.id.tool, toolbar)
         FT.commit()
-        var activity = activity as Activity
+        val activity = activity as Activity
         val session=Session(activity)
 
-        var b= view.findViewById<ImageButton>(R.id.menu)
+        val b= view.findViewById<ImageButton>(R.id.menu)
         if(session.haveSesion()){
             b.visibility=View.VISIBLE
             b.setOnClickListener {
@@ -87,7 +85,7 @@ class ToolbarFragment : Fragment() {
         val m = R.menu.menu_main
         inflater.inflate(m, menu)
     }
-    fun showPopup(view: View) {
+    private fun showPopup(view: View) {
         val popup = PopupMenu(view.context, view)
         popup.inflate(R.menu.menu_tooltip)
         popup.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item: MenuItem? ->
@@ -103,6 +101,8 @@ class ToolbarFragment : Fragment() {
                     startActivity(intent)
                 }
                 R.id.pass -> {
+                    val intent = Intent(activity, CambiarPassActivity::class.java)
+                    startActivity(intent)
                 }
             }
 

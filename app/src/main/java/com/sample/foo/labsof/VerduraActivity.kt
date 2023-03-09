@@ -14,13 +14,13 @@ class VerduraActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_verdura)
         val session = Session(this@VerduraActivity)
-        val userSession = session.getSession()
+
         if (!session.haveSesion()) {
             finish()
         }
         val FT: FragmentTransaction = supportFragmentManager.beginTransaction()
         val toolbar: Fragment = ToolbarFragment()
-        var bun = Bundle()
+        val bun = Bundle()
         bun.putString("toolbar", "2")
         toolbar.setArguments(bun)
         FT.add(R.id.toolbar, toolbar)

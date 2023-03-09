@@ -1,10 +1,6 @@
 package com.sample.foo.labsof
-
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -16,9 +12,11 @@ import com.sample.foo.labsof.Adapter.VisitaAdapter
 import com.sample.foo.labsof.Coneccion.QuintaConeccion
 import com.sample.foo.labsof.Coneccion.UserConeccion
 import com.sample.foo.labsof.Coneccion.VisitaConeccion
+import com.sample.foo.labsof.helpers.DialogHelper
 import kotlinx.coroutines.launch
 
 class HistorialVisitas : AppCompatActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_historial_visitas)
@@ -33,19 +31,33 @@ class HistorialVisitas : AppCompatActivity() {
         initRecyclerView()
 
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun initRecyclerView(){
+    private fun initRecyclerView() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerVisita)
-        recyclerView.layoutManager= LinearLayoutManager(this)
-        lifecycleScope.launch{
-            val visitas= VisitaConeccion.get().getVisitasPasadas().ordenarFechaYTecnico()
-            val user= UserConeccion.get().getTecnicos()
-            val quinta= QuintaConeccion.get()
-            val es= findViewById<TextView>(R.id.esperando)
-            es.visibility= View.GONE
-            recyclerView.adapter= VisitaAdapter(visitas.union(user, quinta))
-            recyclerView.visibility= View.VISIBLE
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        val dCreate = DialogHelper.espera(this@HistorialVisitas)
+        dCreate.show()
+        lifecycleScope.launch {
+            val visitas = VisitaConeccion.get().getVisitasPasadas().ordenarFechaYTecnico()
+            val user = UserConeccion.get().getTecnicos()
+            val quinta = QuintaConeccion.get()
+            dCreate.dismiss()
+            if (visitas.error == null && user.error == null && quinta.error == null) {
+                if (visitas.visitas?.size==0){
+                    DialogHelper.dialogo(this@HistorialVisitas,
+                        "Error","No hay visitas pasadas guardadas",
+                        true,false,{finish()},{})
+                }
+                recyclerView.adapter = VisitaAdapter(visitas.union(user, quinta))
+            }else{
+                DialogHelper.dialogo(this@HistorialVisitas,
+                "Error","Ocurrio un error al intentar obtener los datos de las visitas",
+                true,false,{finish()},{})
+            }
         }
 
     }
+
+
 }

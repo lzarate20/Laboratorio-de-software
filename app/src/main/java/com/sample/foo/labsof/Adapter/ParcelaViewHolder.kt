@@ -6,12 +6,14 @@ import android.view.View
 import android.widget.*
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.sample.foo.labsof.Coneccion.ParcelaConeccion
 import com.sample.foo.labsof.DataClass.Parcela
 import com.sample.foo.labsof.DataClass.ParcelaVerdura
 import com.sample.foo.labsof.DataClass.VerduraFechaList
 import com.sample.foo.labsof.R
 import com.sample.foo.labsof.VerVisita
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
@@ -32,6 +34,12 @@ class ParcelaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         cosecha.isChecked= parcela.cosecha == true
         cubierta.isChecked= parcela.cubierta == true
         verdura.text= parcela.verdura?.nombre
+        GlobalScope.launch {
+            try {
+                Glide.with(itemView).load(parcela.verdura!!.archImg).into(image)
+            } catch (e: Exception) {
+            }
+        }
         if (actualizar){
             ver.text="Actualizar"
             eliminar.visibility=View.VISIBLE

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VerUserActivity">
+    tools:context=".EditarUserActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ver usuario"
+            android:text="Editar usuario"
             android:textColor="@color/black"
             android:textSize="30dp" />
 
@@ -45,7 +45,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Nombre: " />
-                    <TextView
+                    <EditText
                         android:id="@+id/nombre"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -72,7 +72,7 @@
                         android:layout_height="wrap_content"
                         android:text="Apellido: " />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/apellido"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
@@ -97,8 +97,33 @@
                         android:layout_height="wrap_content"
                         android:text="Email: " />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Contraseña: " />
+
+                    <EditText
+                        android:id="@+id/pass"
+                        android:inputType="textPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -121,7 +146,7 @@
                         android:layout_height="wrap_content"
                         android:text="Nombre de usuario: " />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/user_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -145,7 +170,7 @@
                         android:layout_height="wrap_content"
                         android:text="Dirección: " />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/direc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -168,15 +193,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Rol: " />
-                    <TextView
-                        android:id="@+id/rolT"
+                    <Spinner
+                        android:id="@+id/rol"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"/>
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
             </LinearLayout>
+            <Button
+                android:id="@+id/guardar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/botones"
+                android:textColor="@color/white"
+                android:text="Guardar"/>
         </LinearLayout>
 
 

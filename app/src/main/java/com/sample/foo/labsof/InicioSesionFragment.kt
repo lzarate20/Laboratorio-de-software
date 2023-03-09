@@ -1,8 +1,6 @@
 package com.sample.foo.labsof
 
 import android.app.Activity
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -14,6 +12,7 @@ import android.widget.EditText
 import androidx.lifecycle.lifecycleScope
 import com.sample.foo.labsof.Coneccion.UserConeccion
 import com.sample.foo.labsof.DataClass.User
+import com.sample.foo.labsof.helpers.DialogHelper
 import com.sample.foo.labsof.helpers.Session
 import kotlinx.coroutines.launch
 
@@ -51,35 +50,23 @@ class InicioSesionFragment : Fragment() {
         val pass = view.findViewById<EditText>(R.id.pass)
         val iniciar = view.findViewById<Button>(R.id.iniciar)
         iniciar.setOnClickListener { view: View ->
-            var builder: android.app.AlertDialog.Builder =
-                android.app.AlertDialog.Builder(view.context)
-            builder.setTitle("Enviando Información")
-            builder.setMessage("Su solicitud esta siendo procesada")
-            builder.setCancelable(false)
-            var bCreate = builder.create()
+            val bCreate = DialogHelper.espera(view.context)
             bCreate.show()
             lifecycleScope.launch{
-                var user = UserConeccion.auth(User(username.text.toString(), pass.text.toString()))
-
+                val user = UserConeccion.auth(User(username.text.toString(), pass.text.toString()))
                 bCreate.dismiss()
                 if(user.error == null){
-                    var activity = activity as Activity
+                    val activity = activity as Activity
                     Session(activity).saveSession(user)
                     val intent= Intent(view.context,MainActivity::class.java)
                     activity.finish()
                     activity.overridePendingTransition(0, 0)
                     activity.startActivity(intent)
-                    activity.overridePendingTransition(0, 0);
+                    activity.overridePendingTransition(0, 0)
                 }else{
-                    var builder= android.app.AlertDialog.Builder(view.context)
-                    builder.setTitle("Error")
-                    builder.setMessage(user.error)
-                    builder.setPositiveButton("Ok",
-                        DialogInterface.OnClickListener { dialog, which ->
-                            dialog.dismiss()
-                        })
-                    builder.create().show()
-
+                    DialogHelper.dialogo(view.context,
+                    "Error",user.error!!,
+                    true,false,{},{})
                 }
             }
         }

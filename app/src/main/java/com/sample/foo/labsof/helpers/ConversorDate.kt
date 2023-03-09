@@ -85,6 +85,11 @@ class ConversorDate {
             if(fecha[1]/10 < 1) mes= "0${(fecha[1])}"
             return "${(dia)}/${(mes)}/${(fecha[0])}"
         }
+        fun convertMesBD(mes:Int):String{
+            var mesS:String=""
+            if(mes/10 < 1) mesS= "0${(mes)}"
+            return "01/${(mesS)}/2023"
+        }
         fun convertToArray(fecha:String):List<Int>{
             val f = fecha.split("/") as List<Int>
             return f

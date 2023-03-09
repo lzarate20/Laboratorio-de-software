@@ -41,9 +41,9 @@ class VerduraFechaList() {
         this.error = e
     }
     fun mes_siembra():String{
-        return mes.get(mes_siembra!!.get(2) -1)
+        return mes.get(mes_siembra!![1] -1)
     }
     fun mes_cosecha():String{
-        return mes.get(tiempo_cosecha!!.get(2)-1)
+        return mes.get(tiempo_cosecha!![1] -1)
     }
 }
