@@ -88,7 +88,8 @@
                     android:id="@+id/textF"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Fecha: " />
+                    android:text="Fecha: "
+                    />
 
                 <EditText
                     android:id="@+id/editF"
@@ -106,45 +107,6 @@
                     tools:text="Juan Carlos Garcia" />
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Parcelas "
-                android:textColor="@color/black" />
-
-
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="20dp"
-            android:orientation="vertical">
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Agregar Parcela"
-                android:background="@drawable/botones"
-                android:textColor="@color/white"
-                android:id="@+id/agregarP"
-                android:visibility="gone"
-                android:layout_alignParentTop="true"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerPacela"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/agregarP"
-                android:layout_above="@+id/guardar"
-                android:visibility="gone"/>
-
-            <TextView
-                android:id="@+id/esperando"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Esperando informacion"
-                android:layout_centerInParent="true"/>
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -153,7 +115,47 @@
                 android:textColor="@color/white"
                 android:id="@+id/guardar"
                 android:visibility="gone"
+                tools:visibility="visible"
                 android:layout_alignParentBottom="true"/>
+
+
+        </LinearLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="1.5dp"
+    android:background="@color/gris"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Parcelas "
+                android:layout_alignParentTop="true"
+                android:textColor="@color/black"
+                android:id="@+id/p"
+                android:layout_centerHorizontal="true"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Agregar Parcela"
+                android:background="@drawable/botones"
+                android:textColor="@color/white"
+                android:id="@+id/agregarP"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:layout_alignParentBottom="true"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerPacela"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/agregarP"
+                android:layout_below="@+id/p"/>
+
 
         </RelativeLayout>
 

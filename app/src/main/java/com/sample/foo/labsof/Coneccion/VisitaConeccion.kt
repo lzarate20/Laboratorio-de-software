@@ -9,7 +9,7 @@ import com.sample.foo.labsof.Listados.ListVisita
 import com.sample.foo.labsof.Service.VisitaService
 
 class VisitaConeccion {
-    companion object{
+    companion object {
         var api = Coneccion.api.create(VisitaService::class.java)
         suspend fun get(): ListVisita {
             try {
@@ -59,7 +59,7 @@ class VisitaConeccion {
                         val ult_v = visitas_pasadas.getUltimavisita(quinta.id_quinta)
                         if (ult_v != null) {
                             parcelas = ult_v.parcelas
-                            if (parcelas!= null) {
+                            if (parcelas != null) {
                                 parcelas.forEach { p ->
                                     println(p.toString())
                                     p.id_parcela = null
@@ -82,6 +82,7 @@ class VisitaConeccion {
                 return Visita("Error al intentar conectar a la Base de datos")
             }
         }
+
         @RequiresApi(Build.VERSION_CODES.O)
         suspend fun put(visita: Visita): Visita {
             try {
@@ -107,17 +108,13 @@ class VisitaConeccion {
                 return Visita("Error al intentar conectar a la Base de datos")
             }
         }
-        suspend fun delete(id:Int): Visita? {
+
+        suspend fun delete(id: Int): Boolean? {
             try {
                 val result = api.deleteSingleVisita(id)
-                if (result.isSuccessful) {
-                    return result.body()!!
-                } else {
-                    println(result.code())
-                    return null
-                }
+                return result.isSuccessful
+
             } catch (e: Exception) {
-                println(e.printStackTrace())
                 return null
             }
         }

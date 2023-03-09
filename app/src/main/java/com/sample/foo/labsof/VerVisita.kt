@@ -1,6 +1,8 @@
 package com.sample.foo.labsof
 
+import android.app.Activity
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.InputType
@@ -62,10 +64,8 @@ class VerVisita : AppCompatActivity() {
                     "Los datos necesarios para crear una visita no se pudieron obtener",
                     true, false, { finish() }, {})
             }
-            if (!visita!!.visitaPasada()) {
+            if (!visita!!.visitaPasada()&& !visita!!.esHoy()) {
                 guardar.visibility = View.VISIBLE
-            }
-            if (visita!!.esHoy()) {
                 editF.setText(visita!!.fechaString())
                 editF.setOnClickListener {
                     showDatePicker(editF)
@@ -80,8 +80,12 @@ class VerVisita : AppCompatActivity() {
                 quintas?.getPos(visita!!.id_quinta!!)?.let { editQ.setSelection(it) }
                 editT.visibility = View.VISIBLE
                 editF.visibility = View.VISIBLE
-                agregar.visibility = View.VISIBLE
             } else {
+
+                if (visita!!.esHoy()){
+                    agregar.visibility = View.VISIBLE
+                    guardar.visibility = View.VISIBLE
+                }
                 val textT = findViewById<TextView>(R.id.textTx)
                 val textF = findViewById<TextView>(R.id.textFx)
                 textF.setText(visita!!.fechaString())
@@ -98,8 +102,6 @@ class VerVisita : AppCompatActivity() {
             recyclerView.adapter =
                 ParcelaAdapter(visita!!.parcelas, visita!!.esHoy(), verduras, this@VerVisita)
             recyclerView.visibility = View.VISIBLE
-            val es = findViewById<TextView>(R.id.esperando)
-            es.visibility = View.GONE
         }
 
 
@@ -112,7 +114,6 @@ class VerVisita : AppCompatActivity() {
                     lifecycleScope.launch {
                         val vi = Visita(visita!!)
                         vi.id_tecnico = tecnicos?.users?.get(editT.selectedItemPosition)?.id_user
-                        vi.id_quinta = visita?.id_quinta
                         vi.fecha_visita = ConversorDate.convertToBD(editF.text.toString())
                         val v = VisitaConeccion.put(vi)
                         dialog.dismiss()
@@ -125,7 +126,11 @@ class VerVisita : AppCompatActivity() {
                                 "Se guardaron correctamente los cambios",
                                 true,
                                 false,
-                                { finish() },
+                                {
+                                    val intent = Intent()
+                                    setResult(Activity.RESULT_OK, intent)
+                                    finish()
+                                },
                                 {})
                         }
                     }

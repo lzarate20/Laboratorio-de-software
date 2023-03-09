@@ -1,6 +1,7 @@
 package com.sample.foo.labsof.Adapter
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.text.InputType
 import android.view.View
 import android.widget.*
@@ -11,9 +12,10 @@ import com.sample.foo.labsof.Coneccion.ParcelaConeccion
 import com.sample.foo.labsof.DataClass.Parcela
 import com.sample.foo.labsof.DataClass.ParcelaVerdura
 import com.sample.foo.labsof.DataClass.VerduraFechaList
+import com.sample.foo.labsof.ListadoVerdurasActivity
 import com.sample.foo.labsof.R
 import com.sample.foo.labsof.VerVisita
-import kotlinx.coroutines.GlobalScope
+import com.sample.foo.labsof.helpers.DialogHelper
 import kotlinx.coroutines.launch
 
 
@@ -34,12 +36,7 @@ class ParcelaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         cosecha.isChecked= parcela.cosecha == true
         cubierta.isChecked= parcela.cubierta == true
         verdura.text= parcela.verdura?.nombre
-        GlobalScope.launch {
-            try {
-                Glide.with(itemView).load(parcela.verdura!!.archImg).into(image)
-            } catch (e: Exception) {
-            }
-        }
+        Glide.with(itemView.context).load(parcela.verdura?.archImg).error(R.drawable.icon_image).into(image)
         if (actualizar){
             ver.text="Actualizar"
             eliminar.visibility=View.VISIBLE
@@ -47,23 +44,35 @@ class ParcelaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             ver.visibility=View.GONE
         }
         eliminar.setOnClickListener{v->
-            val builder: android.app.AlertDialog.Builder =
-                android.app.AlertDialog.Builder(v.context)
-            builder.setTitle("¿Eliminar?")
-            builder.setMessage("¿Esta seguro que desea eliminar esta parcela?")
-            builder.setPositiveButton(
-                "Eliminar",
-                DialogInterface.OnClickListener { dialog, which ->
-                        view.lifecycleScope.launch {
-                            parcela.id_parcela?.let { ParcelaConeccion.delete(it) }
+            DialogHelper.dialogo(v.context,
+            "¿Eliminar?","¿Esta seguro que desea eliminar esta parcela?",
+            true,true,
+                {
+                    val bCreate= DialogHelper.espera(v.context)
+                    bCreate.show()
+                    view.lifecycleScope.launch {
+                        val eli=ParcelaConeccion.delete(parcela.id_parcela!!)
+                        bCreate.dismiss()
+                        if (eli==true){
+                            DialogHelper.dialogo(v.context,"Eliminación exitosa",
+                            "Se elimino con exito la parcela",
+                            true,false,
+                                {
+                                    val intent = Intent(v.context, VerVisita::class.java)
+                                    view.finish()
+                                    view.overridePendingTransition(0, 0)
+                                    view.startActivity(intent)
+                                    view.overridePendingTransition(0, 0)},
+                                {}
+                            )
+                        }else{
+                            DialogHelper.dialogo(v.context,
+                            "Error","No se pudo eliminar la parcela",
+                            true,false,{},{})
                         }
-                })
-            builder.setNegativeButton(
-                "Cancelar",
-                DialogInterface.OnClickListener { dialog, which ->
-
-                })
-            builder.create().show()
+                }
+                },{}
+            )
         }
         ver.setOnClickListener{v->
             val builder: android.app.AlertDialog.Builder =
@@ -126,40 +135,33 @@ class ParcelaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                             verdura = verduras?.get(verdura.selectedItemPosition),
                             id_parcela=parcela.id_parcela
                         )
+                        val dCreate= DialogHelper.espera(view)
+                        dCreate.show()
                         view.lifecycleScope.launch {
                            var par= ParcelaConeccion.put(Parcela(p))
+                            dCreate.dismiss()
                             if(par!= null){
-                                val builder: android.app.AlertDialog.Builder =
-                                    android.app.AlertDialog.Builder(v.context)
-                                builder.setTitle("Actualizada con exito")
-                                builder.setMessage("La parcela se actualizo con exito")
-                                builder.setPositiveButton("Ok",
-                                    DialogInterface.OnClickListener { dialog, which ->
-                                    })
-                                builder.create().show()
+                                DialogHelper.dialogo(view,
+                                "Actualizacion exitosa",
+                                    "La parcela se actualizo con exito",
+                                true,false,
+                                    {
+                                        val intent = Intent(v.context, VerVisita::class.java)
+                                        view.finish()
+                                        view.overridePendingTransition(0, 0)
+                                        view.startActivity(intent)
+                                        view.overridePendingTransition(0, 0)
+                                    },{})
                             }else{
-                                val builder: android.app.AlertDialog.Builder =
-                                    android.app.AlertDialog.Builder(v.context)
-                                builder.setTitle("Error")
-                                builder.setMessage("No se pudo actualizar la parcela")
-                                builder.setPositiveButton("Ok",
-                                    DialogInterface.OnClickListener { dialog, which ->
-                                        dialog.dismiss()
-                                    })
-                                builder.create().show()
+                                DialogHelper.dialogo(view,"Error",
+                                    "No se pudo actualizar la parcela",true,
+                                false,{},{})
                             }
                         }
                     } else {
-                        val builder: android.app.AlertDialog.Builder =
-                            android.app.AlertDialog.Builder(v.context)
-                        builder.setTitle("Error")
-                        builder.setMessage("La cantidad de surcos no puede ser menor a 1")
-                        builder.setPositiveButton("Ok",
-                            DialogInterface.OnClickListener { dialog, which ->
-                                dialog.dismiss()
-                            })
-                        builder.create().show()
-
+                        DialogHelper.dialogo(view,
+                        "Error","La cantidad de surcos no puede ser menor a 1",
+                        true,false,{},{})
                     }
                 })
             builder.setNegativeButton(

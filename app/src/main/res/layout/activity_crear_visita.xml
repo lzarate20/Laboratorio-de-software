@@ -51,13 +51,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"></Spinner>
                 </LinearLayout>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="#ff0000"
-                    android:text="Error"
-                    android:visibility="gone"
-                    android:id="@+id/errrorQ"/>
             </LinearLayout>
 
             <LinearLayout
@@ -86,14 +79,6 @@
                         android:focusableInTouchMode="false"
                         android:importantForAutofill="no" />
                 </LinearLayout>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="#ff0000"
-                    android:text="Error"
-
-                    android:visibility="gone"
-                    android:id="@+id/errrorF"/>
             </LinearLayout>
 
             <LinearLayout
@@ -119,13 +104,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="#ff0000"
-                    android:text="Error"
-                    android:visibility="gone"
-                    android:id="@+id/errrorD"/>
             </LinearLayout>
 
             <LinearLayout
@@ -153,22 +131,7 @@
 
                     </Spinner>
                 </LinearLayout>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="#ff0000"
-                    android:text="Error"
-
-                    android:visibility="gone"
-                    android:id="@+id/errrorT"/>
             </LinearLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#ff0000"
-                android:text="Error"
-                android:visibility="gone"
-                android:id="@+id/errrorG"/>
             <Button
                 android:id="@+id/guardar"
                 android:layout_width="match_parent"

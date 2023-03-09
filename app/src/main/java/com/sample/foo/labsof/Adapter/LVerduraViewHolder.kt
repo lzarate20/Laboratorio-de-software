@@ -69,7 +69,7 @@ class LVerduraViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                             activity.finish()
                             activity.overridePendingTransition(0, 0)
                             activity.startActivity(intent)
-                            activity.overridePendingTransition(0, 0);
+                            activity.overridePendingTransition(0, 0)
                         } else {
                             DialogHelper.dialogo(itemView.context,
                                 "Error", "No se pudo eliminar la verdura", true, false, {}, {})

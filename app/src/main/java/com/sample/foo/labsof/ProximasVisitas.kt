@@ -1,8 +1,11 @@
 package com.sample.foo.labsof
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -49,7 +52,7 @@ class ProximasVisitas : AppCompatActivity() {
                     "Error","No hay visitas proximas guardadas",
                     true,false,{finish()},{})
                 }
-                recyclerView.adapter = VisitaAdapter(visitas.union(user, quinta))
+                recyclerView.adapter = VisitaAdapter(visitas.union(user, quinta),register,this@ProximasVisitas)
             }else{
                 DialogHelper.dialogo(this@ProximasVisitas,
                     "Error","Ocurrio un error al intentar obtener los datos de las visitas",
@@ -57,5 +60,17 @@ class ProximasVisitas : AppCompatActivity() {
             }
         }
     }
+    private val register =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent =
+                    Intent(this@ProximasVisitas, ProximasVisitas::class.java)
+                finish()
+                overridePendingTransition(0, 0)
+                startActivity(intent)
+                overridePendingTransition(0, 0)
+
+            }
+        }
 
 }

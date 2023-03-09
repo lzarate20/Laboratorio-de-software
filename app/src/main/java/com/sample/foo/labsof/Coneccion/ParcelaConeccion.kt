@@ -62,17 +62,11 @@ class ParcelaConeccion {
                 return null
             }
         }
-        suspend fun delete(id:Int): ParcelaVerdura? {
+        suspend fun delete(id:Int): Boolean?{
             try {
                 val result = api.deleteParcela(id)
-                if (result.isSuccessful) {
-                    return result.body()!!
-                } else {
-                    println(result.code())
-                    return null
-                }
+                    return result.isSuccessful
             } catch (e: Exception) {
-                println(e.printStackTrace())
                 return null
             }
         }

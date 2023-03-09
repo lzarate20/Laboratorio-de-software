@@ -1,12 +1,18 @@
 package com.sample.foo.labsof.Adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.sample.foo.labsof.Listados.ListVisita
 import com.sample.foo.labsof.R
 
-class VisitaAdapter(private val listaVisita: List<ListVisita.Union>) :
+class VisitaAdapter(private val listaVisita: List<ListVisita.Union>,
+                    private val registerForActivityResult: ActivityResultLauncher<Intent>,
+                    private val ac: AppCompatActivity
+) :
     RecyclerView.Adapter<VisitaViewHolder>() {
 
 
@@ -17,7 +23,7 @@ class VisitaAdapter(private val listaVisita: List<ListVisita.Union>) :
 
     override fun onBindViewHolder(holder: VisitaViewHolder, position: Int) {
         val item = listaVisita.get(position)
-        holder.render(item)
+        holder.render(item,registerForActivityResult,ac)
     }
 
     override fun getItemCount(): Int {

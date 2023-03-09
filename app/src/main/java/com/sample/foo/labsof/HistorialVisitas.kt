@@ -1,6 +1,9 @@
 package com.sample.foo.labsof
+import android.app.Activity
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -49,7 +52,7 @@ class HistorialVisitas : AppCompatActivity() {
                         "Error","No hay visitas pasadas guardadas",
                         true,false,{finish()},{})
                 }
-                recyclerView.adapter = VisitaAdapter(visitas.union(user, quinta))
+                recyclerView.adapter = VisitaAdapter(visitas.union(user, quinta),register,this@HistorialVisitas)
             }else{
                 DialogHelper.dialogo(this@HistorialVisitas,
                 "Error","Ocurrio un error al intentar obtener los datos de las visitas",
@@ -58,6 +61,18 @@ class HistorialVisitas : AppCompatActivity() {
         }
 
     }
+    private val register =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent =
+                    Intent(this@HistorialVisitas, HistorialVisitas::class.java)
+                finish()
+                overridePendingTransition(0, 0)
+                startActivity(intent)
+                overridePendingTransition(0, 0)
+
+            }
+        }
 
 
 }
