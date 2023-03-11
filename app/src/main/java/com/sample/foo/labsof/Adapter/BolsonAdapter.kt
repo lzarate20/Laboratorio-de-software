@@ -16,7 +16,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
-class BolsonAdapter(val listaBolsones:List<Bolson>, val listaQuintas:List<Quinta>, val ronda: Ronda, private val editOnClickListener:(Bolson) -> Unit, private val deleteOnClickListener:(Bolson) -> Unit): RecyclerView.Adapter<BolsonViewHolder>() {
+class BolsonAdapter(var listaBolsones:MutableList<Bolson>, var listaQuintas:MutableList<Quinta>, val ronda: Ronda, private val editOnClickListener:(Bolson) -> Unit, private val deleteOnClickListener:(Bolson) -> Unit): RecyclerView.Adapter<BolsonViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BolsonViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return BolsonViewHolder(layoutInflater.inflate(R.layout.item_bolson,parent,false))
@@ -31,6 +31,13 @@ class BolsonAdapter(val listaBolsones:List<Bolson>, val listaQuintas:List<Quinta
     override fun getItemCount(): Int {
         return listaBolsones.size
     }
+
+    fun updateQuintas(quintas:List<Quinta>){
+        listaQuintas.clear()
+        listaQuintas.addAll(quintas)
+        notifyDataSetChanged()
+    }
+
 
 
 

@@ -18,15 +18,10 @@ import com.sample.foo.labsof.Adapter.VerduraAdapter
 import com.sample.foo.labsof.Coneccion.*
 import com.sample.foo.labsof.DataClass.*
 
-import com.sample.foo.labsof.Service.*
 import com.sample.foo.labsof.databinding.ActivityCrearBolsonBinding
 
 import kotlinx.coroutines.launch
-import okhttp3.internal.notifyAll
-import retrofit2.HttpException
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
+
 
 class CrearBolson : AppCompatActivity() {
 
@@ -69,13 +64,13 @@ class CrearBolson : AppCompatActivity() {
                     var listaVerduraPropia =  visita!!.parcelas!!.distinctBy { it.verdura!!.id_verdura }
                     var listaVerduraAjena = ArrayList<ParcelaVerdura>()
                     var quintas = result_quinta.quintas!!
-                    var visitaAjena:VisitaFechaList
-                    for(each in quintas.subList(1,quintas.size-1)){
+                    var visitaAjena:VisitaFechaList?
+                    for(each in listaQuintas.subList(1,listaQuintas.size-1)){
                         visitaAjena = VisitaFechaList.getVisitaById(each.id_quinta!!,result_visitas.visitas!!)
                         var verduras = visitaAjena.parcelas!!.map{it.verdura}.filter { each -> listaVerduraPropia.all { it.verdura!!.id_verdura != each!!.id_verdura } && listaVerduraAjena.all{ it.verdura!!.id_verdura != each!!.id_verdura}}
                         listaVerduraAjena.addAll(verduras.asIterable() as Collection<ParcelaVerdura>)
-                    }
 
+                    }
                     spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(
                             parent: AdapterView<*>,
@@ -89,7 +84,7 @@ class CrearBolson : AppCompatActivity() {
                                 listaQuintas.toMutableList().removeAt(position)
                                 for(each in listaQuintas){
                                     visitaAjena = result_visitas.getUltimavisita(each.id_quinta)!!
-                                    var verduras = visitaAjena.parcelas!!.filter { each -> listaVerduraPropia.all { it.verdura!!.id_verdura != each!!.verdura!!.id_verdura } && listaVerduraAjena.all{ it.verdura!!.id_verdura != each!!.verdura!!.id_verdura}}
+                                    var verduras = visitaAjena!!.parcelas!!.filter { each -> listaVerduraPropia.all { it.verdura!!.id_verdura != each!!.verdura!!.id_verdura } && listaVerduraAjena.all{ it.verdura!!.id_verdura != each!!.verdura!!.id_verdura}}
                                     listaVerduraAjena.addAll(verduras.asIterable() as Collection<ParcelaVerdura>)
                                 }
                             listaVerduraAjena = listaVerduraAjena.distinctBy { it.verdura!!.id_verdura } as ArrayList<ParcelaVerdura>
@@ -169,23 +164,27 @@ class CrearBolson : AppCompatActivity() {
         }
     }
     fun initView(listaVerduraPropia: List<ParcelaVerdura>,listaVerduraAjena:List<ParcelaVerdura>) {
-        if(!listaVerduraPropia.isEmpty()){
-            binding.vaciaPropia.visibility = View.GONE
             binding.recyclerVerdurasPropia.layoutManager = LinearLayoutManager(this)
             this.adapterPropia = VerduraAdapter(listaVerduraPropia as MutableList<ParcelaVerdura>)
             binding.recyclerVerdurasPropia.adapter = adapterPropia
+        if(!listaVerduraPropia.isEmpty()){
+            binding.vaciaPropia.visibility = View.GONE
+            binding.recyclerVerdurasPropia.visibility = View.VISIBLE
         }
         else{
             binding.recyclerVerdurasPropia.visibility = View.GONE
+            binding.vaciaPropia.visibility = View.VISIBLE
         }
-        if(!listaVerduraAjena.isEmpty()) {
             binding.recyclerVerdurasAjena.layoutManager = LinearLayoutManager(this)
             this.adapterAjena = VerduraAdapter(listaVerduraAjena as MutableList<ParcelaVerdura>)
             binding.recyclerVerdurasAjena.adapter = adapterAjena
+        if(!listaVerduraAjena.isEmpty()) {
             binding.vaciaAjena.visibility = View.GONE
+            binding.recyclerVerdurasAjena.visibility = View.VISIBLE
         }
         else{
             binding.recyclerVerdurasAjena.visibility = View.GONE
+            binding.vaciaAjena.visibility=View.VISIBLE
         }
     }
 

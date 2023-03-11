@@ -51,9 +51,9 @@ class EditarBolson: AppCompatActivity() {
             val result_visitas = VisitaConeccion.get().getVisitasPasadas()
             val result_quinta = QuintaConeccion.get()
             val result_verduras = VerduraConeccion.get()
-            val ronda_actual = RondaConeccion.getRonda(bolson_item!!.idRonda!!)
+            val ronda_actual = RondaConeccion.getRonda(bolson_item.idRonda!!)
             val result_bolson = BolsonConeccion.getBolsonByRonda(bolson_item.idRonda)!!.toMutableList()
-            result_bolson!!.removeIf{ it.id_bolson == bolson_item.id_bolson }
+            result_bolson.removeIf{ it.id_bolson == bolson_item.id_bolson }
             val quintaActual = result_quinta.quintas!!.first { it.fpId == bolson_item.idFp }
 
                 if(ronda_actual != null) {
@@ -62,22 +62,21 @@ class EditarBolson: AppCompatActivity() {
                     binding.cantidad.doOnTextChanged{ text, start, count, after ->
                         cantidad_input = text.toString().toIntOrNull()
                     }
-                    var listaQuintas = result_quinta.quintas!!.filter { result_visitas.getUltimavisita(it.id_quinta) != null }
+                    val listaQuintas = result_quinta.quintas!!.filter { result_visitas.getUltimavisita(it.id_quinta) != null }
                     initSpinner(spinner, listaQuintas)
                     spinner.setSelection(adapterSpinner.getPosition(quintaActual.nombre.toString()))
-                    var id_quinta = quintaActual.id_quinta
+                    val id_quinta = quintaActual.id_quinta
                     var visita = result_visitas.getUltimavisita(id_quinta)
                     var listaVerduraPropia =  visita!!.parcelas!!.distinctBy { it.verdura!!.id_verdura }
                     var listaVerduraAjena = ArrayList<ParcelaVerdura>()
-                    var quintas = result_quinta.quintas!!
-                    var visitaAjena:VisitaFechaList
-                    for(each in quintas.subList(1,quintas.size-1)){
+                    var visitaAjena:VisitaFechaList?
+                    for(each in listaQuintas.subList(1,listaQuintas.size-1)){
                         visitaAjena = VisitaFechaList.getVisitaById(each.id_quinta!!,result_visitas.visitas!!)
-                        var verduras = visitaAjena.parcelas!!.map{it.verdura}.filter { each -> listaVerduraPropia.all { it.verdura!!.id_verdura != each!!.id_verdura } && listaVerduraAjena.all{ it.verdura!!.id_verdura != each!!.id_verdura}}
+                        val verduras = visitaAjena.parcelas!!.map{it.verdura}.filter { each -> listaVerduraPropia.all { it.verdura!!.id_verdura != each!!.id_verdura } && listaVerduraAjena.all{ it.verdura!!.id_verdura != each!!.id_verdura}}
                         listaVerduraAjena.addAll(verduras.asIterable() as Collection<ParcelaVerdura>)
                     }
-                    var listVerduraSelectedPropia:ArrayList<VerduraFechaList> = ArrayList<VerduraFechaList>()
-                    var listVerduraSelectedAjena:ArrayList<VerduraFechaList> = ArrayList<VerduraFechaList>()
+                    val listVerduraSelectedPropia:ArrayList<VerduraFechaList> = ArrayList<VerduraFechaList>()
+                    val listVerduraSelectedAjena:ArrayList<VerduraFechaList> = ArrayList<VerduraFechaList>()
                     spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(
                             parent: AdapterView<*>,
@@ -89,10 +88,12 @@ class EditarBolson: AppCompatActivity() {
                             listaVerduraPropia =  visita!!.parcelas!!.distinctBy { it.verdura!!.id_verdura }
                             listaVerduraAjena = ArrayList<ParcelaVerdura>()
                             listaQuintas.toMutableList().removeAt(position)
-                            for(each in listaQuintas){
+                            for(each in listaQuintas) {
                                 visitaAjena = result_visitas.getUltimavisita(each.id_quinta)!!
-                                var verduras = visitaAjena.parcelas!!.filter { each -> listaVerduraPropia.all { it.verdura!!.id_verdura != each!!.verdura!!.id_verdura } && listaVerduraAjena.all{ it.verdura!!.id_verdura != each!!.verdura!!.id_verdura}}
-                                listaVerduraAjena.addAll(verduras.asIterable() as Collection<ParcelaVerdura>)
+                                    val verduras =
+                                        visitaAjena!!.parcelas!!.filter { each -> listaVerduraPropia.all { it.verdura!!.id_verdura != each!!.verdura!!.id_verdura } && listaVerduraAjena.all { it.verdura!!.id_verdura != each!!.verdura!!.id_verdura } }
+                                    listaVerduraAjena.addAll(verduras.asIterable() as Collection<ParcelaVerdura>)
+
                             }
 
                             for(each in verduras){
@@ -155,8 +156,17 @@ class EditarBolson: AppCompatActivity() {
                                         idRonda = bolson_item.idRonda,
                                         verduras = lista_verduras
                                     )
-                                    lifecycleScope.launch { BolsonConeccion.put(bolson) }
-                                    finish();
+                                    var listo = lifecycleScope.launch { BolsonConeccion.put(bolson) }
+                                    listo.invokeOnCompletion {
+                                        val intent = Intent(
+                                            this@EditarBolson,
+                                            ListadoBolsonesActivity::class.java
+                                        )
+                                        intent.putExtra("bolson", bolson.id_bolson)
+                                        setResult(RESULT_OK, intent)
+                                        finish()
+                                    }
+
                                 }
 
                             }
@@ -171,6 +181,12 @@ class EditarBolson: AppCompatActivity() {
             }
         }
 
+    override fun onBackPressed() {
+        setResult(RESULT_CANCELED)
+        finish()
+        super.onBackPressed()
+    }
+
         fun initSpinner(spinner: Spinner,listQuinta: List<Quinta>){
             ArrayAdapter(
                 this,
@@ -183,12 +199,28 @@ class EditarBolson: AppCompatActivity() {
             }
         }
         fun initView(listaVerduraPropia: List<ParcelaVerdura>,listaVerduraAjena:List<ParcelaVerdura>,listaVerduraSelectedPropia:ArrayList<VerduraFechaList>,listaVerduraSelectedAjena:ArrayList<VerduraFechaList>) {
-            binding.recyclerVerdurasPropia.layoutManager = LinearLayoutManager(this)
-            binding.recyclerVerdurasAjena.layoutManager = LinearLayoutManager(this)
-            this.adapterPropia = VerduraAdapter(listaVerduraPropia as MutableList<ParcelaVerdura>,listaVerduraSelectedPropia)
-            this.adapterAjena = VerduraAdapter(listaVerduraAjena as MutableList<ParcelaVerdura>,listaVerduraSelectedAjena)
-            binding.recyclerVerdurasPropia.adapter = adapterPropia
-            binding.recyclerVerdurasAjena.adapter = adapterAjena
+                binding.recyclerVerdurasPropia.layoutManager = LinearLayoutManager(this)
+                this.adapterPropia = VerduraAdapter(listaVerduraPropia as MutableList<ParcelaVerdura>,listaVerduraSelectedPropia)
+                binding.recyclerVerdurasPropia.adapter = adapterPropia
+            if(!listaVerduraPropia.isEmpty()){
+                binding.vaciaPropia.visibility = View.GONE
+                binding.recyclerVerdurasPropia.visibility = View.VISIBLE
+            }
+            else{
+                binding.recyclerVerdurasPropia.visibility = View.GONE
+                binding.vaciaPropia.visibility = View.VISIBLE
+            }
+                binding.recyclerVerdurasAjena.layoutManager = LinearLayoutManager(this)
+                this.adapterAjena = VerduraAdapter(listaVerduraAjena as MutableList<ParcelaVerdura>,listaVerduraSelectedAjena)
+                binding.recyclerVerdurasAjena.adapter = adapterAjena
+            if(!listaVerduraAjena.isEmpty()) {
+                binding.vaciaAjena.visibility = View.GONE
+                binding.recyclerVerdurasAjena.visibility = View.VISIBLE
+            }
+            else{
+                binding.recyclerVerdurasAjena.visibility = View.GONE
+                binding.vaciaAjena.visibility=View.VISIBLE
+            }
         }
 
 

@@ -74,7 +74,7 @@ class VerRondaActivity: AppCompatActivity() {
             textView.setVisibility(View.VISIBLE)
         } else {
             recyclerView.layoutManager = LinearLayoutManager(this)
-            adapter = BolsonAdapter(listaB, listaQ, ronda, { onItemSelected(it) }, {})
+            adapter = BolsonAdapter(listaB.toMutableList(), listaQ.toMutableList(), ronda, { onItemSelected(it) }, {})
             recyclerView.adapter = adapter
             textView.setVisibility(View.GONE)
         }

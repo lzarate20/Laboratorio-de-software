@@ -1,9 +1,13 @@
 package com.sample.foo.labsof
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -18,8 +22,10 @@ import com.sample.foo.labsof.Coneccion.RondaConeccion
 import com.sample.foo.labsof.DataClass.Bolson
 import com.sample.foo.labsof.DataClass.Quinta
 import com.sample.foo.labsof.DataClass.Ronda
+import com.sample.foo.labsof.Listados.ListQuintas
 import com.sample.foo.labsof.Service.BolsonService
 import com.sample.foo.labsof.databinding.ActivityListaBolsonesBinding
+import kotlinx.coroutines.launch
 import okhttp3.internal.notifyAll
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -29,7 +35,21 @@ class ListadoBolsonesActivity:AppCompatActivity() {
     lateinit var binding: ActivityListaBolsonesBinding
     private lateinit var adapter: BolsonAdapter
     lateinit var listaBolsones : List<Bolson>
+    lateinit var rondaActual: Ronda
+    lateinit var listaQuintas:ListQuintas
 
+    val getContent = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {result:ActivityResult? ->
+        if(result!!.resultCode == RESULT_OK){
+            lifecycleScope.launch {
+                var bolson_id = result.data!!.getIntExtra("bolson",-1)
+                val bolson = BolsonConeccion.getBolson(bolson_id)!!
+                var index = adapter.listaBolsones.indexOfFirst { it.id_bolson==bolson.id_bolson }
+                adapter.listaBolsones.removeAt(index)
+                adapter.listaBolsones.add(index,bolson)
+                adapter.notifyItemChanged(index)
+            }
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         binding = ActivityListaBolsonesBinding.inflate(layoutInflater)
@@ -44,12 +64,12 @@ class ListadoBolsonesActivity:AppCompatActivity() {
         lifecycleScope.launchWhenCreated {
             val rondas = RondaConeccion.getRondas()
             if (rondas != null) {
-                val rondaActual = Ronda.getRondaActual(rondas)
+                rondaActual = Ronda.getRondaActual(rondas)
                 val result = BolsonConeccion.getBolsonByRonda(rondaActual.id_ronda)
                 listaBolsones = result!!
-                val result_quinta = QuintaConeccion.get()
-                val quintas = result!!.flatMap { each -> result_quinta.quintas!!.filter { it.id_quinta == each.idFp } }
-                initView(listaBolsones, quintas, rondaActual)
+                listaQuintas = QuintaConeccion.get()
+//                val quintas = result!!.flatMap { each -> listaQuintas.quintas!!.filter { it.fpId == each.idFp } }
+                initView(listaBolsones, listaQuintas.quintas!!, rondaActual)
             }
         }
     }
@@ -60,7 +80,7 @@ class ListadoBolsonesActivity:AppCompatActivity() {
             textView.setVisibility(View.VISIBLE)
         } else {
             recyclerView.layoutManager = LinearLayoutManager(this)
-            adapter = BolsonAdapter(listaB,listaQ,ronda,{onItemSelected(it)},{deleteItem(it)})
+            adapter = BolsonAdapter(listaB.toMutableList(),listaQ.toMutableList(),ronda,{onItemSelected(it)},{deleteItem(it)})
             recyclerView.adapter = adapter
             textView.setVisibility(View.GONE)
         }
@@ -69,7 +89,7 @@ class ListadoBolsonesActivity:AppCompatActivity() {
     fun onItemSelected(bolson: Bolson){
         val intent = Intent(this, EditarBolson::class.java)
         intent.putExtra("bolson",bolson.id_bolson)
-        startActivity(intent)
+        getContent.launch(intent)
     }
 
     fun deleteItem(bolson: Bolson){
@@ -94,5 +114,7 @@ class ListadoBolsonesActivity:AppCompatActivity() {
         val alertDialog: AlertDialog = builder.create()
         alertDialog.show()
     }
+
+
 
 }
