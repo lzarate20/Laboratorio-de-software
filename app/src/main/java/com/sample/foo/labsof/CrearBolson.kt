@@ -169,12 +169,24 @@ class CrearBolson : AppCompatActivity() {
         }
     }
     fun initView(listaVerduraPropia: List<ParcelaVerdura>,listaVerduraAjena:List<ParcelaVerdura>) {
-        binding.recyclerVerdurasPropia.layoutManager = LinearLayoutManager(this)
-        binding.recyclerVerdurasAjena.layoutManager = LinearLayoutManager(this)
-        this.adapterPropia = VerduraAdapter(listaVerduraPropia as MutableList<ParcelaVerdura>)
-        this.adapterAjena = VerduraAdapter(listaVerduraAjena as MutableList<ParcelaVerdura>)
-        binding.recyclerVerdurasPropia.adapter = adapterPropia
-        binding.recyclerVerdurasAjena.adapter = adapterAjena
+        if(!listaVerduraPropia.isEmpty()){
+            binding.vaciaPropia.visibility = View.GONE
+            binding.recyclerVerdurasPropia.layoutManager = LinearLayoutManager(this)
+            this.adapterPropia = VerduraAdapter(listaVerduraPropia as MutableList<ParcelaVerdura>)
+            binding.recyclerVerdurasPropia.adapter = adapterPropia
+        }
+        else{
+            binding.recyclerVerdurasPropia.visibility = View.GONE
+        }
+        if(!listaVerduraAjena.isEmpty()) {
+            binding.recyclerVerdurasAjena.layoutManager = LinearLayoutManager(this)
+            this.adapterAjena = VerduraAdapter(listaVerduraAjena as MutableList<ParcelaVerdura>)
+            binding.recyclerVerdurasAjena.adapter = adapterAjena
+            binding.vaciaAjena.visibility = View.GONE
+        }
+        else{
+            binding.recyclerVerdurasAjena.visibility = View.GONE
+        }
     }
 
 

@@ -60,7 +60,7 @@ class EditarQuintaActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val quinta = QuintaConeccion.getSingle(quinta_id)
             val familia = FamiliaProductoraConeccion.getSingle(quinta.fpId!!)
-            binding.direccion.setText(quinta.direccion.toString())
+            //binding.direccion.setText(quinta.direccion.toString())
             var year: Int
             var month: Int
             var day: Int
@@ -98,10 +98,6 @@ class EditarQuintaActivity : AppCompatActivity() {
                     binding.error.visibility = View.VISIBLE
                     binding.error.text ="Se debe ingresar el nombre de la quinta"
                 }
-                else if(binding.direccion.text == null){
-                    binding.error.visibility = View.VISIBLE
-                    binding.error.text = "Se debe ingresar una direccion"
-                }
                 else if (binding.nombreFamilia.text == null){
                     binding.error.visibility = View.VISIBLE
                     binding.error.text ="Se debe ingresar el nombre de la familia"
@@ -121,7 +117,7 @@ class EditarQuintaActivity : AppCompatActivity() {
                         var list = listOf(year, month, day)
                         familia.fecha_afiliacion = list
                         familia.nombre = binding.nombreFamilia.text.toString()
-                        quinta.direccion = binding.direccion.text.toString()
+                        //quinta.direccion = binding.direccion.text.toString()
                         quinta.nombre = binding.nombreQuinta.text.toString()
                         quinta.geoImg = mapView.mapCenter.toString()
                         var res:Quinta? = null
@@ -175,6 +171,7 @@ class EditarQuintaActivity : AppCompatActivity() {
 
         var marker = Marker(mapView)
         marker.position = Somewhere
+        marker.icon = resources.getDrawable(R.drawable.home)
         mapView.overlays.add(marker)
         mapViewController.setCenter(Somewhere)
     }

@@ -11,7 +11,7 @@ class QuintaViewHolder(view: View) : ViewHolder(view)  {
 
     fun render(quinta: Quinta, familia: FamiliaProductora, editOnClickListener:(Quinta) -> Unit,routeOnClickListener:(Quinta) -> Unit, deleteOnClickListener:(Quinta) -> Unit){
         binding.nombreQ.text = quinta.nombre.toString()
-        binding.direccion.text = quinta.direccion.toString()
+        //binding.direccion.text = quinta.direccion.toString()
         binding.nombreF.text = familia.nombre.toString()
         binding.editarQuinta.setOnClickListener{editOnClickListener(quinta)}
         binding.rutaQuinta.setOnClickListener{routeOnClickListener(quinta)}

@@ -54,20 +54,53 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="0.5"
+                >
+                <TextView
+                    android:id="@+id/title_propias"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Verduras propias"/>
+                <TextView
+                    android:id="@+id/vacia_propia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vacía" />
              <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerVerdurasPropia"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="100dp"
-                 android:layout_weight="0.5"
             />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="0.5">
+                <TextView
+                    android:id="@+id/title_ajena"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Verduras ajenas"
+                    android:gravity="center"/>
+                <TextView
+                    android:id="@+id/vacia_ajena"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vacía"
+                    android:gravity="center_vertical|center_horizontal"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerVerdurasAjena"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="100dp"
-                android:layout_weight="0.5"
                 />
+            </LinearLayout>
             </LinearLayout>
 
 

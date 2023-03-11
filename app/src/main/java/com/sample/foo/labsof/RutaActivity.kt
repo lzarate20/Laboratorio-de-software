@@ -104,6 +104,7 @@ class RutaActivity: AppCompatActivity() {
         mapViewController.animateTo(start)
         val markerStart = Marker(mapView)
         markerStart.position = start
+        markerStart.icon = resources.getDrawable(R.drawable.person)
         mapView.overlays.add(markerStart)
         var coords = center.split(',')
         var lat = coords[0].toDoubleOrNull()
@@ -115,6 +116,7 @@ class RutaActivity: AppCompatActivity() {
 
         var marker = Marker(mapView)
         marker.position = endPoint
+        marker.icon = resources.getDrawable(R.drawable.home)
         mapView.overlays.add(marker)
         val executor: ExecutorService = Executors.newFixedThreadPool(1)
         val futureTask: FutureTask<String> = FutureTask(Runnable {

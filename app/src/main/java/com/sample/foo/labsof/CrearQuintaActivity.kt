@@ -96,10 +96,6 @@ class CrearQuintaActivity:AppCompatActivity() {
                 binding.error.visibility = View.VISIBLE
                 binding.error.text ="Se debe ingresar el nombre de la quinta"
             }
-            else if(binding.direccion.text == null){
-                binding.error.visibility = View.VISIBLE
-                binding.error.text = "Se debe ingresar una direccion"
-            }
             else if (binding.nombreFamilia.text == null){
                 binding.error.visibility = View.VISIBLE
                 binding.error.text ="Se debe ingresar el nombre de la familia"
@@ -119,7 +115,7 @@ class CrearQuintaActivity:AppCompatActivity() {
                     lifecycleScope.launch{
                         var result_fam = FamiliaProductoraConeccion.post(fp)
                         if(result_fam != null){
-                            var quinta = Quinta(binding.nombreQuinta.text.toString(),binding.direccion.text.toString(),mapView.mapCenter.toString(),result_fam.id_fp)
+                            var quinta = Quinta(binding.nombreQuinta.text.toString(),null,mapView.mapCenter.toString(),result_fam.id_fp)
                             var res_quinta = QuintaConeccion.post(quinta)
                             if(res_quinta != null){
                                 val builder: android.app.AlertDialog.Builder =
