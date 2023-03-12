@@ -28,6 +28,7 @@ import java.time.LocalDateTime
 
 
 class VerVisita : AppCompatActivity() {
+    var id: Int = 0
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +40,7 @@ class VerVisita : AppCompatActivity() {
         toolbar.setArguments(bun)
         FT.add(R.id.toolbar, toolbar)
         FT.commit()
-        val id: Int = this.intent.getIntExtra("id", 0)
+        id= this.intent.getIntExtra("id", 0)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerPacela)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -84,7 +85,7 @@ class VerVisita : AppCompatActivity() {
 
                 if (visita!!.esHoy()){
                     agregar.visibility = View.VISIBLE
-                    guardar.visibility = View.VISIBLE
+                    guardar.visibility = View.GONE
                 }
                 val textT = findViewById<TextView>(R.id.textTx)
                 val textF = findViewById<TextView>(R.id.textFx)
@@ -143,96 +144,101 @@ class VerVisita : AppCompatActivity() {
             lifecycleScope.launch {
                 verduras = VerduraConeccion.get()
                 dialog.dismiss()
-            }
-            val builder: android.app.AlertDialog.Builder =
-                android.app.AlertDialog.Builder(this@VerVisita)
-            builder.setTitle("¿Guardar?")
-            val linearLayout = LinearLayout(this@VerVisita)
-            linearLayout.orientation = LinearLayout.VERTICAL
-            val l: MutableList<LinearLayout> = mutableListOf()
-            for (i: Int in 0..3) {
-                l.add(LinearLayout(this@VerVisita))
-                l[i].orientation = LinearLayout.HORIZONTAL
-            }
-            val surcos = EditText(this@VerVisita)
-            surcos.inputType = InputType.TYPE_CLASS_NUMBER
-            surcos.width = 200
-            var text = TextView(this@VerVisita)
-            text.text = "Cantidad de surcos: "
-            l[0].addView(text)
-            l[0].addView(surcos)
-            text = TextView(this@VerVisita)
-            text.text = "Cosechado: "
-            val cosechado = CheckBox(this@VerVisita)
-            l[1].addView(text)
-            l[1].addView(cosechado)
-            text = TextView(this@VerVisita)
-            text.text = "Cubierto: "
-            val cubierto = CheckBox(this@VerVisita)
-            l[2].addView(text)
-            l[2].addView(cubierto)
-            text = TextView(this@VerVisita)
-            text.text = "Verdura: "
-            val verdura = Spinner(this@VerVisita)
-            val lista =
-                verduras?.map { x -> "${(x.nombre)} " }?.toTypedArray()
-            lista?.let { creacionSpinner(verdura, it) }
-            l[3].addView(text)
-            l[3].addView(verdura)
-            for (i: Int in 0..3) {
-                linearLayout.addView(l[i])
-            }
-            builder.setView(linearLayout)
-            builder.setPositiveButton(
-                "Guardar",
-                DialogInterface.OnClickListener { dialog, which ->
-                    if (surcos.text.toString() != "" && surcos.text.toString().toInt() >= 1) {
-                        val cantidad_surcos: Int = surcos.text.toString().toInt()
-                        val p = Parcela(
-                            id_visita = visita?.id_visita,
-                            cantidad_surcos = cantidad_surcos,
-                            cubierta = cubierto.isChecked == true,
-                            cosecha = cosechado.isChecked == true,
-                            id_verdura = verduras?.get(verdura.selectedItemPosition)?.id_verdura
-                        )
-                        val dialog = DialogHelper.espera(this@VerVisita)
-                        dialog.show()
-                        lifecycleScope.launch {
-                            val par = ParcelaConeccion.post(p)
-                            dialog.dismiss()
-                            if (par != null) {
-                                val mParcelas = mutableListOf<ParcelaVerdura>()
-                                visita?.parcelas?.let { it1 ->
-                                    mParcelas.addAll(it1)
+                if(verduras == null){
+                    DialogHelper.dialogo(this@VerVisita,
+                    "Error","No se pudieron obtener las verduras para la parcela",
+                    true,false,{},{})
+                }else{
+                    val builder: android.app.AlertDialog.Builder =
+                        android.app.AlertDialog.Builder(this@VerVisita)
+                    builder.setTitle("¿Guardar?")
+                    val linearLayout = LinearLayout(this@VerVisita)
+                    linearLayout.orientation = LinearLayout.VERTICAL
+                    val l: MutableList<LinearLayout> = mutableListOf()
+                    for (i: Int in 0..3) {
+                        l.add(LinearLayout(this@VerVisita))
+                        l[i].orientation = LinearLayout.HORIZONTAL
+                    }
+                    val surcos = EditText(this@VerVisita)
+                    surcos.inputType = InputType.TYPE_CLASS_NUMBER
+                    surcos.width = 200
+                    var text = TextView(this@VerVisita)
+                    text.text = "Cantidad de surcos: "
+                    l[0].addView(text)
+                    l[0].addView(surcos)
+                    text = TextView(this@VerVisita)
+                    text.text = "Cosechado: "
+                    val cosechado = CheckBox(this@VerVisita)
+                    l[1].addView(text)
+                    l[1].addView(cosechado)
+                    text = TextView(this@VerVisita)
+                    text.text = "Cubierto: "
+                    val cubierto = CheckBox(this@VerVisita)
+                    l[2].addView(text)
+                    l[2].addView(cubierto)
+                    text = TextView(this@VerVisita)
+                    text.text = "Verdura: "
+                    val verdura = Spinner(this@VerVisita)
+                    val lista =
+                        verduras?.map { x -> "${(x.nombre)} " }?.toTypedArray()
+                    lista?.let { creacionSpinner(verdura, it) }
+                    l[3].addView(text)
+                    l[3].addView(verdura)
+                    for (i: Int in 0..3) {
+                        linearLayout.addView(l[i])
+                    }
+                    builder.setView(linearLayout)
+                    builder.setPositiveButton(
+                        "Guardar",
+                        DialogInterface.OnClickListener { dialog, which ->
+                            if (surcos.text.toString() != "" && surcos.text.toString().toInt() >= 1) {
+                                val cantidad_surcos: Int = surcos.text.toString().toInt()
+                                val p = Parcela(
+                                    id_visita = id,
+                                    cantidad_surcos = cantidad_surcos,
+                                    cubierta = cubierto.isChecked,
+                                    cosecha = cosechado.isChecked ,
+                                    id_verdura = verduras?.get(verdura.selectedItemPosition)?.id_verdura,
+                                    0
+                                )
+                                val dialog = DialogHelper.espera(this@VerVisita)
+                                dialog.show()
+                                lifecycleScope.launch {
+                                    val par = ParcelaConeccion.post(p)
+                                    dialog.dismiss()
+                                    if (par != null) {
+                                        val mParcelas = mutableListOf<ParcelaVerdura>()
+                                        visita?.parcelas?.let { it1 ->
+                                            mParcelas.addAll(it1)
+                                        }
+                                        mParcelas.add(par)
+                                        visita?.parcelas = mParcelas
+                                        recyclerView.adapter =
+                                            ParcelaAdapter(
+                                                visita!!.parcelas,
+                                                visita!!.esHoy(),
+                                                verduras,
+                                                this@VerVisita
+                                            )
+                                    } else {
+                                        DialogHelper.dialogo(this@VerVisita,"Error",
+                                            "No se pudo guardar la parcela, vuelva a intentarlo.",true,false,{},{})
+                                    }
                                 }
-                                mParcelas.add(par)
-                                visita?.parcelas = mParcelas
-                                recyclerView.adapter =
-                                    ParcelaAdapter(
-                                        visita!!.parcelas,
-                                        visita!!.esHoy(),
-                                        verduras,
-                                        this@VerVisita
-                                    )
+
                             } else {
                                 DialogHelper.dialogo(this@VerVisita,"Error",
-                                "No se pudo guardar la parcela, vuelva a intentarlo.",true,false,{},{})
+                                    "La cantidad de surcos no puede ser menor a 1",true,false,{},{})
                             }
-                        }
+                        })
+                    builder.setNegativeButton(
+                        "Cancelar",
+                        DialogInterface.OnClickListener { dialog, which ->
 
-                    } else {
-                        DialogHelper.dialogo(this@VerVisita,"Error",
-                            "La cantidad de surcos no puede ser menor a 1",true,false,{},{})
-                    }
-                })
-            builder.setNegativeButton(
-                "Cancelar",
-                DialogInterface.OnClickListener { dialog, which ->
-
-                })
-            builder.create()?.show()
-
-
+                        })
+                    builder.create()?.show()
+                }
+            }
         }
     }
 

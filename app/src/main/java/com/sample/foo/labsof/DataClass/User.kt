@@ -46,4 +46,9 @@ data class User(var error: String? = null) {
     fun rol():String{
         return if (isTecnico()) "Técnico" else "Administrador"
     }
+
+    override fun toString(): String {
+        var text = "nombre ${(this.nombre)} apellido ${(this.apellido)} email ${(this.email)} pass ${(this.password)}"
+        return text
+    }
 }

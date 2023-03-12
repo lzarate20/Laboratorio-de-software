@@ -37,9 +37,18 @@ class Parcela() {
         this.cantidad_surcos = p.cantidad_surcos
         this.cubierta = p.cubierta
         this.cosecha = p.cosecha
-        this.id_verdura = p.verdura?.id_verdura
+        this.id_verdura = p.verdura!!.id_verdura
         this.id_parcela= p.id_parcela
         this.id_visita= p.id_visita
+    }
+
+    override fun toString(): String {
+        return "surcos:${(this.cantidad_surcos)}" +
+                " cubierta ${(this.cubierta)} " +
+                "cosecha ${(this.cosecha)} " +
+                "id verdura ${(this.id_verdura)} " +
+                "id parcela ${(this.id_parcela)} " +
+                "id visita ${(this.id_visita)}"
     }
 
 

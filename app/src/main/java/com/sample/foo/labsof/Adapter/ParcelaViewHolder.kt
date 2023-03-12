@@ -127,26 +127,28 @@ class ParcelaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 "Guardar",
                 DialogInterface.OnClickListener { dialog, which ->
                     if (surcos.text.toString() != "" && surcos.text.toString().toInt() >= 1) {
-                        var p = ParcelaVerdura(
-                           id_visita= parcela.id_visita,
+                        var p = Parcela(
+                           id_visita= view.id,
                             cantidad_surcos = surcos.text.toString().toInt(),
                             cubierta = cubierto.isChecked==true,
                             cosecha = cosechado.isChecked==true,
-                            verdura = verduras?.get(verdura.selectedItemPosition),
+                            id_verdura = verduras?.get(verdura.selectedItemPosition)!!.id_verdura,
                             id_parcela=parcela.id_parcela
                         )
+                        println(p.id_visita)
                         val dCreate= DialogHelper.espera(view)
                         dCreate.show()
                         view.lifecycleScope.launch {
-                           var par= ParcelaConeccion.put(Parcela(p))
+                           var par= ParcelaConeccion.put(p)
                             dCreate.dismiss()
                             if(par!= null){
                                 DialogHelper.dialogo(view,
-                                "Actualizacion exitosa",
+                                "Actualización exitosa",
                                     "La parcela se actualizo con exito",
                                 true,false,
                                     {
                                         val intent = Intent(v.context, VerVisita::class.java)
+                                        intent.putExtra("id", view.id)
                                         view.finish()
                                         view.overridePendingTransition(0, 0)
                                         view.startActivity(intent)
@@ -171,8 +173,5 @@ class ParcelaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 })
             builder.create()?.show()
         }
-
-
-
     }
 }

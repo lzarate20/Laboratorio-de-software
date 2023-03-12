@@ -42,7 +42,7 @@ class ProximasVisitas : AppCompatActivity() {
         val dCreate = DialogHelper.espera(this@ProximasVisitas)
         dCreate.show()
         lifecycleScope.launch {
-            val visitas = VisitaConeccion.get().getVisitasPasadas().ordenarFechaYTecnico()
+            val visitas = VisitaConeccion.get().getVisitasFuturas().ordenarFechaYTecnico()
             val user = UserConeccion.get().getTecnicos()
             val quinta = QuintaConeccion.get()
             dCreate.dismiss()

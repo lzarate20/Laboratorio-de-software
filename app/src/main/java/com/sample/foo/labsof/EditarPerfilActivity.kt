@@ -65,8 +65,6 @@ class EditarPerfilActivity : AppCompatActivity() {
                             userSession.roles,
                             userSession.id_user
                         )
-                        val u = UserConeccion.getSingle(userSession.id_user)
-                        user.password= u.password
                         val new_user = UserConeccion.put(user)
                         bCreate.dismiss()
                         if (new_user.error != null) {
@@ -77,7 +75,7 @@ class EditarPerfilActivity : AppCompatActivity() {
                             DialogHelper.dialogo(this@EditarPerfilActivity,
                             "Guardado exitoso",
                             "Se guardaron exitosamente los cambios",
-                            true,false,{},{})
+                            true,false,{finish()},{})
                         }
                     }
                 }else {

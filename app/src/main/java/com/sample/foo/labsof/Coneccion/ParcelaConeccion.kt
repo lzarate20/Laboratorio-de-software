@@ -22,6 +22,7 @@ class ParcelaConeccion {
                 return null
             }
         }
+
         suspend fun getSingle(id: Int?): Parcela? {
             try {
                 val result = api.getSingleParcelas(id)
@@ -35,26 +36,40 @@ class ParcelaConeccion {
                 return null
             }
         }
+
         suspend fun post(parcela: Parcela): ParcelaVerdura? {
             try {
                 val result = api.postParcelas(parcela)
                 if (result.isSuccessful) {
-                    return result.body()!!
+                    parcela.id_parcela= result.body()!!.id_parcela
+                    val resultP = this.put(parcela)
+                    if(resultP!=null){
+                        println("Actualizacion")
+                     return resultP
+                    }else{
+                        this.delete(result.body()!!.id_parcela!!)
+                        return null
+                    }
                 } else {
+                    println("no se guardo " +result.code())
                     return null
                 }
             } catch (e: Exception) {
-
+                println(e.stackTraceToString())
                 return null
             }
         }
+
         suspend fun put(parcela: Parcela): ParcelaVerdura? {
             try {
+                println(parcela.toString())
                 val result = api.putParcelas(parcela)
                 if (result.isSuccessful) {
                     return result.body()!!
                 } else {
                     println(result.code())
+                    println(result.errorBody().toString())
+                    println(result.message())
                     return null
                 }
             } catch (e: Exception) {
@@ -62,10 +77,11 @@ class ParcelaConeccion {
                 return null
             }
         }
-        suspend fun delete(id:Int): Boolean?{
+
+        suspend fun delete(id: Int): Boolean? {
             try {
                 val result = api.deleteParcela(id)
-                    return result.isSuccessful
+                return result.isSuccessful
             } catch (e: Exception) {
                 return null
             }

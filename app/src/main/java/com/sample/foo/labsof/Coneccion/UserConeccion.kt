@@ -26,7 +26,6 @@ class UserConeccion {
                 val result = api.getSingleUser(id)
                 if (result.isSuccessful) {
                     val user = result.body()!!
-                    user.password= null
                     return user
                 } else {
                     return User("El usuario seleccionado no existe en la base de datos")
@@ -70,6 +69,7 @@ class UserConeccion {
                     return User(u.error)
                 }
                 user.password= u.password
+                user.roles= u.roles
                 val result = api.putUser(user)
                 return if (result.isSuccessful) {
                     result.body()!!

@@ -38,13 +38,7 @@
                     android:id="@+id/recyclerVisita"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/esperando"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Esperando informacion" />
+                     />
 
             </LinearLayout>
         </LinearLayout>
