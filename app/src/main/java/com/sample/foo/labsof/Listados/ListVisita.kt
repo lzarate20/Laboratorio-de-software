@@ -25,11 +25,11 @@ class ListVisita() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getUltimavisita(id_quinta: Int?): VisitaFechaList? {
-        if (!visitas.isNullOrEmpty()) {
-            var visitas_quinta = visitas!!.filter { v -> v.id_quinta == id_quinta }
+        if (!this.visitas.isNullOrEmpty()) {
+            var visitas_quinta = this.visitas!!.filter { v -> v.id_quinta == id_quinta }
             if (!visitas_quinta.isNullOrEmpty()) {
-                var v = visitas_quinta.maxBy { v -> v.fechaDate() }
-                return v
+                return  visitas_quinta.maxBy { it.fechaDate() }
+
             }
         }
         return null

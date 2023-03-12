@@ -16,6 +16,9 @@ interface RondaService {
     @POST("/api/rondas/")
     suspend fun postRonda(@Body ronda:Ronda): Response<Ronda>
 
+    @PUT("/api/rondas/")
+    suspend fun putRonda(@Body ronda:Ronda): Response<Ronda>
+
     @DELETE("/api/rondas/{id}")
     suspend fun deleteRonda(@Path("id") id: Int?): Response<Ronda>
 }

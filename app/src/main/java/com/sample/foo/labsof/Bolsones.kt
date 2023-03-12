@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.sample.foo.labsof.databinding.ActivityBolsonesBinding
@@ -23,7 +22,7 @@ class Bolsones : AppCompatActivity() {
         FT.commit()
         binding.listaBolsones.text = "Lista de bolsones"
         binding.listaBolsones.setOnClickListener { view: View ->
-            val intent = Intent(this, ListadoBolsones::class.java)
+            val intent = Intent(this, ListadoBolsonesActivity::class.java)
             startActivity(intent)
         }
 

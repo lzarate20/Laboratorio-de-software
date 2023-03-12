@@ -9,13 +9,14 @@ import com.sample.foo.labsof.DataClass.Bolson
 import com.sample.foo.labsof.Service.BolsonService
 import androidx.lifecycle.lifecycleScope
 import com.sample.foo.labsof.DataClass.Quinta
+import com.sample.foo.labsof.DataClass.Ronda
 import com.sample.foo.labsof.R
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
-class BolsonAdapter(val listaBolsones:List<Bolson>, val listaQuintas:List<Quinta>, private val editOnClickListener:(Bolson) -> Unit, private val deleteOnClickListener:(Bolson) -> Unit): RecyclerView.Adapter<BolsonViewHolder>() {
+class BolsonAdapter(var listaBolsones:MutableList<Bolson>, var listaQuintas:MutableList<Quinta>, val ronda: Ronda, private val editOnClickListener:(Bolson) -> Unit, private val deleteOnClickListener:(Bolson) -> Unit): RecyclerView.Adapter<BolsonViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BolsonViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return BolsonViewHolder(layoutInflater.inflate(R.layout.item_bolson,parent,false))
@@ -24,12 +25,20 @@ class BolsonAdapter(val listaBolsones:List<Bolson>, val listaQuintas:List<Quinta
     override fun onBindViewHolder(holder: BolsonViewHolder, position: Int) {
             val item = listaBolsones[position]
             val itemQ = listaQuintas.find { it.fpId == item.idFp }!!
-            holder.render(item,itemQ, editOnClickListener,deleteOnClickListener)
+            holder.render(item,itemQ,ronda, editOnClickListener,deleteOnClickListener)
     }
 
     override fun getItemCount(): Int {
         return listaBolsones.size
     }
+
+    fun updateQuintas(quintas:List<Quinta>){
+        listaQuintas.clear()
+        listaQuintas.addAll(quintas)
+        notifyDataSetChanged()
+    }
+
+
 
 
 }
