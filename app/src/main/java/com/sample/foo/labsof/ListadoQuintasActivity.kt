@@ -20,6 +20,7 @@ import com.sample.foo.labsof.DataClass.Quinta
 import com.sample.foo.labsof.Listados.ListQuintas
 import com.sample.foo.labsof.Service.BolsonService
 import com.sample.foo.labsof.databinding.ActivityListaQuintasBinding
+import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -43,22 +44,12 @@ class ListadoQuintasActivity: AppCompatActivity() {
         FT.add(R.id.toolbar, toolbar)
         FT.commit()
 
-        lifecycleScope.launchWhenCreated{
-            try {
+        lifecycleScope.launch{
                 listaQuintas = QuintaConeccion.get()
                 val lista_familias = FamiliaProductoraConeccion.get()
+            if(listaQuintas !=null && lista_familias!= null)
                 initView(listaQuintas,lista_familias!!)
-            }
-            catch (e: IOException) {
-
-            }
-            catch (e: HttpException){
-
-            }
-
-
-
-        }
+       }
 
     }
 
