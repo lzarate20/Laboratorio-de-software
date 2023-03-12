@@ -56,7 +56,6 @@ class ListadoBolsonesActivity:AppCompatActivity() {
             }
         }
     }
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         binding = ActivityListaBolsonesBinding.inflate(layoutInflater)
@@ -83,7 +82,6 @@ class ListadoBolsonesActivity:AppCompatActivity() {
             dCreate.dismiss()
         }
     }
-    @RequiresApi(Build.VERSION_CODES.N)
     fun initView(listaB: List<Bolson>, listaQ: List<Quinta>, ronda:Ronda) {
         val recyclerView = binding.recyclerBolsones
         val textView = binding.sinBolsones
@@ -103,7 +101,6 @@ class ListadoBolsonesActivity:AppCompatActivity() {
         getContent.launch(intent)
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     fun deleteItem(bolson: Bolson){
         val api_bolson = Retrofit.Builder().baseUrl(Coneccion.url)
             .addConverterFactory(GsonConverterFactory.create())
