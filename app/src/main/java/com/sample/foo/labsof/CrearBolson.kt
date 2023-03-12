@@ -100,12 +100,12 @@ class CrearBolson : AppCompatActivity() {
                                     var count_verduras = 0
                                     var verdura_en_parcela = true
                                     for (each in dataPropia.keys) {
-                                        verdura = result_verduras!!.get(each)
+                                        verdura = result_verduras!!.first {it.id_verdura == each}
                                         count_verduras +=1
                                         lista_verduras.add(verdura)
                                     }
                                     for(each in dataAjena.keys){
-                                        verdura = result_verduras!!.get(each)
+                                        verdura = result_verduras!!.first {it.id_verdura == each}
                                         count_verduras +=1
                                         count_verduras_otro +=1
                                         lista_verduras.add(verdura)
