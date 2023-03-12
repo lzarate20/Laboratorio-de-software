@@ -1,9 +1,11 @@
 package com.sample.foo.labsof
 
 import android.content.DialogInterface
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doBeforeTextChanged
 import androidx.fragment.app.Fragment
@@ -14,6 +16,7 @@ import com.sample.foo.labsof.DataClass.Ronda
 import com.sample.foo.labsof.databinding.ActivityCrearRondaBinding
 import com.sample.foo.labsof.helpers.ConversorDate
 import com.sample.foo.labsof.helpers.DatePickerHelper
+import com.sample.foo.labsof.helpers.DialogHelper
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -26,6 +29,7 @@ class CrearRondaActivity: AppCompatActivity() {
     lateinit var datePickerInicio: DatePickerHelper
     lateinit var datePickerFin: DatePickerHelper
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding  = ActivityCrearRondaBinding.inflate(layoutInflater)
@@ -51,8 +55,11 @@ class CrearRondaActivity: AppCompatActivity() {
             day = now.dayOfMonth
         }
         var result_rondas: List<Ronda>? = null
+        val dCreate= DialogHelper.espera(this)
+        dCreate.show()
         lifecycleScope.launch {
             result_rondas = RondaConeccion.getRondas()
+            dCreate.dismiss()
         }
         binding.fechaInicio.setText(ConversorDate.formatDate(year, month-1, day))
         binding.fechaFin.setText(ConversorDate.formatDate(year, month-1, day))
@@ -95,8 +102,11 @@ class CrearRondaActivity: AppCompatActivity() {
                     binding.error.visibility = View.VISIBLE
                 }
                 else{
+                    val dCreate= DialogHelper.espera(this@CrearRondaActivity)
+                    dCreate.show()
                     lifecycleScope.launch {
                         var res = RondaConeccion.postRonda(ronda)
+                        dCreate.dismiss()
                         if (res != null) {
                             val builder: android.app.AlertDialog.Builder =
                                 android.app.AlertDialog.Builder(it.context)
@@ -114,7 +124,8 @@ class CrearRondaActivity: AppCompatActivity() {
         }
         }
 
-    private fun showDatePicker(datePicker:DatePickerHelper,fecha: EditText,fechaDialogo:LocalDate) {
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun showDatePicker(datePicker:DatePickerHelper, fecha: EditText, fechaDialogo:LocalDate) {
         datePicker.showDialog(fechaDialogo.dayOfMonth, fechaDialogo.monthValue-1,fechaDialogo.year, object : DatePickerHelper.Callback {
             override fun onDateSelected(dayofMonth: Int, month: Int, year: Int) {
                 val dayStr = if (dayofMonth < 10) "0${dayofMonth}" else "${dayofMonth}"

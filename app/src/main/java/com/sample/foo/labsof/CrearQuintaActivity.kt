@@ -25,6 +25,7 @@ import com.sample.foo.labsof.DataClass.Quinta
 import com.sample.foo.labsof.databinding.ActivityCrearQuintaBinding
 import com.sample.foo.labsof.helpers.ConversorDate
 import com.sample.foo.labsof.helpers.DatePickerHelper
+import com.sample.foo.labsof.helpers.DialogHelper
 import kotlinx.coroutines.launch
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants
@@ -43,6 +44,7 @@ class CrearQuintaActivity:AppCompatActivity() {
     lateinit var datePicker: DatePickerHelper
     lateinit var scrollview: ScrollView
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding  = ActivityCrearQuintaBinding.inflate(layoutInflater)
@@ -112,11 +114,14 @@ class CrearQuintaActivity:AppCompatActivity() {
                     day = date.dayOfMonth
                     var list = listOf(year,month,day)
                     var fp = FamiliaProductora(binding.nombreFamilia.text.toString(),list)
+                    val dCreate= DialogHelper.espera(this@CrearQuintaActivity)
+                    dCreate.show()
                     lifecycleScope.launch{
                         var result_fam = FamiliaProductoraConeccion.post(fp)
                         if(result_fam != null){
                             var quinta = Quinta(binding.nombreQuinta.text.toString(),null,mapView.mapCenter.toString(),result_fam.id_fp)
                             var res_quinta = QuintaConeccion.post(quinta)
+                            dCreate.dismiss()
                             if(res_quinta != null){
                                 val builder: android.app.AlertDialog.Builder =
                                     android.app.AlertDialog.Builder(it.context)
@@ -128,6 +133,8 @@ class CrearQuintaActivity:AppCompatActivity() {
                                     })
                                 builder.create()?.show()
                             }
+                        }else{
+                            dCreate.dismiss()
                         }
                     }
                 }
@@ -135,7 +142,8 @@ class CrearQuintaActivity:AppCompatActivity() {
         }
 
     }
-    private fun showDatePicker(fecha: EditText,fechaDialogo:LocalDate ,fechaMin: LocalDateTime=LocalDateTime.now()) {
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun showDatePicker(fecha: EditText, fechaDialogo:LocalDate, fechaMin: LocalDateTime=LocalDateTime.now()) {
         datePicker.setMaxDate(ConversorDate.toLong(fechaMin))
         datePicker.showDialog(fechaDialogo.dayOfMonth, fechaDialogo.monthValue-1,fechaDialogo.year, object : DatePickerHelper.Callback {
             override fun onDateSelected(dayofMonth: Int, month: Int, year: Int) {

@@ -1,9 +1,11 @@
 package com.sample.foo.labsof
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -20,6 +22,7 @@ import com.sample.foo.labsof.DataClass.Quinta
 import com.sample.foo.labsof.DataClass.Ronda
 import com.sample.foo.labsof.databinding.ActivityListaBolsonesBinding
 import com.sample.foo.labsof.databinding.ActivityListaRondaBinding
+import com.sample.foo.labsof.helpers.DialogHelper
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -28,6 +31,7 @@ class ProximasRondasActivity: AppCompatActivity() {
     lateinit var binding: ActivityListaRondaBinding
     private lateinit var adapter: RondaAdapter
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         binding = ActivityListaRondaBinding.inflate(layoutInflater)
@@ -39,8 +43,11 @@ class ProximasRondasActivity: AppCompatActivity() {
         toolbar.setArguments(bun)
         FT.add(R.id.toolbar, toolbar)
         FT.commit()
+        val dCreate = DialogHelper.espera(this)
+        dCreate.show()
         lifecycleScope.launch {
             var result = RondaConeccion.getRondas()
+            dCreate.dismiss()
             if(result != null){
                 result = result.filter { Ronda.Compare.isAfterToday(it) }.sortedWith(
                     Comparator<Ronda>( {t, t2 ->
@@ -76,8 +83,11 @@ class ProximasRondasActivity: AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setMessage("Estás seguro que querés eliminar la ronda?")
         builder.setPositiveButton("Si"){dialogInterface, which ->
+            val dCreate = DialogHelper.espera(this@ProximasRondasActivity)
+            dCreate.show()
             lifecycleScope.launchWhenCreated{
                 var res = RondaConeccion.delete(ronda.id_ronda!!)
+                dCreate.dismiss()
                 finish()
                 startActivity(intent)
                 Toast.makeText(applicationContext,"Se ha borrado correctamente", Toast.LENGTH_LONG).show()

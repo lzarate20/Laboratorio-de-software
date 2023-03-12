@@ -29,14 +29,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"/>
+
         <EditText
             android:id="@+id/cantidad"
             android:layout_width="80dp"
-            android:layout_height="50dp"
-            android:hint="Cantidad"
-            android:inputType="number"
+            android:layout_height="42dp"
+            android:layout_gravity="right"
             android:layout_margin="10dp"
-            android:layout_gravity="right"/>
+            android:hint="Cantidad"
+            android:inputType="number" />
 
     <TextView
         android:id="@+id/errores"
@@ -57,6 +58,8 @@
         android:id="@+id/submit"
         android:layout_width="match_parent"
         android:text="Actualizar bolson"
+        android:background="@drawable/botones"
+        android:textColor="@color/white"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true" />
 </RelativeLayout>

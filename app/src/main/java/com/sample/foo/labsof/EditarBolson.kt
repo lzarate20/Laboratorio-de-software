@@ -2,11 +2,13 @@ package com.sample.foo.labsof
 
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -18,6 +20,7 @@ import com.sample.foo.labsof.Coneccion.*
 import com.sample.foo.labsof.DataClass.*
 
 import com.sample.foo.labsof.databinding.ActivityCrearBolsonBinding
+import com.sample.foo.labsof.helpers.DialogHelper
 
 import kotlinx.coroutines.launch
 
@@ -30,6 +33,7 @@ class EditarBolson: AppCompatActivity() {
     lateinit var  adapterAjena:VerduraAdapter
     lateinit var adapterSpinner:ArrayAdapter<String?>
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCrearBolsonBinding.inflate(layoutInflater)
@@ -45,6 +49,8 @@ class EditarBolson: AppCompatActivity() {
         binding.title.text = "Editar bolson"
         val bolson_id:Int = intent.getIntExtra("bolson",-1)
         val spinner: Spinner = binding.familiaProductora
+        val dCreate= DialogHelper.espera(this)
+        dCreate.show()
         lifecycleScope.launch{
             val bolson_item = BolsonConeccion.getBolson(bolson_id)
             val verduras = bolson_item!!.verduras!!
@@ -53,6 +59,7 @@ class EditarBolson: AppCompatActivity() {
             val result_verduras = VerduraConeccion.get()
             val ronda_actual = RondaConeccion.getRonda(bolson_item.idRonda!!)
             val result_bolson = BolsonConeccion.getBolsonByRonda(bolson_item.idRonda)!!.toMutableList()
+            dCreate.dismiss()
             result_bolson.removeIf{ it.id_bolson == bolson_item.id_bolson }
             val quintaActual = result_quinta.quintas!!.first { it.fpId == bolson_item.idFp }
 
@@ -156,7 +163,10 @@ class EditarBolson: AppCompatActivity() {
                                         idRonda = bolson_item.idRonda,
                                         verduras = lista_verduras
                                     )
-                                    var listo = lifecycleScope.launch { BolsonConeccion.put(bolson) }
+                                    val dCreate= DialogHelper.espera(this@EditarBolson)
+                                    dCreate.show()
+                                    var listo = lifecycleScope.launch { BolsonConeccion.put(bolson)
+                                    dCreate.dismiss()}
                                     listo.invokeOnCompletion {
                                         val intent = Intent(
                                             this@EditarBolson,

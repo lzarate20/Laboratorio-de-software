@@ -1,8 +1,10 @@
 package com.sample.foo.labsof
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -12,6 +14,7 @@ import com.sample.foo.labsof.Adapter.RondaAdapter
 import com.sample.foo.labsof.Coneccion.RondaConeccion
 import com.sample.foo.labsof.DataClass.Ronda
 import com.sample.foo.labsof.databinding.ActivityListaRondaBinding
+import com.sample.foo.labsof.helpers.DialogHelper
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -20,6 +23,7 @@ class HistorialRondasActivity: AppCompatActivity() {
     lateinit var binding: ActivityListaRondaBinding
     private lateinit var adapter: RondaAdapter
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         binding = ActivityListaRondaBinding.inflate(layoutInflater)
@@ -31,8 +35,11 @@ class HistorialRondasActivity: AppCompatActivity() {
         toolbar.setArguments(bun)
         FT.add(R.id.toolbar, toolbar)
         FT.commit()
+        val dCreate= DialogHelper.espera(this@HistorialRondasActivity)
+        dCreate.show()
         lifecycleScope.launch {
             var result = RondaConeccion.getRondas()
+            dCreate.dismiss()
             if(result != null){
                 result = result.filter { Ronda.Compare.endBeforeOrEqualToday(it) }.sortedWith(
                     Comparator<Ronda>( { t, t2 ->

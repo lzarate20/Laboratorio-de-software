@@ -1,9 +1,11 @@
 package com.sample.foo.labsof
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -20,6 +22,7 @@ import com.sample.foo.labsof.DataClass.Quinta
 import com.sample.foo.labsof.Listados.ListQuintas
 import com.sample.foo.labsof.Service.BolsonService
 import com.sample.foo.labsof.databinding.ActivityListaQuintasBinding
+import com.sample.foo.labsof.helpers.DialogHelper
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -31,6 +34,7 @@ class ListadoQuintasActivity: AppCompatActivity() {
     private lateinit var adapter: QuintaAdapter
     lateinit var listaQuintas : ListQuintas
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityListaQuintasBinding.inflate(layoutInflater)
@@ -42,7 +46,8 @@ class ListadoQuintasActivity: AppCompatActivity() {
         toolbar.setArguments(bun)
         FT.add(R.id.toolbar, toolbar)
         FT.commit()
-
+        val dCreate = DialogHelper.espera(this)
+        dCreate.show()
         lifecycleScope.launchWhenCreated{
             try {
                 listaQuintas = QuintaConeccion.get()
@@ -55,7 +60,7 @@ class ListadoQuintasActivity: AppCompatActivity() {
             catch (e: HttpException){
 
             }
-
+            dCreate.dismiss()
 
 
         }
@@ -74,7 +79,8 @@ class ListadoQuintasActivity: AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun initView(listaQ: ListQuintas,listaF: List<FamiliaProductora>) {
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun initView(listaQ: ListQuintas, listaF: List<FamiliaProductora>) {
         val recyclerView = binding.recyclerQuintas
         val textView = binding.sinQuintas
         if (listaQ.quintas!!.isEmpty()) {
@@ -87,13 +93,17 @@ class ListadoQuintasActivity: AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     fun deleteItem(quinta: Quinta){
         val builder = AlertDialog.Builder(this)
         builder.setMessage("Estás seguro que querés eliminar la quinta? Se eliminará también la familia")
         builder.setPositiveButton("Si"){dialogInterface, which ->
+            val dCreate = DialogHelper.espera(this)
+            dCreate.show()
             lifecycleScope.launchWhenCreated{
                 var res = QuintaConeccion.delete(quinta.id_quinta!!)
                 var resF = FamiliaProductoraConeccion.delete(quinta.fpId!!)
+                dCreate.dismiss()
                 listaQuintas.quintas?.toMutableList()?.removeIf{ it.id_quinta == quinta.id_quinta }
                 finish()
                 startActivity(intent)

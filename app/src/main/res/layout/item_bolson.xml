@@ -72,22 +72,24 @@
             android:gravity="center"
             android:layout_margin="5dp">
 
-            <Button
-                android:id="@+id/delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/botones"
-                android:text="Eliminar bolson"
-                android:textColor="@color/white"
-                android:layout_marginBottom="5dp"/>
 
             <Button
                 android:id="@+id/editarBolson"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/botones"
-                android:text="Editar bolson"
+                android:text="Editar"
                 android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/botones"
+                android:text="Eliminar"
+                android:backgroundTint="#ff0000"
+                android:textColor="@color/white"
+                android:layout_marginBottom="5dp"/>
         </LinearLayout>
     </RelativeLayout>
 

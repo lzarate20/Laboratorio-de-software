@@ -21,6 +21,7 @@ import com.sample.foo.labsof.databinding.ActivityEditarBolsonBinding
 import com.sample.foo.labsof.databinding.ActivityListaRondaBinding
 import com.sample.foo.labsof.databinding.ActivityVerRondaBinding
 import com.sample.foo.labsof.helpers.ConversorDate
+import com.sample.foo.labsof.helpers.DialogHelper
 import kotlinx.coroutines.launch
 
 class VerRondaActivity: AppCompatActivity() {
@@ -43,11 +44,14 @@ class VerRondaActivity: AppCompatActivity() {
         var ronda: Ronda?
         var bolsones:List<Bolson>?
         var quintas:ListQuintas
+        val dCreate = DialogHelper.espera(this@VerRondaActivity)
+        dCreate.show()
         lifecycleScope.launch{
             var cantidad = 0
             ronda = RondaConeccion.getRonda(ronda_id)
             bolsones = BolsonConeccion.getBolsonByRonda(ronda_id)
             quintas = QuintaConeccion.get()
+            dCreate.dismiss()
             if(!bolsones?.isEmpty()!!){
                 for(bolson in bolsones!!){
                     cantidad +=bolson.cantidad

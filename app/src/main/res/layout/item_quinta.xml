@@ -65,7 +65,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/botones"
-                android:text="Editar quinta"
+                android:text="Editar"
+                android:layout_marginBottom="5dp"
                 android:textColor="@color/white" />
             <Button
                 android:id="@+id/rutaQuinta"
@@ -73,6 +74,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/botones"
                 android:text="Ver Ruta"
+                android:layout_marginBottom="5dp"
                 android:textColor="@color/white" />
 
             <Button
@@ -80,8 +82,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/botones"
-                android:text="Eliminar quinta"
+                android:text="Eliminar"
                 android:textColor="@color/white"
+                android:backgroundTint="#ff0000"
                 android:layout_marginBottom="5dp"/>
 
         </LinearLayout>

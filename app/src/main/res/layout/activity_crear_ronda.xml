@@ -68,6 +68,8 @@
         android:id="@+id/submit"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:background="@drawable/botones"
+        android:textColor="@color/white"
         android:text="Crear Ronda"
         />
 </LinearLayout>

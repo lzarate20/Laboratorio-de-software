@@ -2,12 +2,14 @@ package com.sample.foo.labsof
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -25,6 +27,7 @@ import com.sample.foo.labsof.DataClass.Ronda
 import com.sample.foo.labsof.Listados.ListQuintas
 import com.sample.foo.labsof.Service.BolsonService
 import com.sample.foo.labsof.databinding.ActivityListaBolsonesBinding
+import com.sample.foo.labsof.helpers.DialogHelper
 import kotlinx.coroutines.launch
 import okhttp3.internal.notifyAll
 import retrofit2.Retrofit
@@ -40,9 +43,12 @@ class ListadoBolsonesActivity:AppCompatActivity() {
 
     val getContent = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {result:ActivityResult? ->
         if(result!!.resultCode == RESULT_OK){
+            val dCreate= DialogHelper.espera(this@ListadoBolsonesActivity)
+            dCreate.show()
             lifecycleScope.launch {
                 var bolson_id = result.data!!.getIntExtra("bolson",-1)
                 val bolson = BolsonConeccion.getBolson(bolson_id)!!
+                dCreate.dismiss()
                 var index = adapter.listaBolsones.indexOfFirst { it.id_bolson==bolson.id_bolson }
                 adapter.listaBolsones.removeAt(index)
                 adapter.listaBolsones.add(index,bolson)
@@ -50,6 +56,7 @@ class ListadoBolsonesActivity:AppCompatActivity() {
             }
         }
     }
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         binding = ActivityListaBolsonesBinding.inflate(layoutInflater)
@@ -61,6 +68,8 @@ class ListadoBolsonesActivity:AppCompatActivity() {
         toolbar.setArguments(bun)
         FT.add(R.id.toolbar, toolbar)
         FT.commit()
+        val dCreate =DialogHelper.espera(this)
+        dCreate.show()
         lifecycleScope.launchWhenCreated {
             val rondas = RondaConeccion.getRondas()
             if (rondas != null) {
@@ -71,9 +80,11 @@ class ListadoBolsonesActivity:AppCompatActivity() {
 //                val quintas = result!!.flatMap { each -> listaQuintas.quintas!!.filter { it.fpId == each.idFp } }
                 initView(listaBolsones, listaQuintas.quintas!!, rondaActual)
             }
+            dCreate.dismiss()
         }
     }
-    fun initView(listaB: List<Bolson>,listaQ: List<Quinta>,ronda:Ronda) {
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun initView(listaB: List<Bolson>, listaQ: List<Quinta>, ronda:Ronda) {
         val recyclerView = binding.recyclerBolsones
         val textView = binding.sinBolsones
         if (listaB.isEmpty()) {
@@ -92,16 +103,22 @@ class ListadoBolsonesActivity:AppCompatActivity() {
         getContent.launch(intent)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     fun deleteItem(bolson: Bolson){
         val api_bolson = Retrofit.Builder().baseUrl(Coneccion.url)
             .addConverterFactory(GsonConverterFactory.create())
             .build().create(BolsonService::class.java)
         val builder = AlertDialog.Builder(this)
-        builder.setMessage("Estas seguro que queres eliminar el bolson?")
+        builder.setMessage("¿Esta seguro que desea eliminar el bolson?")
         builder.setPositiveButton("Si"){dialogInterface, which ->
+            val dCreate = DialogHelper.espera(this@ListadoBolsonesActivity)
+            dCreate.show()
             lifecycleScope.launchWhenCreated{
+
                 var res = api_bolson.deleteSingleBolson(bolson.id_bolson!!)
+                dCreate.dismiss()
                 if(res.isSuccessful) {
+
                     listaBolsones.toMutableList().removeIf{ it.id_bolson == bolson.id_bolson }
                     startActivity(intent)
                     finish()

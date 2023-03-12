@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnTokenCanceledListener
 import com.sample.foo.labsof.Coneccion.QuintaConeccion
 import com.sample.foo.labsof.DataClass.Quinta
 import com.sample.foo.labsof.databinding.ActivityRutaQuintaBinding
+import com.sample.foo.labsof.helpers.DialogHelper
 import kotlinx.coroutines.launch
 import org.osmdroid.bonuspack.routing.OSRMRoadManager
 import org.osmdroid.bonuspack.routing.Road
@@ -78,8 +79,11 @@ class RutaActivity: AppCompatActivity() {
                     val start = GeoPoint(lat,lon)
                     val quinta_id:Int = intent.getIntExtra("quinta",-1)
                     var quinta: Quinta? = null
+                    val dCreate = DialogHelper.espera(this@RutaActivity)
+                    dCreate.show()
                     lifecycleScope.launch {
                         quinta = QuintaConeccion.getSingle(quinta_id)
+                        dCreate.dismiss()
                         var center = quinta?.geoImg
                         route(mapView,center!!,start)
                 }

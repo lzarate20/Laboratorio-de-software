@@ -14,6 +14,7 @@ import com.sample.foo.labsof.DataClass.Bolson
 import com.sample.foo.labsof.DataClass.FamiliaProductora
 import com.sample.foo.labsof.DataClass.VerduraFechaList
 import com.sample.foo.labsof.databinding.ActivityVerBolsonBinding
+import com.sample.foo.labsof.helpers.DialogHelper
 import kotlinx.coroutines.launch
 
 
@@ -34,9 +35,12 @@ class VerBolsonActivity: AppCompatActivity() {
         FT.add(R.id.toolbar, toolbar)
         FT.commit()
         val bolson_id:Int = intent.getIntExtra("bolson",-1)
+        val dCreate = DialogHelper.espera(this@VerBolsonActivity)
+        dCreate.show()
         lifecycleScope.launch{
             var bolson = BolsonConeccion.getBolson(bolson_id)
             var quinta = QuintaConeccion.get().quintas!!.first{ it.fpId == bolson!!.idFp }
+            dCreate.dismiss()
             var verduras = bolson!!.verduras!!.map { it.nombre }.toMutableList()
             val adapter: ArrayAdapter<String> = ArrayAdapter<String>(this@VerBolsonActivity,R.layout.item_ver_verdura,R.id.nombre,verduras)
             binding.verduras.adapter = adapter
