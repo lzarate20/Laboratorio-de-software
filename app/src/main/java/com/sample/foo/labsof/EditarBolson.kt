@@ -74,7 +74,7 @@ class EditarBolson: AppCompatActivity() {
                     spinner.setSelection(adapterSpinner.getPosition(quintaActual.nombre.toString()))
                     val id_quinta = quintaActual.id_quinta
                     var visita = result_visitas.getUltimavisita(id_quinta)
-                    if (visita != null) {
+                    if (visita != null && !visita!!.parcelas!!.isEmpty()) {
                         var listaVerduraPropia =
                             visita!!.parcelas!!.distinctBy { it.verdura!!.id_verdura }
                         var listaVerduraAjena = ArrayList<ParcelaVerdura>()
@@ -84,7 +84,7 @@ class EditarBolson: AppCompatActivity() {
                                 each.id_quinta!!,
                                 result_visitas.visitas!!
                             )
-                            val verduras = visitaAjena.parcelas!!.map { it.verdura }
+                            val verduras = visitaAjena!!.parcelas!!.map { it.verdura }
                                 .filter { each -> listaVerduraPropia!!.all { it.verdura!!.id_verdura != each!!.id_verdura } && listaVerduraAjena.all { it.verdura!!.id_verdura != each!!.id_verdura } }
                             listaVerduraAjena.addAll(verduras.asIterable() as Collection<ParcelaVerdura>)
                         }
