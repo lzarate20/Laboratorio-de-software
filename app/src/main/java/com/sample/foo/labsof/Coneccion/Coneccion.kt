@@ -4,7 +4,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object Coneccion {
-    var url= "http://ip172-19-0-7-cg76fnae69v000cegkbg-80.direct.labs.play-with-docker.com"
+    var url= "http://192.168.0.101:80"
     var api= Retrofit.Builder().baseUrl(url)
         .addConverterFactory(GsonConverterFactory.create())
         .build()

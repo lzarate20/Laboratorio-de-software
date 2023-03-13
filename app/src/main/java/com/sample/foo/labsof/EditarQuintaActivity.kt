@@ -52,6 +52,9 @@ class EditarQuintaActivity : AppCompatActivity() {
         FT.commit()
         binding.nombreVista.text = "Editar Quinta"
         binding.submit.text = "Editar Quinta"
+
+        binding.familiaLinear.visibility = View.GONE
+        binding.fechaLinear.visibility = View.GONE
         if (ContextCompat.checkSelfPermission(
                 this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
@@ -122,10 +125,10 @@ class EditarQuintaActivity : AppCompatActivity() {
                 if (binding.nombreQuinta.text == null) {
                     binding.error.visibility = View.VISIBLE
                     binding.error.text = "Se debe ingresar el nombre de la quinta"
-                } else if (binding.nombreFamilia.text == null) {
+                } /*else if (binding.nombreFamilia.text == null) {
                     binding.error.visibility = View.VISIBLE
                     binding.error.text = "Se debe ingresar el nombre de la familia"
-                } else {
+                } */else {/*
                     val date = LocalDate.parse(
                         binding.fecha.text.toString(),
                         DateTimeFormatter.ofPattern("dd/MM/yyyy")
@@ -139,7 +142,7 @@ class EditarQuintaActivity : AppCompatActivity() {
                         day = date.dayOfMonth
                         var list = listOf(year, month, day)
                         familia.fecha_afiliacion = list
-                        familia.nombre = binding.nombreFamilia.text.toString()
+                        familia.nombre = binding.nombreFamilia.text.toString()*/
                         //quinta.direccion = binding.direccion.text.toString()
                         quinta.nombre = binding.nombreQuinta.text.toString()
                         quinta.geoImg = mapView.mapCenter.toString()
@@ -149,9 +152,9 @@ class EditarQuintaActivity : AppCompatActivity() {
                         dCreate.show()
                         lifecycleScope.launch {
                             res = QuintaConeccion.put(quinta)
-                            resF = FamiliaProductoraConeccion.put(familia)
+                           // resF = FamiliaProductoraConeccion.put(familia)
                             dCreate.dismiss()
-                            if (res != null && resF != null) {
+                            if (res != null) {
                                 val builder: android.app.AlertDialog.Builder =
                                     android.app.AlertDialog.Builder(it.context)
                                 builder.setTitle("Guardado Exitoso")
@@ -159,14 +162,13 @@ class EditarQuintaActivity : AppCompatActivity() {
                                 builder.setPositiveButton("Listo",
                                     DialogInterface.OnClickListener { dialog, which ->
                                         finish()
-                                        startActivity(intent)
                                     })
                                 builder.create()?.show()
                             }
                         }
 
 
-                    }
+                    //}
                 }
             }
         }

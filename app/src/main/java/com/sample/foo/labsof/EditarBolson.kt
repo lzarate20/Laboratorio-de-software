@@ -73,12 +73,16 @@ class EditarBolson: AppCompatActivity() {
                     spinner.setSelection(adapterSpinner.getPosition(quintaActual.nombre.toString()))
                     val id_quinta = quintaActual.id_quinta
                     var visita = result_visitas.getUltimavisita(id_quinta)
-                    var listaVerduraPropia =  visita!!.parcelas!!.distinctBy { it.verdura!!.id_verdura }
+                    var listaVerduraPropia: List<ParcelaVerdura>? = null
+                    if(!visita!!.parcelas!!.isEmpty()) {
+                        listaVerduraPropia =
+                            visita!!.parcelas!!.distinctBy { it.verdura!!.id_verdura }
+                    }
                     var listaVerduraAjena = ArrayList<ParcelaVerdura>()
                     var visitaAjena:VisitaFechaList?
                     for(each in listaQuintas.subList(1,listaQuintas.size-1)){
                         visitaAjena = VisitaFechaList.getVisitaById(each.id_quinta!!,result_visitas.visitas!!)
-                        val verduras = visitaAjena.parcelas!!.map{it.verdura}.filter { each -> listaVerduraPropia.all { it.verdura!!.id_verdura != each!!.id_verdura } && listaVerduraAjena.all{ it.verdura!!.id_verdura != each!!.id_verdura}}
+                        val verduras = visitaAjena.parcelas!!.map{it.verdura}.filter { each -> listaVerduraPropia!!.all { it.verdura!!.id_verdura != each!!.id_verdura } && listaVerduraAjena.all{ it.verdura!!.id_verdura != each!!.id_verdura}}
                         listaVerduraAjena.addAll(verduras.asIterable() as Collection<ParcelaVerdura>)
                     }
                     val listVerduraSelectedPropia:ArrayList<VerduraFechaList> = ArrayList<VerduraFechaList>()
@@ -97,13 +101,13 @@ class EditarBolson: AppCompatActivity() {
                             for(each in listaQuintas) {
                                 visitaAjena = result_visitas.getUltimavisita(each.id_quinta)!!
                                     val verduras =
-                                        visitaAjena!!.parcelas!!.filter { each -> listaVerduraPropia.all { it.verdura!!.id_verdura != each!!.verdura!!.id_verdura } && listaVerduraAjena.all { it.verdura!!.id_verdura != each!!.verdura!!.id_verdura } }
+                                        visitaAjena!!.parcelas!!.filter { each -> listaVerduraPropia!!.all { it.verdura!!.id_verdura != each!!.verdura!!.id_verdura } && listaVerduraAjena.all { it.verdura!!.id_verdura != each!!.verdura!!.id_verdura } }
                                     listaVerduraAjena.addAll(verduras.asIterable() as Collection<ParcelaVerdura>)
 
                             }
 
                             for(each in verduras){
-                                val lp = listaVerduraPropia.map { it.verdura }
+                                val lp = listaVerduraPropia!!.map { it.verdura }
                                 val la = listaVerduraAjena.map{it.verdura}
                                 if(la.any { it!!.id_verdura == each.id_verdura }&& lp.none { it!!.id_verdura == each.id_verdura }){
                                     listVerduraSelectedAjena.add(each)
@@ -113,7 +117,7 @@ class EditarBolson: AppCompatActivity() {
                                 }
                             }
                             listaVerduraAjena = listaVerduraAjena.distinctBy { it.verdura!!.id_verdura } as ArrayList<ParcelaVerdura>
-                            initView(listaVerduraPropia,listaVerduraAjena,listVerduraSelectedPropia,listVerduraSelectedAjena)
+                            initView(listaVerduraPropia!!,listaVerduraAjena,listVerduraSelectedPropia,listVerduraSelectedAjena)
 
 
                             binding.submit.setOnClickListener {
