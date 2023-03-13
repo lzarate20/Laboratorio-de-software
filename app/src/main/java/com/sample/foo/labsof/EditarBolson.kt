@@ -163,7 +163,7 @@ class EditarBolson: AppCompatActivity() {
                                                 binding.errores.text =
                                                     "Ya existe un bolson para dicha familia"
                                                 binding.errores.visibility = View.VISIBLE
-                                            } else if (count_verduras < 1 || count_verduras_otro > 2) {
+                                            } else if (count_verduras != 7 || count_verduras_otro > 2) {
                                                 binding.errores.text =
                                                     "Se deben seleccionar 7 verduras, con al menos 5 de producción propia"
                                                 binding.errores.visibility = View.VISIBLE
