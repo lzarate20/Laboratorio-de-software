@@ -66,9 +66,9 @@ class CrearBolson : AppCompatActivity() {
                 var listaQuintas =
                     result_quinta.quintas!!.filter { result_visitas.getUltimavisita(it.id_quinta) != null }
                 initSpinner(spinner, listaQuintas)
-                var id_quinta = result_quinta.quintas!!.first().id_quinta
+               /* var id_quinta = result_quinta.quintas!!.first().id_quinta
                 var visita = result_visitas.getUltimavisita(id_quinta)
-                if (visita != null && !visita!!.parcelas!!.isEmpty()) {
+
                     var listaVerduraPropia =
                         visita!!.parcelas!!.distinctBy { it.verdura!!.id_verdura }
                     var listaVerduraAjena = ArrayList<ParcelaVerdura>()
@@ -83,7 +83,8 @@ class CrearBolson : AppCompatActivity() {
                             .filter { each -> listaVerduraPropia.all { it.verdura!!.id_verdura != each!!.id_verdura } && listaVerduraAjena.all { it.verdura!!.id_verdura != each!!.id_verdura } }
                         listaVerduraAjena.addAll(verduras.asIterable() as Collection<ParcelaVerdura>)
 
-                    }
+                    }*/
+                if(!listaQuintas.isEmpty()){
                     spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                         @RequiresApi(Build.VERSION_CODES.O)
                         override fun onItemSelected(
@@ -92,11 +93,12 @@ class CrearBolson : AppCompatActivity() {
                             position: Int,
                             id: Long
                         ) {
-                            visita =
-                                result_visitas.getUltimavisita(result_quinta.quintas!!.get(position).id_quinta!!)!!
-                            listaVerduraPropia =
+                            var visita =
+                                result_visitas.getUltimavisita(listaQuintas.get(position).id_quinta!!)!!
+                            var listaVerduraPropia =
                                 visita!!.parcelas!!.distinctBy { it.verdura!!.id_verdura }
-                            listaVerduraAjena = ArrayList<ParcelaVerdura>()
+                            var listaVerduraAjena = ArrayList<ParcelaVerdura>()
+                            var visitaAjena: VisitaFechaList?
                             listaQuintas.toMutableList().removeAt(position)
                             for (each in listaQuintas) {
                                 visitaAjena = result_visitas.getUltimavisita(each.id_quinta)!!
@@ -128,7 +130,7 @@ class CrearBolson : AppCompatActivity() {
                                     count_verduras_otro += 1
                                     lista_verduras.add(verdura)
                                 }
-                                var id_fp = result_quinta.quintas!!.get(position).fpId
+                                var id_fp = listaQuintas.get(position).fpId
                                 if (result_bolson!!.any { it.idFp == id_fp }) {
                                     binding.errores.text =
                                         "Ya existe un bolson para dicha familia"
@@ -149,7 +151,7 @@ class CrearBolson : AppCompatActivity() {
                                     val bolson = Bolson(
                                         null,
                                         cantidad_input!!,
-                                        idFp = result_quinta.quintas!!.get(position).fpId,
+                                        idFp = id_fp,
                                         idRonda = ronda_actual.id_ronda,
                                         verduras = lista_verduras
                                     )
