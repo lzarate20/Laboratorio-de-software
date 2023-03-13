@@ -10,7 +10,7 @@ class VerduraFechaList() {
     var descripcion: String? = null
     var parcelas: List<String>? = null
     var error: String? = null
-    val mes= arrayOf<String>("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre")
+
     constructor(
         tiempo_cosecha: List<Int>?,
         mes_siembra: List<Int>?, archImg: String?,
@@ -40,10 +40,14 @@ class VerduraFechaList() {
     constructor(e: String?) : this() {
         this.error = e
     }
+    fun getMes():Array<String>{
+        return arrayOf<String>("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre")
+    }
+
     fun mes_siembra():String{
-        return mes.get(mes_siembra!![1] -1)
+        return this.getMes().get(mes_siembra!![1] -1)
     }
     fun mes_cosecha():String{
-        return mes.get(tiempo_cosecha!![1] -1)
+        return this.getMes().get(tiempo_cosecha!![1] -1)
     }
 }

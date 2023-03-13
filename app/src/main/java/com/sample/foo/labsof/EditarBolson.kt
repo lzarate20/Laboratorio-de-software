@@ -63,132 +63,150 @@ class EditarBolson: AppCompatActivity() {
             val quintaActual = result_quinta.quintas!!.first { it.fpId == bolson_item.idFp }
 
                 if(ronda_actual != null) {
-                    var cantidad_input:Int? = bolson_item.cantidad
+                    var cantidad_input: Int? = bolson_item.cantidad
                     binding.cantidad.setText(bolson_item.cantidad.toString())
-                    binding.cantidad.doOnTextChanged{ text, start, count, after ->
+                    binding.cantidad.doOnTextChanged { text, start, count, after ->
                         cantidad_input = text.toString().toIntOrNull()
                     }
-                    val listaQuintas = result_quinta.quintas!!.filter { result_visitas.getUltimavisita(it.id_quinta) != null }
+                    val listaQuintas =
+                        result_quinta.quintas!!.filter { result_visitas.getUltimavisita(it.id_quinta) != null }
                     initSpinner(spinner, listaQuintas)
                     spinner.setSelection(adapterSpinner.getPosition(quintaActual.nombre.toString()))
                     val id_quinta = quintaActual.id_quinta
                     var visita = result_visitas.getUltimavisita(id_quinta)
-                    var listaVerduraPropia: List<ParcelaVerdura>? = null
-                    if(!visita!!.parcelas!!.isEmpty()) {
-                        listaVerduraPropia =
+                    if (visita != null) {
+                        var listaVerduraPropia =
                             visita!!.parcelas!!.distinctBy { it.verdura!!.id_verdura }
-                    }
-                    var listaVerduraAjena = ArrayList<ParcelaVerdura>()
-                    var visitaAjena:VisitaFechaList?
-                    for(each in listaQuintas.subList(1,listaQuintas.size-1)){
-                        visitaAjena = VisitaFechaList.getVisitaById(each.id_quinta!!,result_visitas.visitas!!)
-                        val verduras = visitaAjena.parcelas!!.map{it.verdura}.filter { each -> listaVerduraPropia!!.all { it.verdura!!.id_verdura != each!!.id_verdura } && listaVerduraAjena.all{ it.verdura!!.id_verdura != each!!.id_verdura}}
-                        listaVerduraAjena.addAll(verduras.asIterable() as Collection<ParcelaVerdura>)
-                    }
-                    val listVerduraSelectedPropia:ArrayList<VerduraFechaList> = ArrayList<VerduraFechaList>()
-                    val listVerduraSelectedAjena:ArrayList<VerduraFechaList> = ArrayList<VerduraFechaList>()
-                    spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                        override fun onItemSelected(
-                            parent: AdapterView<*>,
-                            view: View,
-                            position: Int,
-                            id: Long
-                        ) {
-                            visita = result_visitas.getUltimavisita(result_quinta.quintas!!.get(position).id_quinta!!)!!
-                            listaVerduraPropia =  visita!!.parcelas!!.distinctBy { it.verdura!!.id_verdura }
-                            listaVerduraAjena = ArrayList<ParcelaVerdura>()
-                            listaQuintas.toMutableList().removeAt(position)
-                            for(each in listaQuintas) {
-                                visitaAjena = result_visitas.getUltimavisita(each.id_quinta)!!
-                                    val verduras =
-                                        visitaAjena!!.parcelas!!.filter { each -> listaVerduraPropia!!.all { it.verdura!!.id_verdura != each!!.verdura!!.id_verdura } && listaVerduraAjena.all { it.verdura!!.id_verdura != each!!.verdura!!.id_verdura } }
-                                    listaVerduraAjena.addAll(verduras.asIterable() as Collection<ParcelaVerdura>)
+                        var listaVerduraAjena = ArrayList<ParcelaVerdura>()
+                        var visitaAjena: VisitaFechaList?
+                        for (each in listaQuintas.subList(1, listaQuintas.size - 1)) {
+                            visitaAjena = VisitaFechaList.getVisitaById(
+                                each.id_quinta!!,
+                                result_visitas.visitas!!
+                            )
+                            val verduras = visitaAjena.parcelas!!.map { it.verdura }
+                                .filter { each -> listaVerduraPropia!!.all { it.verdura!!.id_verdura != each!!.id_verdura } && listaVerduraAjena.all { it.verdura!!.id_verdura != each!!.id_verdura } }
+                            listaVerduraAjena.addAll(verduras.asIterable() as Collection<ParcelaVerdura>)
+                        }
+                        val listVerduraSelectedPropia: ArrayList<VerduraFechaList> =
+                            ArrayList<VerduraFechaList>()
+                        val listVerduraSelectedAjena: ArrayList<VerduraFechaList> =
+                            ArrayList<VerduraFechaList>()
+                        spinner.onItemSelectedListener =
+                            object : AdapterView.OnItemSelectedListener {
+                                override fun onItemSelected(
+                                    parent: AdapterView<*>,
+                                    view: View,
+                                    position: Int,
+                                    id: Long
+                                ) {
+                                    visita = result_visitas.getUltimavisita(
+                                        result_quinta.quintas!!.get(position).id_quinta!!
+                                    )!!
+                                    listaVerduraPropia =
+                                        visita!!.parcelas!!.distinctBy { it.verdura!!.id_verdura }
+                                    listaVerduraAjena = ArrayList<ParcelaVerdura>()
+                                    listaQuintas.toMutableList().removeAt(position)
+                                    for (each in listaQuintas) {
+                                        visitaAjena =
+                                            result_visitas.getUltimavisita(each.id_quinta)!!
+                                        val verduras =
+                                            visitaAjena!!.parcelas!!.filter { each -> listaVerduraPropia!!.all { it.verdura!!.id_verdura != each!!.verdura!!.id_verdura } && listaVerduraAjena.all { it.verdura!!.id_verdura != each!!.verdura!!.id_verdura } }
+                                        listaVerduraAjena.addAll(verduras.asIterable() as Collection<ParcelaVerdura>)
 
-                            }
-
-                            for(each in verduras){
-                                val lp = listaVerduraPropia!!.map { it.verdura }
-                                val la = listaVerduraAjena.map{it.verdura}
-                                if(la.any { it!!.id_verdura == each.id_verdura }&& lp.none { it!!.id_verdura == each.id_verdura }){
-                                    listVerduraSelectedAjena.add(each)
-                                }
-                                else{
-                                    listVerduraSelectedPropia.add(each)
-                                }
-                            }
-                            listaVerduraAjena = listaVerduraAjena.distinctBy { it.verdura!!.id_verdura } as ArrayList<ParcelaVerdura>
-                            initView(listaVerduraPropia!!,listaVerduraAjena,listVerduraSelectedPropia,listVerduraSelectedAjena)
-
-
-                            binding.submit.setOnClickListener {
-                                val dataPropia = adapterPropia.getData()
-                                val dataAjena= adapterAjena.getData()
-                                var verdura: VerduraFechaList
-                                var lista_verduras = ArrayList<VerduraFechaList>()
-                                var count_verduras_otro = 0
-                                var count_verduras = 0
-                                var verdura_en_parcela = true
-                                for (each in dataPropia.keys) {
-                                    verdura = result_verduras!!.first { each == it.id_verdura }
-                                    count_verduras +=1
-                                    lista_verduras.add(verdura)
-                                }
-                                for(each in dataAjena.keys){
-                                    verdura = result_verduras!!.first { each == it.id_verdura }
-                                    count_verduras +=1
-                                    count_verduras_otro +=1
-                                    lista_verduras.add(verdura)
-                                }
-                                var id_fp = result_quinta.quintas!!.get(position).fpId
-                                if (result_bolson!!.any { it.idFp == id_fp }){
-                                    binding.errores.text =
-                                        "Ya existe un bolson para dicha familia"
-                                    binding.errores.visibility = View.VISIBLE
-                                }
-                                else if (count_verduras <1 || count_verduras_otro>2 ) {
-                                    binding.errores.text =
-                                        "Se deben seleccionar 7 verduras, con al menos 5 de producción propia"
-                                    binding.errores.visibility = View.VISIBLE
-                                } else if (cantidad_input == null || cantidad_input!! <=0) {
-                                    binding.errores.text =
-                                        "La cantidad de bolsones debe ser mayor a 0"
-                                    binding.errores.visibility = View.VISIBLE
-                                }
-                                else if(verdura_en_parcela.not()){
-                                    binding.errores.text = "Se debe seleccionar una verdura de produccion propia o que haya producido otra familia"
-                                    binding.errores.visibility = View.VISIBLE
-                                }
-                                else {
-                                    val bolson = Bolson(
-                                        bolson_id,
-                                        cantidad_input!!,
-                                        idFp = result_quinta.quintas!!.get(position).fpId,
-                                        idRonda = bolson_item.idRonda,
-                                        verduras = lista_verduras
-                                    )
-                                    val dCreate= DialogHelper.espera(this@EditarBolson)
-                                    dCreate.show()
-                                    var listo = lifecycleScope.launch { BolsonConeccion.put(bolson)
-                                    dCreate.dismiss()}
-                                    listo.invokeOnCompletion {
-                                        val intent = Intent(
-                                            this@EditarBolson,
-                                            ListadoBolsonesActivity::class.java
-                                        )
-                                        intent.putExtra("bolson", bolson.id_bolson)
-                                        setResult(RESULT_OK, intent)
-                                        finish()
                                     }
 
+                                    for (each in verduras) {
+                                        val lp = listaVerduraPropia!!.map { it.verdura }
+                                        val la = listaVerduraAjena.map { it.verdura }
+                                        if (la.any { it!!.id_verdura == each.id_verdura } && lp.none { it!!.id_verdura == each.id_verdura }) {
+                                            listVerduraSelectedAjena.add(each)
+                                        } else {
+                                            listVerduraSelectedPropia.add(each)
+                                        }
+                                    }
+                                    listaVerduraAjena =
+                                        listaVerduraAjena.distinctBy { it.verdura!!.id_verdura } as ArrayList<ParcelaVerdura>
+                                    initView(
+                                        listaVerduraPropia!!,
+                                        listaVerduraAjena,
+                                        listVerduraSelectedPropia,
+                                        listVerduraSelectedAjena
+                                    )
+
+
+                                    binding.submit.setOnClickListener {
+                                        val dataPropia = adapterPropia.getData()
+                                        val dataAjena = adapterAjena.getData()
+                                        var verdura: VerduraFechaList
+                                        var lista_verduras = ArrayList<VerduraFechaList>()
+                                        var count_verduras_otro = 0
+                                        var count_verduras = 0
+                                        var verdura_en_parcela = true
+                                        for (each in dataPropia.keys) {
+                                            verdura =
+                                                result_verduras!!.first { each == it.id_verdura }
+                                            count_verduras += 1
+                                            lista_verduras.add(verdura)
+                                        }
+                                        for (each in dataAjena.keys) {
+                                            verdura =
+                                                result_verduras!!.first { each == it.id_verdura }
+                                            count_verduras += 1
+                                            count_verduras_otro += 1
+                                            lista_verduras.add(verdura)
+                                        }
+                                        var id_fp = result_quinta.quintas!!.get(position).fpId
+                                        if (result_bolson!!.any { it.idFp == id_fp }) {
+                                            binding.errores.text =
+                                                "Ya existe un bolson para dicha familia"
+                                            binding.errores.visibility = View.VISIBLE
+                                        } else if (count_verduras < 1 || count_verduras_otro > 2) {
+                                            binding.errores.text =
+                                                "Se deben seleccionar 7 verduras, con al menos 5 de producción propia"
+                                            binding.errores.visibility = View.VISIBLE
+                                        } else if (cantidad_input == null || cantidad_input!! <= 0) {
+                                            binding.errores.text =
+                                                "La cantidad de bolsones debe ser mayor a 0"
+                                            binding.errores.visibility = View.VISIBLE
+                                        } else if (verdura_en_parcela.not()) {
+                                            binding.errores.text =
+                                                "Se debe seleccionar una verdura de produccion propia o que haya producido otra familia"
+                                            binding.errores.visibility = View.VISIBLE
+                                        } else {
+                                            val bolson = Bolson(
+                                                bolson_id,
+                                                cantidad_input!!,
+                                                idFp = result_quinta.quintas!!.get(position).fpId,
+                                                idRonda = bolson_item.idRonda,
+                                                verduras = lista_verduras
+                                            )
+                                            val dCreate = DialogHelper.espera(this@EditarBolson)
+                                            dCreate.show()
+                                            var listo = lifecycleScope.launch {
+                                                BolsonConeccion.put(bolson)
+                                                dCreate.dismiss()
+                                            }
+                                            listo.invokeOnCompletion {
+                                                val intent = Intent(
+                                                    this@EditarBolson,
+                                                    ListadoBolsonesActivity::class.java
+                                                )
+                                                intent.putExtra("bolson", bolson.id_bolson)
+                                                setResult(RESULT_OK, intent)
+                                                finish()
+                                            }
+
+                                        }
+
+                                    }
                                 }
 
+                                override fun onNothingSelected(parent: AdapterView<*>) {
+                                    binding.submit.isEnabled = false
+                                    binding.submit.isClickable = false
+                                }
                             }
-                        }
-
-                        override fun onNothingSelected(parent: AdapterView<*>) {
-                            binding.submit.isEnabled = false
-                            binding.submit.isClickable = false
-                        }
                     }
                 }
             }
