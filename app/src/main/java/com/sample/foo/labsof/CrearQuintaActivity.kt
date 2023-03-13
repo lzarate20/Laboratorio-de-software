@@ -44,7 +44,6 @@ class CrearQuintaActivity:AppCompatActivity() {
     lateinit var datePicker: DatePickerHelper
     lateinit var scrollview: ScrollView
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding  = ActivityCrearQuintaBinding.inflate(layoutInflater)
@@ -142,7 +141,6 @@ class CrearQuintaActivity:AppCompatActivity() {
         }
 
     }
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun showDatePicker(fecha: EditText, fechaDialogo:LocalDate, fechaMin: LocalDateTime=LocalDateTime.now()) {
         datePicker.setMaxDate(ConversorDate.toLong(fechaMin))
         datePicker.showDialog(fechaDialogo.dayOfMonth, fechaDialogo.monthValue-1,fechaDialogo.year, object : DatePickerHelper.Callback {

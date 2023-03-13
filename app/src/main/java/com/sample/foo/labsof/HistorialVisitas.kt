@@ -19,7 +19,7 @@ import com.sample.foo.labsof.helpers.DialogHelper
 import kotlinx.coroutines.launch
 
 class HistorialVisitas : AppCompatActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_historial_visitas)
@@ -35,7 +35,6 @@ class HistorialVisitas : AppCompatActivity() {
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun initRecyclerView() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerVisita)
         recyclerView.layoutManager = LinearLayoutManager(this)

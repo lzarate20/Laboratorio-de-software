@@ -29,7 +29,6 @@ import java.time.LocalDateTime
 
 class VerVisita : AppCompatActivity() {
     var id: Int = 0
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ver_visita)
@@ -252,7 +251,6 @@ class VerVisita : AppCompatActivity() {
         spinner.adapter = mSortAdapter
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun showDatePicker(fecha: EditText) {
         val date = ConversorDate.getCurrentDate(fecha.text.toString())
         val hoy = ConversorDate.toLong(LocalDateTime.now())

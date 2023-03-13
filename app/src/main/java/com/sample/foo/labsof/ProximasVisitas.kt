@@ -20,7 +20,6 @@ import com.sample.foo.labsof.helpers.DialogHelper
 import kotlinx.coroutines.launch
 
 class ProximasVisitas : AppCompatActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_proximas_visitas)
@@ -35,7 +34,6 @@ class ProximasVisitas : AppCompatActivity() {
         initRecyclerView()
 
     }
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun initRecyclerView(){
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerVisita)
         recyclerView.layoutManager=LinearLayoutManager(this)

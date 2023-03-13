@@ -29,7 +29,6 @@ class CrearRondaActivity: AppCompatActivity() {
     lateinit var datePickerInicio: DatePickerHelper
     lateinit var datePickerFin: DatePickerHelper
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding  = ActivityCrearRondaBinding.inflate(layoutInflater)
@@ -124,7 +123,6 @@ class CrearRondaActivity: AppCompatActivity() {
         }
         }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun showDatePicker(datePicker:DatePickerHelper, fecha: EditText, fechaDialogo:LocalDate) {
         datePicker.showDialog(fechaDialogo.dayOfMonth, fechaDialogo.monthValue-1,fechaDialogo.year, object : DatePickerHelper.Callback {
             override fun onDateSelected(dayofMonth: Int, month: Int, year: Int) {

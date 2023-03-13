@@ -22,8 +22,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 
-class CrearVisita : AppCompatActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
+class CrearVisita : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_crear_visita)
@@ -113,7 +112,6 @@ class CrearVisita : AppCompatActivity() {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun showDatePicker(fecha: EditText) {
         val date = ConversorDate.getCurrentDate(fecha.text.toString())
         val hoy = ConversorDate.toLong(LocalDateTime.now())

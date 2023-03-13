@@ -31,7 +31,6 @@ class ProximasRondasActivity: AppCompatActivity() {
     lateinit var binding: ActivityListaRondaBinding
     private lateinit var adapter: RondaAdapter
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         binding = ActivityListaRondaBinding.inflate(layoutInflater)

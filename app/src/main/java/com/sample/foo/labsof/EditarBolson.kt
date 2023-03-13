@@ -33,7 +33,6 @@ class EditarBolson: AppCompatActivity() {
     lateinit var  adapterAjena:VerduraAdapter
     lateinit var adapterSpinner:ArrayAdapter<String?>
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCrearBolsonBinding.inflate(layoutInflater)

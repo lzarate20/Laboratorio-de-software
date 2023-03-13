@@ -39,7 +39,6 @@ class EditarQuintaActivity : AppCompatActivity() {
     lateinit var datePicker: DatePickerHelper
     lateinit var scrollview: ScrollView
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCrearQuintaBinding.inflate(layoutInflater)
@@ -199,7 +198,6 @@ class EditarQuintaActivity : AppCompatActivity() {
         mapViewController.setCenter(Somewhere)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun showDatePicker(fecha: EditText) {
         val hoy = LocalDateTime.now()
         datePicker.setMaxDate(ConversorDate.toLong(hoy))
