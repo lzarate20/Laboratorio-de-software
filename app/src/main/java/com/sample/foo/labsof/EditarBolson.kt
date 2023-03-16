@@ -20,6 +20,7 @@ import com.sample.foo.labsof.Coneccion.*
 import com.sample.foo.labsof.DataClass.*
 
 import com.sample.foo.labsof.databinding.ActivityCrearBolsonBinding
+import com.sample.foo.labsof.helpers.ConversorDate
 import com.sample.foo.labsof.helpers.DialogHelper
 
 import kotlinx.coroutines.launch
@@ -68,6 +69,8 @@ class EditarBolson: AppCompatActivity() {
                     binding.cantidad.doOnTextChanged { text, start, count, after ->
                         cantidad_input = text.toString().toIntOrNull()
                     }
+                    binding.fechaInicio.setText(ConversorDate.convertToInput(ronda_actual.fecha_inicio))
+                    binding.fechaFin.setText(ConversorDate.convertToInput(ronda_actual.fecha_fin))
                     val listaQuintas =
                         result_quinta.quintas!!.filter { result_visitas.getUltimavisita(it.id_quinta) != null }
                     initSpinner(spinner, listaQuintas)
@@ -230,6 +233,7 @@ class EditarBolson: AppCompatActivity() {
                 adapterSpinner = adapter
                 spinner.adapter = adapterSpinner
             }
+
         }
         fun initView(listaVerduraPropia: List<ParcelaVerdura>,listaVerduraAjena:List<ParcelaVerdura>,listaVerduraSelectedPropia:ArrayList<VerduraFechaList>,listaVerduraSelectedAjena:ArrayList<VerduraFechaList>) {
                 binding.recyclerVerdurasPropia.layoutManager = LinearLayoutManager(this)

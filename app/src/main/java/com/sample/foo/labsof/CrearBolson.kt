@@ -21,6 +21,7 @@ import com.sample.foo.labsof.Coneccion.*
 import com.sample.foo.labsof.DataClass.*
 
 import com.sample.foo.labsof.databinding.ActivityCrearBolsonBinding
+import com.sample.foo.labsof.helpers.ConversorDate
 import com.sample.foo.labsof.helpers.DialogHelper
 
 import kotlinx.coroutines.launch
@@ -65,6 +66,8 @@ class CrearBolson : AppCompatActivity() {
                 }
                 var listaQuintas =
                     result_quinta.quintas!!.filter { result_visitas.getUltimavisita(it.id_quinta) != null }
+                //binding.fechaInicio.setText(ConversorDate.convertToInput(ronda_actual.fecha_inicio))
+                //binding.fechaFin.setText(ConversorDate.convertToInput(ronda_actual.fecha_fin))
                 initSpinner(spinner, listaQuintas)
                /* var id_quinta = result_quinta.quintas!!.first().id_quinta
                 var visita = result_visitas.getUltimavisita(id_quinta)

@@ -27,12 +27,57 @@
         android:layout_height="match_parent"
         android:layout_margin="20dp"
         android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.75">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fecha de inicio Ronda: " />
+                    <TextView
+                        android:id="@+id/fecha_inicio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fecha de fin Ronda: "
+                        />
+                    <TextView
+                        android:id="@+id/fecha_fin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
         <Spinner
             android:id="@+id/familia_productora"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"/>
+
         <EditText
             android:id="@+id/cantidad"
             android:layout_width="80dp"
@@ -41,7 +86,6 @@
             android:inputType="number"
             android:layout_margin="10dp"
             android:layout_gravity="right"/>
-
         <TextView
             android:id="@+id/errores"
             android:layout_width="match_parent"
@@ -49,6 +93,7 @@
             android:visibility="invisible"
             android:layout_below="@+id/familia_productora"
             />
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -82,24 +127,31 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_weight="0.5">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
                 <TextView
                     android:id="@+id/title_ajena"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Verduras ajenas"
-                    android:gravity="center"/>
+                    android:gravity="center"
+                    android:layout_weight="0.1"/>
                 <TextView
                     android:id="@+id/vacia_ajena"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Vacía"
-                    android:gravity="center_vertical|center_horizontal"/>
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_weight="0.1"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerVerdurasAjena"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="100dp"
-                />
+                android:layout_weight="0.8"/></LinearLayout>
             </LinearLayout>
             </LinearLayout>
 
