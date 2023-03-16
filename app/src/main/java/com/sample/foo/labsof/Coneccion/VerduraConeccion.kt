@@ -46,6 +46,7 @@ class VerduraConeccion {
         suspend fun post(v:Verdura): VerduraFechaList {
             return try {
                 val result =api.postVerdura(v)
+                println(result.body!!.mes)
                 if (result.isSuccessful) {
                     result.body()!!
                 } else {

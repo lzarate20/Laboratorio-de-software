@@ -59,6 +59,7 @@ class ParcelaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                             true,false,
                                 {
                                     val intent = Intent(v.context, VerVisita::class.java)
+                                    intent.putExtra("id", view.id)
                                     view.finish()
                                     view.overridePendingTransition(0, 0)
                                     view.startActivity(intent)

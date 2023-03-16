@@ -17,7 +17,6 @@ class FechaDialog() : DialogFragment() {
     private var year: Int
     private var observer: DatePickerDialog.OnDateSetListener? = null
     private var minDate: Long = Long.MIN_VALUE
-    private var maxDate: Long = Long.MAX_VALUE
 
     init {
         LocalDate.now().let { now ->
@@ -34,7 +33,6 @@ class FechaDialog() : DialogFragment() {
         const val MONTH_ARG = "args.month"
         const val DAY_ARG = "args.day"
         const val MINDATE_ARG = "args.day"
-        const val MAXDATE_ARG = "args.day"
 
         fun newInstance(
             year: Int, month: Int, day: Int, minDate: Long? = null, maxDate: Long? = null,
@@ -50,9 +48,6 @@ class FechaDialog() : DialogFragment() {
                 if (minDate != null) {
                     putLong(MINDATE_ARG, minDate)
                 }
-                if (maxDate != null) {
-                    putLong(MAXDATE_ARG, maxDate)
-                }
             }
             datePicker.observer = observer
             return datePicker
@@ -67,7 +62,6 @@ class FechaDialog() : DialogFragment() {
             month = args.getInt(MONTH_ARG)
             day = args.getInt(DAY_ARG)
             minDate = args.getLong(MINDATE_ARG)
-            maxDate = args.getLong(MAXDATE_ARG)
 
         }
 
@@ -78,9 +72,9 @@ class FechaDialog() : DialogFragment() {
         val dialog =
             DatePickerDialog(requireContext(), R.style.DialogTheme, observer, year, month, day)
 
+        if(minDate!=null){
         dialog.datePicker.minDate = minDate!!
-        dialog.datePicker.maxDate = maxDate!!
-
+        }
         return dialog
     }
 

@@ -206,19 +206,12 @@ class VerVisita : AppCompatActivity() {
                                     val par = ParcelaConeccion.post(p)
                                     dialog.dismiss()
                                     if (par != null) {
-                                        val mParcelas = mutableListOf<ParcelaVerdura>()
-                                        visita?.parcelas?.let { it1 ->
-                                            mParcelas.addAll(it1)
-                                        }
-                                        mParcelas.add(par)
-                                        visita?.parcelas = mParcelas
-                                        recyclerView.adapter =
-                                            ParcelaAdapter(
-                                                visita!!.parcelas,
-                                                visita!!.esHoy(),
-                                                verduras,
-                                                this@VerVisita
-                                            )
+                                        val intent = Intent(this@VerVisita, VerVisita::class.java)
+                                        intent.putExtra("id", id)
+                                        finish()
+                                        overridePendingTransition(0, 0)
+                                        startActivity(intent)
+                                        overridePendingTransition(0, 0)
                                     } else {
                                         DialogHelper.dialogo(this@VerVisita,"Error",
                                             "No se pudo guardar la parcela, vuelva a intentarlo.",true,false,{},{})
