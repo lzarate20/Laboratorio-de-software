@@ -2,12 +2,31 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="?attr/actionBarSize"
     tools:context=".ToolbarFragment">
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="?attr/actionBarSize">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Juan Pedro Garcia"
+            android:elevation="2dp"
+            android:textSize="11dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/menu"
+            android:id="@+id/nombre"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Técnico"
+            android:elevation="2dp"
+            android:textSize="11dp"
+            android:layout_marginLeft="40dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/rol"/>
         <ImageButton
             android:id="@+id/menu"
             android:layout_width="?attr/actionBarSize"
@@ -37,6 +56,5 @@
 
 
         </androidx.appcompat.widget.Toolbar>
-
     </RelativeLayout>
 </FrameLayout>

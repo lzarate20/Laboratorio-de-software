@@ -137,9 +137,9 @@ class CrearBolson : AppCompatActivity() {
                                     binding.errores.text =
                                         "Ya existe un bolson para dicha familia"
                                     binding.errores.visibility = View.VISIBLE
-                                } else if (count_verduras != 7 || count_verduras_otro > 2) {
+                                } else if (count_verduras != 1 || count_verduras_otro > 2) {
                                     binding.errores.text =
-                                        "Se deben seleccionar 7 verduras, con al menos 5 de producción propia"
+                                        "Debe seleccionar 7 verduras, con al menos 5 de producción propia"
                                     binding.errores.visibility = View.VISIBLE
                                 } else if (cantidad_input == null || cantidad_input!! <= 0) {
                                     binding.errores.text =
@@ -147,7 +147,7 @@ class CrearBolson : AppCompatActivity() {
                                     binding.errores.visibility = View.VISIBLE
                                 } else if (verdura_en_parcela.not()) {
                                     binding.errores.text =
-                                        "Se debe seleccionar una verdura de produccion propia o que haya producido otra familia"
+                                        "Debe seleccionar una verdura de produccion propia o que haya producido otra familia"
                                     binding.errores.visibility = View.VISIBLE
                                 } else {
                                     val bolson = Bolson(

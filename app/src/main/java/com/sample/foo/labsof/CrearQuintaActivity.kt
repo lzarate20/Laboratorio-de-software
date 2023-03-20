@@ -95,17 +95,17 @@ class CrearQuintaActivity:AppCompatActivity() {
         binding.submit.setOnClickListener {
             if(binding.nombreQuinta.text == null){
                 binding.error.visibility = View.VISIBLE
-                binding.error.text ="Se debe ingresar el nombre de la quinta"
+                binding.error.text ="Debe ingresar el nombre de la quinta"
             }
             else if (binding.nombreFamilia.text == null){
                 binding.error.visibility = View.VISIBLE
-                binding.error.text ="Se debe ingresar el nombre de la familia"
+                binding.error.text ="Debe ingresar el nombre de la familia"
             }
             else {
                 val date = LocalDate.parse(binding.fecha.text.toString(), DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                 if(!date.isBefore(LocalDate.now())){
                     binding.error.visibility = View.VISIBLE
-                    binding.error.text = "Se debe ingresar una fecha anterior al dia de hoy"
+                    binding.error.text = "Debe ingresar una fecha anterior al dia de hoy"
                 }
                 else{
                     year = date.year

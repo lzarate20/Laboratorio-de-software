@@ -44,7 +44,7 @@
                         android:id="@+id/textQ"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Quinta" />
+                        android:text="*Quinta" />
 
                     <Spinner
                         android:id="@+id/spinnerQ"
@@ -69,7 +69,7 @@
                         android:id="@+id/textF"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Fecha" />
+                        android:text="*Fecha" />
 
                     <EditText
                         android:id="@+id/fecha"
@@ -122,7 +122,7 @@
                         android:id="@+id/textT"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tecnico" />
+                        android:text="*Tecnico" />
 
                     <Spinner
                         android:id="@+id/spinnerT"
@@ -132,6 +132,12 @@
                     </Spinner>
                 </LinearLayout>
             </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="* Campos obligatorios"
+                android:textColor="#ff0000"/>
+
             <Button
                 android:id="@+id/guardar"
                 android:layout_width="match_parent"

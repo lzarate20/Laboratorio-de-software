@@ -20,7 +20,8 @@
             android:layout_height="wrap_content"
             android:text="Visitas"
             android:textColor="@color/black"
-            android:textSize="30dp" />
+            android:textSize="30dp"
+            android:id="@+id/titulo"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -52,6 +53,15 @@
                 android:background="@drawable/botones"
                 android:text="Historial de visitas"
                 android:textColor="@color/white" />
+            <Button
+                android:id="@+id/compa"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/botones"
+                android:text="ver visitas de mis compañeros"
+                android:textColor="@color/white"
+                android:visibility="gone"/>
 
         </LinearLayout>
     </LinearLayout>

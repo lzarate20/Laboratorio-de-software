@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.*
 import android.view.Menu
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
@@ -68,6 +69,11 @@ class ToolbarFragment : Fragment() {
 
         val b= view.findViewById<ImageButton>(R.id.menu)
         if(session.haveSesion()){
+            val nombre=  view.findViewById<TextView>(R.id.nombre)
+            val rol=  view.findViewById<TextView>(R.id.rol)
+            val mi_sesion= session.getSession()
+            nombre.text = "${(mi_sesion.apellido)}\n${(mi_sesion.nombre)}"
+            rol.text= mi_sesion.rol()
             b.visibility=View.VISIBLE
             b.setOnClickListener {
                 showPopup(it)

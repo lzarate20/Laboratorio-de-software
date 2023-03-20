@@ -10,6 +10,7 @@ class UserConeccion {
     companion object {
         val api = Coneccion.api.create(UserService::class.java)
         suspend fun get(): ListUsers {
+           println(Coneccion.url)
             try {
                 val result = api.getUsers(1)
                 if (result.isSuccessful) {

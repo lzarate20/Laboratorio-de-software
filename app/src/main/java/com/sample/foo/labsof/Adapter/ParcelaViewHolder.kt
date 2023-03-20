@@ -12,10 +12,12 @@ import com.sample.foo.labsof.Coneccion.ParcelaConeccion
 import com.sample.foo.labsof.DataClass.Parcela
 import com.sample.foo.labsof.DataClass.ParcelaVerdura
 import com.sample.foo.labsof.DataClass.VerduraFechaList
+import com.sample.foo.labsof.DataClass.VisitaFechaList
 import com.sample.foo.labsof.ListadoVerdurasActivity
 import com.sample.foo.labsof.R
 import com.sample.foo.labsof.VerVisita
 import com.sample.foo.labsof.helpers.DialogHelper
+import com.sample.foo.labsof.helpers.Session
 import kotlinx.coroutines.launch
 
 
@@ -31,13 +33,16 @@ class ParcelaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val ver= itemView.findViewById<Button>(R.id.ver)
     val eliminar= itemView.findViewById<Button>(R.id.eliminar)
 
-    fun render( parcela:ParcelaVerdura, actualizar:Boolean, verduras: List<VerduraFechaList>?, view:VerVisita){
+    fun render(parcela:ParcelaVerdura, visita: VisitaFechaList, actualizar:Boolean, verduras: List<VerduraFechaList>?, view:VerVisita){
 
         cosecha.isChecked= parcela.cosecha == true
+        cosecha.isEnabled=false
         cubierta.isChecked= parcela.cubierta == true
+        cubierta.isEnabled= false
         verdura.text= parcela.verdura?.nombre
         Glide.with(itemView.context).load(parcela.verdura?.archImg).error(R.drawable.icon_image).into(image)
-        if (actualizar){
+        var session = Session(view).getSession()
+        if (visita.esHoy()&&(!session.isTecnico()||visita.id_tecnico == session.id_user )){
             ver.text="Actualizar"
             eliminar.visibility=View.VISIBLE
         }else{
@@ -48,7 +53,7 @@ class ParcelaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             "¿Eliminar?","¿Esta seguro que desea eliminar esta parcela?",
             true,true,
                 {
-                    val bCreate= DialogHelper.espera(v.context)
+                    val bCreate = DialogHelper.espera(v.context)
                     bCreate.show()
                     view.lifecycleScope.launch {
                         val eli=ParcelaConeccion.delete(parcela.id_parcela!!)
@@ -59,6 +64,7 @@ class ParcelaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                             true,false,
                                 {
                                     val intent = Intent(v.context, VerVisita::class.java)
+                                    intent.putExtra("id", view.id)
                                     view.finish()
                                     view.overridePendingTransition(0, 0)
                                     view.startActivity(intent)
@@ -76,7 +82,7 @@ class ParcelaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
         ver.setOnClickListener{v->
             val builder: android.app.AlertDialog.Builder =
-                android.app.AlertDialog.Builder(v.context)
+            android.app.AlertDialog.Builder(v.context)
             builder.setTitle("¿Guardar?")
             var linearLayout = LinearLayout(v.context)
             linearLayout.orientation = LinearLayout.VERTICAL
@@ -128,7 +134,7 @@ class ParcelaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 DialogInterface.OnClickListener { dialog, which ->
                     if (surcos.text.toString() != "" && surcos.text.toString().toInt() >= 1) {
                         var p = Parcela(
-                           id_visita= view.id,
+                            id_visita= view.id,
                             cantidad_surcos = surcos.text.toString().toInt(),
                             cubierta = cubierto.isChecked==true,
                             cosecha = cosechado.isChecked==true,
@@ -139,13 +145,13 @@ class ParcelaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                         val dCreate= DialogHelper.espera(view)
                         dCreate.show()
                         view.lifecycleScope.launch {
-                           var par= ParcelaConeccion.put(p)
+                            var par= ParcelaConeccion.put(p)
                             dCreate.dismiss()
                             if(par!= null){
                                 DialogHelper.dialogo(view,
-                                "Actualización exitosa",
+                                    "Actualización exitosa",
                                     "La parcela se actualizo con exito",
-                                true,false,
+                                    true,false,
                                     {
                                         val intent = Intent(v.context, VerVisita::class.java)
                                         intent.putExtra("id", view.id)
@@ -157,13 +163,13 @@ class ParcelaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                             }else{
                                 DialogHelper.dialogo(view,"Error",
                                     "No se pudo actualizar la parcela",true,
-                                false,{},{})
+                                    false,{},{})
                             }
                         }
                     } else {
                         DialogHelper.dialogo(view,
-                        "Error","La cantidad de surcos no puede ser menor a 1",
-                        true,false,{},{})
+                            "Error","La cantidad de surcos no puede ser menor a 1",
+                            true,false,{},{})
                     }
                 })
             builder.setNegativeButton(

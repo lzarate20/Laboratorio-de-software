@@ -71,7 +71,7 @@ class CrearUserActivity : AppCompatActivity() {
                                 this@CrearUserActivity,
                                 "Guardado exitoso",
                                 "Se guardo exitosamente el usuario",
-                                true,false,{},{}
+                                true,false,{finish()},{}
                             )
                         }
                     }

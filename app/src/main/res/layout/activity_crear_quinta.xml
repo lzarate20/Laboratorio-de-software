@@ -79,7 +79,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Nombre quinta" />
+                            android:text="*Nombre quinta" />
 
                         <EditText
                             android:id="@+id/nombreQuinta"
@@ -97,7 +97,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Nombre familia" />
+                            android:text="*Nombre familia" />
 
                         <EditText
                             android:id="@+id/nombreFamilia"
@@ -115,7 +115,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Fecha afiliacion" />
+                            android:text="*Fecha afiliacion" />
 
                         <EditText
                             android:id="@+id/fecha"
@@ -135,6 +135,11 @@
                         android:textColor="#ff0000"
                         android:visibility="gone" />
                 </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="* Campos obligatorios"
+                android:textColor="#ff0000"/>
 
 
             <Button

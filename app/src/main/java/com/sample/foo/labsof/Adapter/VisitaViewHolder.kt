@@ -18,6 +18,7 @@ import com.sample.foo.labsof.Listados.ListVisita
 import com.sample.foo.labsof.R
 import com.sample.foo.labsof.VerVisita
 import com.sample.foo.labsof.helpers.DialogHelper
+import com.sample.foo.labsof.helpers.Session
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.NonDisposableHandle.parent
 import kotlinx.coroutines.launch
@@ -39,10 +40,19 @@ class VisitaViewHolder(itemView: View) : ViewHolder(itemView) {
         fecha.text = "Fecha: ${(visitaModel.fecha)}"
         quinta.text = "Quinta: ${(visitaModel.nombre_q)}"
         tecnico.text = "Tecnico: ${(visitaModel.nombre)}"
-        if (visitaModel.futura) {
+        var session = Session(ac).getSession()
+        if (visitaModel.futura && (
+                    (
+                            visitaModel.id_user == session.id_user || !visitaModel.esHoy
+                            )
+                            || !session.isTecnico()
+                    )
+        ) {
             ver.text = "Actualizar"
-            eliminar.visibility = View.VISIBLE
-            ver.setOnClickListener{
+            if (!visitaModel.esHoy) {
+                eliminar.visibility = View.VISIBLE
+            }
+            ver.setOnClickListener {
                 val intent = Intent(itemView.context, VerVisita::class.java)
                 intent.putExtra("id", visitaModel.id)
                 registerForActivityResult.launch(intent)
@@ -58,34 +68,34 @@ class VisitaViewHolder(itemView: View) : ViewHolder(itemView) {
         }
         eliminar.setOnClickListener { v ->
             DialogHelper.dialogo(ac,
-            "¿Eliminar?",
+                "¿Eliminar?",
                 "¿Esta seguro que desea eliminar esta visita?",
-            true,true,
+                true, true,
                 {
-                    val dCreate= DialogHelper.espera(ac)
+                    val dCreate = DialogHelper.espera(ac)
                     dCreate.show()
                     ac.lifecycleScope.launch {
-                        val el=VisitaConeccion.delete(visitaModel.id)
+                        val el = VisitaConeccion.delete(visitaModel.id)
                         dCreate.dismiss()
-                        if(el==true){
+                        if (el == true) {
                             DialogHelper.dialogo(ac,
-                            "Eliminación exitosa",
+                                "Eliminación exitosa",
                                 "Se elimino con exito la parcela",
-                                true,false,{
+                                true, false, {
                                     val intent = Intent(v.context, VerVisita::class.java)
                                     ac.finish()
                                     ac.overridePendingTransition(0, 0)
                                     ac.startActivity(intent)
                                     ac.overridePendingTransition(0, 0)
-                                },{}
+                                }, {}
                             )
-                        }else{
+                        } else {
                             DialogHelper.dialogo(ac,
-                            "Error","No se pudo eliminar la vista",
-                            true,false,{},{})
+                                "Error", "No se pudo eliminar la vista",
+                                true, false, {}, {})
                         }
                     }
-                },{})
+                }, {})
         }
 
     }

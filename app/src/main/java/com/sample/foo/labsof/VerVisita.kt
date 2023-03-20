@@ -23,6 +23,7 @@ import com.sample.foo.labsof.Listados.ListUsers
 import com.sample.foo.labsof.helpers.ConversorDate
 import com.sample.foo.labsof.helpers.DialogHelper
 import com.sample.foo.labsof.helpers.FechaDialog
+import com.sample.foo.labsof.helpers.Session
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
@@ -81,8 +82,8 @@ class VerVisita : AppCompatActivity() {
                 editT.visibility = View.VISIBLE
                 editF.visibility = View.VISIBLE
             } else {
-
-                if (visita!!.esHoy()){
+                val session = Session(this@VerVisita).getSession()
+                if (visita!!.esHoy()&&(session.id_user==visita!!.id_tecnico|| !session.isTecnico())){
                     agregar.visibility = View.VISIBLE
                     guardar.visibility = View.GONE
                 }
@@ -100,7 +101,7 @@ class VerVisita : AppCompatActivity() {
             textQ.text = quintas?.getById(visita!!.id_quinta!!)?.nombre
             val verduras = VerduraConeccion.get()
             recyclerView.adapter =
-                ParcelaAdapter(visita!!.parcelas, visita!!.esHoy(), verduras, this@VerVisita)
+                ParcelaAdapter(visita!!.parcelas,visita!!, visita!!.esHoy(), verduras, this@VerVisita)
             recyclerView.visibility = View.VISIBLE
         }
 
@@ -206,19 +207,12 @@ class VerVisita : AppCompatActivity() {
                                     val par = ParcelaConeccion.post(p)
                                     dialog.dismiss()
                                     if (par != null) {
-                                        val mParcelas = mutableListOf<ParcelaVerdura>()
-                                        visita?.parcelas?.let { it1 ->
-                                            mParcelas.addAll(it1)
-                                        }
-                                        mParcelas.add(par)
-                                        visita?.parcelas = mParcelas
-                                        recyclerView.adapter =
-                                            ParcelaAdapter(
-                                                visita!!.parcelas,
-                                                visita!!.esHoy(),
-                                                verduras,
-                                                this@VerVisita
-                                            )
+                                        val intent = Intent(this@VerVisita, VerVisita::class.java)
+                                        intent.putExtra("id", id)
+                                        finish()
+                                        overridePendingTransition(0, 0)
+                                        startActivity(intent)
+                                        overridePendingTransition(0, 0)
                                     } else {
                                         DialogHelper.dialogo(this@VerVisita,"Error",
                                             "No se pudo guardar la parcela, vuelva a intentarlo.",true,false,{},{})
