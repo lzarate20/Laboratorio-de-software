@@ -64,10 +64,9 @@ class CrearBolson : AppCompatActivity() {
                 binding.cantidad.doOnTextChanged { text, start, count, after ->
                     cantidad_input = text.toString().toIntOrNull()
                 }
-                var listaQuintas =
-                    result_quinta.quintas!!.filter { result_visitas.getUltimavisita(it.id_quinta) != null }
-                //binding.fechaInicio.setText(ConversorDate.convertToInput(ronda_actual.fecha_inicio))
-                //binding.fechaFin.setText(ConversorDate.convertToInput(ronda_actual.fecha_fin))
+                var listaQuintas = result_quinta.quintas!!.filter { result_visitas.getUltimavisita(it.id_quinta) != null }
+                binding.fechaInicio.setText(ConversorDate.convertToInput(ronda_actual.fecha_inicio))
+                binding.fechaFin.setText(ConversorDate.convertToInput(ronda_actual.fecha_fin))
                 initSpinner(spinner, listaQuintas)
                /* var id_quinta = result_quinta.quintas!!.first().id_quinta
                 var visita = result_visitas.getUltimavisita(id_quinta)
