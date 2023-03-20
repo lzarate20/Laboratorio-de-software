@@ -46,7 +46,6 @@ class VerduraConeccion {
         suspend fun post(v:Verdura): VerduraFechaList {
             return try {
                 val result =api.postVerdura(v)
-                println(result.body!!.mes)
                 if (result.isSuccessful) {
                     result.body()!!
                 } else {
@@ -63,6 +62,8 @@ class VerduraConeccion {
                 if (result.isSuccessful) {
                     result.body()!!
                 } else {
+                    println(result.code())
+                    println(result.message())
                     VerduraFechaList("No se pudo guardar los cambios de la verdura")
                 }
             } catch (e: Exception) {

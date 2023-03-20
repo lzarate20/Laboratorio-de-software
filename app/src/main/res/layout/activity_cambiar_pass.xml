@@ -44,7 +44,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Contraseña anterior: " />
+                        android:text="*Contraseña anterior: " />
                     <EditText
                         android:id="@+id/pass"
                         android:layout_width="match_parent"
@@ -71,7 +71,7 @@
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Nueva contraseña: " />
+                        android:text="*Nueva contraseña: " />
 
                     <EditText
                         android:id="@+id/new_pass"
@@ -96,7 +96,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Repita la contraseña: " />
+                        android:text="*Repita la contraseña: " />
 
                     <EditText
                         android:id="@+id/new_pass2"
@@ -115,8 +115,11 @@
                 android:textColor="@color/white"
                 android:text="Guardar"/>
         </LinearLayout>
-
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="* Campos obligatorios"
+            android:textColor="#ff0000"/>
     </LinearLayout>
 
 

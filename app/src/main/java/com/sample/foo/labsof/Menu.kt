@@ -40,6 +40,12 @@ class Menu : Fragment() {
 
         visitas.setOnClickListener { view: View ->
             val intent = Intent(activity, Visitas::class.java)
+            val session = Session(activity!!).getSession()
+            var tipo = 0
+            if(session.roles==1){
+                tipo=2
+            }
+            intent.putExtra("tipo", tipo)
             activity?.startActivity(intent)
         }
 

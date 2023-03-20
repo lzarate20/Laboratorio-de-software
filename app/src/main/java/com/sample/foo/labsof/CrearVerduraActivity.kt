@@ -56,8 +56,7 @@ class CrearVerduraActivity : AppCompatActivity() {
         creacionSpinner(siembra, mes)
         val guardar = findViewById<Button>(R.id.guardar)
         guardar.setOnClickListener { view: View ->
-            if (Verificacion.notVacio(nombre) && Verificacion.notVacio(descripcion)
-                && Verificacion.notVacio(image)
+            if (Verificacion.notVacio(nombre)
             ) {
                 val verdura = Verdura()
                 verdura.nombre = nombre.text.toString()

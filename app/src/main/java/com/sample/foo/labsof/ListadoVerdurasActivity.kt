@@ -43,7 +43,7 @@ class ListadoVerdurasActivity : AppCompatActivity() {
                     ListVerduras(verdura), register,this@ListadoVerdurasActivity
                 )
             } else {
-                DialogHelper.dialogo(this@ListadoVerdurasActivity,"Error","No se puede eliminar la verdura",true,false,{},{})
+                DialogHelper.dialogo(this@ListadoVerdurasActivity,"Error","Error al obtener las verduras",true,false,{},{})
             }
         }
 

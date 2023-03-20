@@ -11,6 +11,7 @@ class BolsonConeccion {
         var api = Coneccion.api.create(BolsonService::class.java)
 
         suspend fun getBolson(id:Int):Bolson?{
+
             try{
                 val result = api.getBolson(id)
                 if (result.isSuccessful){
@@ -27,6 +28,7 @@ class BolsonConeccion {
         }
 
         suspend fun getBolsonByRonda(id:Int?):List<Bolson>?{
+
             try{
                 val result = api.getBolsonByRonda(id)
                 if (result.isSuccessful){

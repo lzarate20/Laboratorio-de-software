@@ -44,7 +44,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Nombre: " />
+                        android:text="*Nombre: " />
                     <EditText
                         android:id="@+id/nombre"
                         android:layout_width="match_parent"
@@ -70,7 +70,7 @@
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Apellido: " />
+                        android:text="*Apellido: " />
 
                     <EditText
                         android:id="@+id/apellido"
@@ -95,7 +95,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Email: " />
+                        android:text="*Email: " />
 
                     <EditText
                         android:id="@+id/email"
@@ -119,7 +119,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Nombre de usuario: " />
+                        android:text="*Nombre de usuario: " />
 
                     <EditText
                         android:id="@+id/user_name"
@@ -143,7 +143,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Dirección: " />
+                        android:text="*Dirección: " />
 
                     <EditText
                         android:id="@+id/direc"
@@ -176,6 +176,12 @@
                 </LinearLayout>
 
             </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="* Campos obligatorios"
+                android:textColor="#ff0000"/>
+
             <Button
                 android:id="@+id/guardar"
                 android:layout_width="match_parent"

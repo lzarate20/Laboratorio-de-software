@@ -44,7 +44,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Nombre: " />
+                        android:text="*Nombre: " />
 
                     <EditText
                         android:id="@+id/nombre"
@@ -117,7 +117,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Mes de cosecha: " />
+                        android:text="*Mes de cosecha: " />
 
                     <Spinner
                         android:id="@+id/cosecha"
@@ -144,7 +144,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Mes de siembra: " />
+                        android:text="*Mes de siembra: " />
 
                     <Spinner
                         android:id="@+id/siembra"
@@ -153,6 +153,11 @@
 
                 </LinearLayout>
             </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="* Campos obligatorios"
+                android:textColor="#ff0000"/>
 
             <Button
                 android:id="@+id/guardar"

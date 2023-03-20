@@ -16,6 +16,7 @@ import com.sample.foo.labsof.Coneccion.QuintaConeccion
 import com.sample.foo.labsof.Coneccion.UserConeccion
 import com.sample.foo.labsof.Coneccion.VisitaConeccion
 import com.sample.foo.labsof.helpers.DialogHelper
+import com.sample.foo.labsof.helpers.Session
 import kotlinx.coroutines.launch
 
 class HistorialVisitas : AppCompatActivity() {
@@ -31,17 +32,23 @@ class HistorialVisitas : AppCompatActivity() {
         FT.add(R.id.toolbar, toolbar)
 
         FT.commit()
-        initRecyclerView()
+        val tipo= this.intent.getIntExtra("tipo", 0)
+        initRecyclerView(tipo)
 
     }
 
-    private fun initRecyclerView() {
+    private fun initRecyclerView(tipo:Int) {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerVisita)
         recyclerView.layoutManager = LinearLayoutManager(this)
         val dCreate = DialogHelper.espera(this@HistorialVisitas)
         dCreate.show()
         lifecycleScope.launch {
-            val visitas = VisitaConeccion.get().getVisitasPasadas().ordenarFechaYTecnico()
+            val resultVisitas = VisitaConeccion.get()
+            var visitas = resultVisitas.getVisitasPasadas().ordenarFechaYTecnico()
+            val session = Session(this@HistorialVisitas).getSession()
+            if(session.isTecnico()&& tipo == 1){
+                visitas= resultVisitas.getMisVisitas(session.id_user!!).getVisitasPasadas().ordenarFecha()
+            }
             val user = UserConeccion.get().getTecnicos()
             val quinta = QuintaConeccion.get()
             dCreate.dismiss()

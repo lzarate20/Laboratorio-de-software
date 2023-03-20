@@ -26,7 +26,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fecha inicio" />
+            android:text="*Fecha inicio" />
 
         <EditText
             android:id="@+id/fecha_inicio"
@@ -52,7 +52,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fecha fin" />
+            android:text="*Fecha fin" />
 
         <EditText
             android:id="@+id/fecha_fin"
@@ -63,6 +63,11 @@
             android:importantForAutofill="no" />
 
     </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="* Campos obligatorios"
+        android:textColor="#ff0000"/>
 
     <Button
         android:id="@+id/submit"

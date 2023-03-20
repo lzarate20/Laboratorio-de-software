@@ -38,6 +38,9 @@ class ListVisita() {
     fun getVisitasPasadas(): ListVisita {
         return ListVisita(visitas?.filter { v -> v.visitaPasada() })
     }
+    fun getMisVisitas(id:Int):ListVisita{
+        return ListVisita(visitas?.filter { v -> v.id_tecnico== id })
+    }
 
     fun getVisitasFuturas(): ListVisita {
         return ListVisita(visitas?.filter { v -> !v.visitaPasada() })
@@ -78,11 +81,13 @@ class ListVisita() {
             val q = quinta.quintas!!.single { q -> q.id_quinta == v.id_quinta }
             aux.add(
                 Union(
+                    v.id_tecnico!!,
                     "${(t.nombre!!)} ${(t.apellido!!)}",
                     v.fechaString(),
                     !v.visitaPasada(),
                     v.id_visita!!,
-                    q.nombre!!
+                    q.nombre!!,
+                    v.esHoy()
                 )
             )
         }
@@ -90,11 +95,13 @@ class ListVisita() {
     }
 
     class Union(
+        val id_user:Int,
         val nombre: String,
         val fecha: String,
         val futura: Boolean,
         val id: Int,
-        val nombre_q: String
+        val nombre_q: String,
+        val esHoy:Boolean
     )
 
 }

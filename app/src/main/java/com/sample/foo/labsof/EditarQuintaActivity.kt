@@ -124,7 +124,7 @@ class EditarQuintaActivity : AppCompatActivity() {
             binding.submit.setOnClickListener {
                 if (binding.nombreQuinta.text == null) {
                     binding.error.visibility = View.VISIBLE
-                    binding.error.text = "Se debe ingresar el nombre de la quinta"
+                    binding.error.text = "Debe ingresar el nombre de la quinta"
                 } /*else if (binding.nombreFamilia.text == null) {
                     binding.error.visibility = View.VISIBLE
                     binding.error.text = "Se debe ingresar el nombre de la familia"

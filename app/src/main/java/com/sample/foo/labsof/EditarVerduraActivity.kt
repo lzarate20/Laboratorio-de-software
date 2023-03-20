@@ -92,8 +92,8 @@ class EditarVerduraActivity : AppCompatActivity() {
                 true,
                 true,
                 {
-                    if (Verificacion.notVacio(nombre) && Verificacion.notVacio(descripcion)
-                        && Verificacion.notVacio(image)
+                    if (Verificacion.notVacio(nombre)
+
                     ) {
                         val verdura = Verdura(ver!!)
                         verdura.nombre = nombre.text.toString()
