@@ -100,7 +100,7 @@ class ParcelaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             l[0].addView(text)
             l[0].addView(surcos)
             text = TextView(v.context)
-            text.text = "Cosechado: "
+            text.text = "En cosecha: "
             val cosechado = CheckBox(v.context)
             cosechado.isChecked = parcela.cosecha == true
             l[1].addView(text)

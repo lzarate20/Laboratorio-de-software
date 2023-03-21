@@ -41,7 +41,9 @@ class ListVisita() {
     fun getMisVisitas(id:Int):ListVisita{
         return ListVisita(visitas?.filter { v -> v.id_tecnico== id })
     }
-
+    fun getVisitasCompa(id:Int):ListVisita{
+        return ListVisita(visitas?.filter { v -> v.id_tecnico!= id })
+    }
     fun getVisitasFuturas(): ListVisita {
         return ListVisita(visitas?.filter { v -> !v.visitaPasada() })
     }

@@ -49,6 +49,9 @@ class ProximasVisitas : AppCompatActivity() {
             if(session.isTecnico()&& tipo ==1){
                 visitas= resultVisitas.getMisVisitas(session.id_user!!).getVisitasFuturas().ordenarFecha()
             }
+            if(session.isTecnico()&& tipo == 0){
+                visitas = resultVisitas.getVisitasCompa(session.id_user!!).getVisitasFuturas().ordenarFechaYTecnico()
+            }
             val user = UserConeccion.get().getTecnicos()
             val quinta = QuintaConeccion.get()
             dCreate.dismiss()

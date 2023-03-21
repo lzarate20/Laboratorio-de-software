@@ -11,7 +11,6 @@ class BolsonConeccion {
         var api = Coneccion.api.create(BolsonService::class.java)
 
         suspend fun getBolson(id:Int):Bolson?{
-
             try{
                 val result = api.getBolson(id)
                 if (result.isSuccessful){
@@ -20,7 +19,6 @@ class BolsonConeccion {
                 else{
                     return null
                 }
-
             }
             catch (e: Exception) {
                 return null
