@@ -75,8 +75,7 @@
         <Spinner
             android:id="@+id/familia_productora"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"/>
+            android:layout_height="wrap_content"/>
 
         <EditText
             android:id="@+id/cantidad"

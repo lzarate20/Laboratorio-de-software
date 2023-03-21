@@ -29,7 +29,6 @@ class ListVisita() {
             var visitas_quinta = this.visitas!!.filter { v -> v.id_quinta == id_quinta }
             if (!visitas_quinta.isNullOrEmpty()) {
                 return  visitas_quinta.maxBy { it.fechaDate() }
-
             }
         }
         return null

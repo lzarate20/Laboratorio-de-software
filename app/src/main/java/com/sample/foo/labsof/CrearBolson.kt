@@ -64,10 +64,9 @@ class CrearBolson : AppCompatActivity() {
                 binding.cantidad.doOnTextChanged { text, start, count, after ->
                     cantidad_input = text.toString().toIntOrNull()
                 }
-                var listaQuintas =
-                    result_quinta.quintas!!.filter { result_visitas.getUltimavisita(it.id_quinta) != null }
-                //binding.fechaInicio.setText(ConversorDate.convertToInput(ronda_actual.fecha_inicio))
-                //binding.fechaFin.setText(ConversorDate.convertToInput(ronda_actual.fecha_fin))
+                var listaQuintas = result_quinta.quintas!!.filter { result_visitas.getUltimavisita(it.id_quinta) != null }
+                binding.fechaInicio.setText(ConversorDate.convertToInput(ronda_actual.fecha_inicio))
+                binding.fechaFin.setText(ConversorDate.convertToInput(ronda_actual.fecha_fin))
                 initSpinner(spinner, listaQuintas)
                /* var id_quinta = result_quinta.quintas!!.first().id_quinta
                 var visita = result_visitas.getUltimavisita(id_quinta)
@@ -138,7 +137,7 @@ class CrearBolson : AppCompatActivity() {
                                     binding.errores.text =
                                         "Ya existe un bolson para dicha familia"
                                     binding.errores.visibility = View.VISIBLE
-                                } else if (count_verduras != 1 || count_verduras_otro > 2) {
+                                } else if (count_verduras != 7 || count_verduras_otro > 2) {
                                     binding.errores.text =
                                         "Debe seleccionar 7 verduras, con al menos 5 de producción propia"
                                     binding.errores.visibility = View.VISIBLE
