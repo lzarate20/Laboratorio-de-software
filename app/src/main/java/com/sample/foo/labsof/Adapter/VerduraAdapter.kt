@@ -60,11 +60,11 @@ class VerduraAdapter(var listaVerdura:MutableList<ParcelaVerdura>,var listaSelec
 
         if(listaSelected!=null) {
             isSelected = listaSelected!!.any{ it.id_verdura == item.verdura!!.id_verdura}
-            if (!verdurasMap.isEmpty()){
+            if (!verdurasMap.isEmpty() && !isSelected){
                 isSelected = verdurasMap.containsValue(item.verdura?.nombre)
             }
         }
-        else if (!verdurasMap.isEmpty()){
+        else if (!verdurasMap.isEmpty() && !isSelected){
             isSelected = verdurasMap.containsValue(item.verdura?.nombre)
         }
         holder.render(item,position,isSelected)
